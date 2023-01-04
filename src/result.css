@@ -1,0 +1,353 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* font 정의 */
+@font-face {
+  font-family: "notoSans";
+  src: url("./util/fonts/NotoSansCJKkr-Regular.otf");
+}
+
+@font-face {
+  font-family: "notoSansBold";
+  src: url("./util/fonts/NotoSansCJKkr-Bold.otf");
+}
+
+@font-face {
+  font-family: "notoSansLight";
+  src: url("./util/fonts/NotoSansCJKkr-Light.otf");
+}
+
+#ResultPage #Header {
+  width: 100%;
+  height: 6.5967016491754125vh;
+  min-height: 44px;
+  text-align: center;
+  line-height: 6.5967016491754125vh;
+  border-bottom: 1px solid #e6e6e6;
+  padding-top: 2.9985007496251876vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#ResultPage #Header .ok-btn {
+  display: inline-block;
+  width: 2.9985007496251876vh;
+  height: 2.9985007496251876vh;
+  min-width: 20px;
+  min-height: 20px;
+  position: absolute;
+  right: 2.9985007496251876vh;
+  background: none;
+  border: none;
+  outline: none;
+  font-style: normal;
+  font-size: 2.5487256371814095vh;
+  font-family: "notoSansbold";
+  letter-spacing: -0.408px;
+  cursor: pointer;
+}
+
+#ResultPage #Header h1 {
+  display: inline-block;
+  color: #000000;
+  font-size: 2.5487256371814095vh;
+  font-weight: 700;
+}
+
+#ResultPage #Content {
+  width: 56.22188905547227vh;
+  min-width: 375px;
+  height: calc(100vh - 9.745127436281859vh);
+  margin: 0 auto;
+  position: relative;
+  text-align: left;
+  box-sizing: border-box;
+  padding: 2.9985007496251876vh;
+}
+
+#ResultPage #Content #ContentHeader h4 {
+  font-family: "notoSansBold";
+  font-size: 2.9985007496251876vh;
+  height: 4.497751124437781vh;
+  min-height: 30px;
+  margin-top: 1.4992503748125938vh;
+  margin-bottom: 2.9985007496251876vh;
+  font-size: 2.9985007496251876vh;
+}
+
+#ResultPage #Content #ContentHeader .result-grade {
+  width: 50.22488755622189vh;
+  height: 34.03298350824588vh;
+  min-width: 335px;
+  min-height: 227px;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 2.9985007496251876vh;
+}
+
+#ResultPage #Content #ContentHeader .result-grade h6 {
+  font-family: "notoSansBold";
+  font-size: 2.9985007496251876vh;
+}
+
+#ResultPage #Content #ContentHeader .result-grade .grade {
+  display: inline-block;
+  height: 6.5967016491754125vh;
+  min-height: 44px;
+  font-family: "notoSansBold";
+  font-size: 4.497751124437781vh;
+  letter-spacing: -0.408px;
+  margin-top: 2.9985007496251876vh;
+  margin-bottom: 4.497751124437781vh;
+}
+
+#ResultPage #Content #ContentHeader .result-grade .grade.one {
+  color: #0dcd2c;
+}
+#ResultPage #Content #ContentHeader .result-grade .grade.two {
+  color: #95db00;
+}
+#ResultPage #Content #ContentHeader .result-grade .grade.three {
+  color: #ffd600;
+}
+#ResultPage #Content #ContentHeader .result-grade .grade.four {
+  color: #ff6b00;
+}
+#ResultPage #Content #ContentHeader .result-grade .grade.five {
+  color: #ff0000;
+}
+
+#ResultPage #Content #ContentHeader .result-grade .des-wrapper {
+  height: 10.794602698650674vh;
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 2.39880059970015vh;
+  line-height: 0.7;
+}
+
+#ResultPage #Content #ContentHeader .result-grade .des-wrapper .des {
+  height: 3.598200899550225vh;
+  min-height: 24px;
+  line-height: 3.598200899550225vh;
+  font-family: "notoSansLight";
+  font-size: 2.39880059970015vh;
+}
+
+#ResultPage #Content #ContentBody h4 {
+  font-family: "notoSansBold";
+  font-size: 2.9985007496251876vh;
+  margin-top: 7.496251874062969vh;
+  margin-bottom: 3.2983508245877062vh;
+  font-size: 2.9985007496251876vh;
+}
+
+#ResultPage #Content #ContentBody .result-rate {
+  width: 50.22488755622189vh;
+  height: 30.284857571214392vh;
+  min-width: 335px;
+  min-height: 202px;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  box-sizing: border-box;
+  padding: 2.9985007496251876vh;
+  margin-bottom: 4.497751124437781vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#ResultPage #Content #ContentBody .result-rate h6 {
+  font-family: "notoSansBold";
+  font-size: 2.9985007496251876vh;
+}
+
+#ResultPage #Content #ContentBody .result-rate > span {
+  display: flex;
+  margin-top: 4.197901049475262vh;
+  margin-bottom: 6.5967016491754125vh;
+  align-items: baseline;
+  font-size: 2.9985007496251876vh;
+  font-family: "notoSansBold";
+  margin-left: 1.4992503748125938vh;
+}
+#ResultPage #Content #ContentBody .result-rate span strong {
+  font-family: "notoSansBold";
+  height: 7.496251874062969vh;
+  min-height: 50px;
+  font-size: 7.496251874062969vh;
+  letter-spacing: -0.408px;
+  margin-right: 1.4992503748125938vh;
+}
+
+#ResultPage #Content #ContentBody .result-rate .rate-img {
+  position: relative;
+}
+
+#ResultPage #Content #ContentBody .result-rate .rate-img .my-position {
+  display: inline-block;
+  width: 3.898050974512744vh;
+  height: 2.9985007496251876vh;
+  min-width: 26px;
+  min-height: 20px;
+  background: url(./util/icons/ic_you.svg) no-repeat center;
+  position: absolute;
+  top: -3.598200899550225vh;
+}
+
+#ResultPage #Content #ContentBody .result-rate .rate-img .my-position.healthy {
+  left: 14px;
+}
+
+#ResultPage #Content #ContentBody .result-rate .rate-img .my-position.normal {
+  left: 74px;
+}
+
+#ResultPage #Content #ContentBody .result-rate .rate-img .my-position.caution {
+  left: 134px;
+}
+
+#ResultPage #Content #ContentBody .result-rate .rate-img .my-position.warning {
+  left: 194px;
+}
+
+#ResultPage #Content #ContentBody .result-rate .rate-img .my-position.danger {
+  left: 254px;
+}
+
+#ResultPage #Content #ContentBody .result-rate .rate-img .stage {
+  width: 295px;
+  height: 20px;
+  background: url(./util/icons/ic_stage.svg) no-repeat center;
+}

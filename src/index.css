@@ -1,0 +1,264 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* font 정의 */
+@font-face {
+  font-family: "notoSans";
+  src: url("./util/fonts/NotoSansCJKkr-Regular.otf");
+}
+
+@font-face {
+  font-family: "notoSansBold";
+  src: url("./util/fonts/NotoSansCJKkr-Bold.otf");
+}
+
+@font-face {
+  font-family: "notoSansLight";
+  src: url("./util/fonts/NotoSansCJKkr-Light.otf");
+}
+
+#GenderPage #Header {
+  width: 100%;
+  height: 6.5967016491754125vh;
+  min-height: 44px;
+  text-align: center;
+  line-height: 6.5967016491754125vh;
+  border-bottom: 1px solid #e6e6e6;
+  padding-top: 2.9985007496251876vh;
+}
+
+#GenderPage #Header h1 {
+  display: inline-block;
+  color: #000000;
+  font-size: 2.5487256371814095vh;
+  font-weight: 700;
+}
+
+#GenderPage #Content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#GenderPage #Content h6 {
+  display: inline-block;
+  color: #000000;
+  font-size: 2.9985007496251876vh;
+  font-weight: 700;
+  margin-top: 14.24287856071964vh;
+  margin-bottom: 5.997001499250375vh;
+  height: 4.497751124437781vh;
+}
+
+#GenderPage #Content .button-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+#GenderPage #Content .button-wrapper button {
+  display: flex;
+  cursor: pointer;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5.997001499250375vh;
+  align-items: center;
+  outline: none;
+  border: none;
+  background-color: #ffffff;
+  color: #000000;
+  width: 49.17541229385307vh;
+  height: 11.99400299850075vh;
+  min-width: 328px;
+  min-height: 80px;
+  font-size: 2.39880059970015vh;
+  font-weight: 700;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
+  gap: 1.4992503748125938vh;
+  margin-bottom: 2.9985007496251876vh;
+  transition: all 0.3s;
+}
+
+#GenderPage #Content .button-wrapper button.clicked {
+  background-color: #006fad;
+  color: #fff;
+}
+
+#GenderPage #Content .button-wrapper button .male-icon {
+  width: 4.497751124437781vh;
+  height: 4.497751124437781vh;
+  min-width: 30px;
+  min-height: 30px;
+  background: url(./util/icons/ic_male.svg) no-repeat center;
+}
+
+#GenderPage #Content .button-wrapper button .male-icon.clicked {
+  background: url(./util/icons/ic_male_selected.svg) no-repeat center;
+}
+
+#GenderPage #Content .button-wrapper button .female-icon {
+  width: 4.497751124437781vh;
+  height: 4.497751124437781vh;
+  min-width: 30px;
+  min-height: 30px;
+  background: url(./util/icons/ic_female.svg) no-repeat center;
+}
+
+#GenderPage #Content .button-wrapper button .female-icon.clicked {
+  background: url(./util/icons/ic_female_selected.svg) no-repeat center;
+}
+
+#GenderPage #Footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 23.68815592203898vh auto 0;
+}
+
+#GenderPage #Footer button {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background-color: #d9d9d9;
+  color: #ffffff;
+  font-size: 2.9985007496251876vh;
+  width: 50.37481259370315vh;
+  height: 8.995502248875562vh;
+  min-width: 336px;
+  min-height: 60px;
+  border-radius: 10.494752623688155vh;
+  box-shadow: none;
+}
+
+#GenderPage #Footer button.clicked {
+  background-color: #006fad;
+  color: #fff;
+}
