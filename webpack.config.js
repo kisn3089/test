@@ -9,6 +9,7 @@ module.exports = {
     age: "./src/age.js",
     measure: "./src/measure.js",
     result: "./src/result.js",
+    progress: "./src/util/js/progressbar.js",
   },
   output: {
     filename: "[name].bundle.js",
