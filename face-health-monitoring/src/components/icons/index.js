@@ -1,0 +1,9 @@
+export { ReactComponent as GenderF } from "./../../assets/icons/ic_female.svg";
+export { ReactComponent as GenderM } from "./../../assets/icons/ic_male.svg";
+export { ReactComponent as GenderSelectedF } from "./../../assets/icons/ic_female_selected.svg";
+export { ReactComponent as GenderSelectedM } from "./../../assets/icons/ic_male_selected.svg";
+export { ReactComponent as MeasureBtn } from "./../../assets/icons/ic_measuring.svg";
+export { ReactComponent as PrepareBtn } from "./../../assets/icons/ic_prepatation.svg";
+export { ReactComponent as StageBar } from "./../../assets/icons/ic_stage.svg";
+export { ReactComponent as PrevArrow } from "./../../assets/icons/ic_arrowback_20x20.svg";
+export { ReactComponent as MyStatus } from "./../../assets/icons/ic_you.svg";
