@@ -1,4 +1,60 @@
 import "./measure.css";
+import "./util/css/reset.css";
+import "./util/js/MathUtils.js";
+import "./util/js/Matrix3.js";
+import "./util/js/Quaternion.js";
+import "./util/js/convex.js";
+import "./util/js/extraction.js";
+import "./util/js/format.js";
+import "./util/js/geometry.js";
+import "./util/js/grid.js";
+import "./util/js/hull.js";
+import "./util/js/intersect.js";
+// import "./util/js/numjs.linalg.js";
+import "./util/js/math.js";
+import "./util/js/opencv.js";
+import ProgressBar from "./util/js/progressbar.js";
+import "./util/js/bci.min.js";
+import "./util/js/fili.min.js";
+import "./util/js/numjs.min.js";
+import "./util/js/dygraph.min.js";
+import "./util/js/lottie-player.js";
+import "./util/js/rollups/hmac-md5.js";
+import "./util/js/rollups/aes.js";
+import "./util/js/rollups/hmac-ripemd160.js";
+import "./util/js/rollups/hmac-sha1.js";
+import "./util/js/rollups/hmac-sha224.js";
+import "./util/js/rollups/hmac-sha256.js";
+import "./util/js/rollups/hmac-sha3.js";
+import "./util/js/rollups/hmac-sha384.js";
+import "./util/js/rollups/hmac-sha512.js";
+import "./util/js/rollups/md5.js";
+import "./util/js/rollups/pbkdf2.js";
+import "./util/js/rollups/rabbit.js";
+import "./util/js/rollups/rabbit-legacy.js";
+import "./util/js/rollups/rc4.js";
+import "./util/js/rollups/ripemd160.js";
+import "./util/js/rollups/sha1.js";
+import "./util/js/rollups/sha224.js";
+import "./util/js/rollups/sha256.js";
+import "./util/js/rollups/sha3.js";
+import "./util/js/rollups/sha384.js";
+import "./util/js/rollups/sha512.js";
+import "./util/js/rollups/tripledes.js";
+import { Camera } from "@mediapipe/camera_utils";
+import {
+  FaceMesh,
+  FACEMESH_RIGHT_EYE,
+  FACEMESH_LEFT_EYE,
+  FACEMESH_FACE_OVAL,
+  FACEMESH_LIPS,
+} from "@mediapipe/face_mesh";
+import CryptoJS from "crypto-js";
+import lottie from "lottie-web";
+import animationData from "./util/animation/ani_heartrate.json";
+
+var cv = require("opencv.js");
+var Fili = require("fili");
 
 const videoElement = document.getElementsByClassName("input_video")[0];
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
@@ -16,6 +72,44 @@ const detectedModal = document.getElementsByClassName("detected")[0];
 const networkModal = document.getElementsByClassName("network")[0];
 const detectedBtn = document.getElementsByClassName("detected-btn")[0];
 const networkBtn = document.getElementsByClassName("network-btn")[0];
+
+// const lottie = document.getElementsByClassName("lottie-player")[0];
+// lottie.src = "./util/animation/ani_heartrate.json";
+
+const AniWrapper = document.getElementsByClassName("lottie-container")[0];
+
+const Ani = document.createElement("div");
+Ani.style.width = "14.3928035982009vh";
+Ani.style.height = "8.095952023988007vh";
+Ani.style.minWidth = "96px";
+Ani.style.minHeight = "54px";
+Ani.classList.add("container");
+
+lottie.loadAnimation({
+  container: Ani,
+  renderer: "svg",
+  loop: true,
+  autoplay: true,
+  animationData: animationData,
+});
+
+AniWrapper.appendChild(Ani);
+
+detectedBtn.addEventListener("click", () => {
+  location.href = "./measure.html";
+});
+
+networkBtn.addEventListener("click", () => {
+  location.href = "./measure.html";
+});
+
+// var lottieAnim = lottie.loadAnimation({
+//   container: document.getElementById("lottie-player"), // the dom element that will contain the animation
+//   renderer: "svg",
+//   loop: true,
+//   autoplay: true,
+//   path: "./util/animation/ani_heartrate.json", // the path to the animation json
+// });
 
 preparation.classList.remove("off");
 measuring.classList.remove("on");
@@ -150,63 +244,53 @@ const bpfCoeffs2 = iirCalculator.bandpass({
 const bandpassFilter = new Fili.IirFilter(bpfCoeffs);
 const bandpassFilter2 = new Fili.IirFilter(bpfCoeffs2);
 
-cv["onRuntimeInitialized"] = () => {
-  try {
-    videoElement.width = 640;
-    videoElement.height = 480;
-    lastFrameGray = new cv.Mat(
-      canvasElement2.height,
-      canvasElement2.width,
-      cv.CV_8UC1
-    );
-    frameGray = new cv.Mat(
-      canvasElement2.height,
-      canvasElement2.width,
-      cv.CV_8UC1
-    );
-    overlayMask = new cv.Mat(
-      canvasElement2.height,
-      canvasElement2.width,
-      cv.CV_8UC1
-    );
-    frame0 = new cv.Mat(
-      canvasElement2.height,
-      canvasElement2.width,
-      cv.CV_8UC4
-    );
-    frame1 = new cv.Mat(
-      canvasElement2.height,
-      canvasElement2.width,
-      cv.CV_8UC4
-    );
+// cv["onRuntimeInitialized"] = () => {
+//   try {
+videoElement.width = 640;
+videoElement.height = 480;
+lastFrameGray = new cv.Mat(
+  canvasElement2.height,
+  canvasElement2.width,
+  cv.CV_8UC1
+);
+frameGray = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC1);
+overlayMask = new cv.Mat(
+  canvasElement2.height,
+  canvasElement2.width,
+  cv.CV_8UC1
+);
+frame0 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
+frame1 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
 
-    VIEW_WIDTH = canvasElement2.width;
-    VIEW_HEIGHT = canvasElement2.height;
+VIEW_WIDTH = canvasElement2.width;
+VIEW_HEIGHT = canvasElement2.height;
 
-    p0 = new cv.Mat();
+p0 = new cv.Mat();
 
-    winSize = new cv.Size(75, 75);
-    maxLevel = 3;
-    criteria = new cv.TermCriteria(
-      cv.TERM_CRITERIA_EPS | cv.TERM_CRITERIA_COUNT,
-      30,
-      0.01
-    );
+winSize = new cv.Size(75, 75);
+maxLevel = 3;
+criteria = new cv.TermCriteria(
+  cv.TERM_CRITERIA_EPS | cv.TERM_CRITERIA_COUNT,
+  30,
+  0.01
+);
 
-    for (var i = 0; i < 150; i++) {
-      chart_sig1[i] = 0;
-      chart_sig2[i] = 0;
-    }
+for (var i = 0; i < 150; i++) {
+  chart_sig1[i] = 0;
+  chart_sig2[i] = 0;
+}
 
-    date1 = new Date();
-  } catch (e) {
-    console.log(e);
-  }
-};
+date1 = new Date();
+// } catch (e) {
+//   console.log(e);
+// }
+// };
 
 function onResults(results) {
+  // lottieAnim.play();
   preparation.classList.add("off");
   measuring.classList.add("on");
+  lottie.src = "";
   ctx.save();
   ctx2.save();
   ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
@@ -482,7 +566,7 @@ camera.start();
 var bar = new ProgressBar.Circle(container, {
   strokeWidth: 3,
   easing: "easeInOut",
-  duration: 30000,
+  duration: 90000,
   color: "rgba(0, 111, 173, 1)",
   trailColor: "#fff",
   trailWidth: 3,

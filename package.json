@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "build": "webpack",
+    "build": "GENERATE_SOURCEMAP=false webpack",
     "start": "webpack serve --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,6 +29,11 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "@mediapipe/face_mesh": "^0.4.1633559619"
+    "@mediapipe/camera_utils": "^0.3.1640029074",
+    "@mediapipe/face_mesh": "^0.4.1633559619",
+    "crypto-js": "^4.1.1",
+    "fili": "^2.0.3",
+    "lottie-web": "^5.10.1",
+    "opencv.js": "^1.2.1"
   }
 }
