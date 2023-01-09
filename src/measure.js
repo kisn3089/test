@@ -52,6 +52,8 @@ import {
 import CryptoJS from "crypto-js";
 import lottie from "lottie-web";
 import animationData from "./util/animation/ani_heartrate.json";
+import loadingData from "./util/animation/loading.json";
+import { math } from "./util/js/math.js";
 
 var cv = require("opencv.js");
 var Fili = require("fili");
@@ -77,6 +79,7 @@ const networkBtn = document.getElementsByClassName("network-btn")[0];
 // lottie.src = "./util/animation/ani_heartrate.json";
 
 const AniWrapper = document.getElementsByClassName("lottie-container")[0];
+const LoadingWrapper = document.getElementsByClassName("loading-wrapper")[0];
 
 const Ani = document.createElement("div");
 Ani.style.width = "14.3928035982009vh";
@@ -84,6 +87,13 @@ Ani.style.height = "8.095952023988007vh";
 Ani.style.minWidth = "96px";
 Ani.style.minHeight = "54px";
 Ani.classList.add("container");
+
+const Loading = document.createElement("div");
+Loading.style.width = "8.995502248875562vh";
+Loading.style.height = "8.995502248875562vh";
+Loading.style.minWidth = "60px";
+Loading.style.minHeight = "60px";
+Loading.classList.add("loading");
 
 lottie.loadAnimation({
   container: Ani,
@@ -93,7 +103,16 @@ lottie.loadAnimation({
   animationData: animationData,
 });
 
+lottie.loadAnimation({
+  container: Loading,
+  renderer: "svg",
+  loop: true,
+  autoplay: true,
+  animationData: loadingData,
+});
+
 AniWrapper.appendChild(Ani);
+LoadingWrapper.appendChild(Loading);
 
 detectedBtn.addEventListener("click", () => {
   location.href = "./measure.html";
@@ -102,6 +121,14 @@ detectedBtn.addEventListener("click", () => {
 networkBtn.addEventListener("click", () => {
   location.href = "./measure.html";
 });
+
+Loading.classList.remove("Loaded");
+LoadingWrapper.classList.remove("remove");
+
+setTimeout(() => {
+  Loading.classList.add("Loaded");
+  LoadingWrapper.classList.add("remove");
+}, 2000);
 
 // var lottieAnim = lottie.loadAnimation({
 //   container: document.getElementById("lottie-player"), // the dom element that will contain the animation
@@ -454,6 +481,10 @@ function onResults(results) {
       timingHist.shift();
       // resp_sig.shift();
       let textArr = [];
+      // let respArr = [];
+
+      Loading.classList.remove("Loaded");
+      LoadingWrapper.classList.remove("remove");
 
       for (let i = 0; i < maxHistLen; i++) {
         textArr.push(
@@ -497,7 +528,13 @@ function onResults(results) {
       movingAverage(resp_signals, 3, Math.max(Math.floor(fps / 6), 2));
 
       let res = peakdet(resp_sig, 0.5);
-      resp = res.peaks.length * 2;
+
+      let timeInterval =
+        (timingHist[timingHist.length - 1] - timingHist[0]) / 1000000;
+      let second = Math.trunc(timeInterval);
+      let count = 60 / second;
+
+      resp = res.peaks.length * count;
 
       fetch(url, options)
         .then((response) => response.json())
@@ -508,7 +545,7 @@ function onResults(results) {
             sessionStorage.setItem("msi", response.message.mentalStress);
             sessionStorage.setItem("psi", response.message.physicalStress);
             sessionStorage.setItem("hr", response.message.hr);
-            sessionStorage.setItem("resp", resp);
+            sessionStorage.setItem("resp", Math.trunc(resp));
             location.href = "./result.html";
           }
         })
@@ -566,7 +603,7 @@ camera.start();
 var bar = new ProgressBar.Circle(container, {
   strokeWidth: 3,
   easing: "easeInOut",
-  duration: 90000,
+  duration: 85000,
   color: "rgba(0, 111, 173, 1)",
   trailColor: "#fff",
   trailWidth: 3,

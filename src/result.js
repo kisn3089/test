@@ -297,4 +297,6 @@ if (totalScore > 90) {
 
 okBtn.addEventListener("click", function () {
   location.href = "./index.html";
+  sessionStorage.setItem("age", "");
+  sessionStorage.setItem("gender", "");
 });

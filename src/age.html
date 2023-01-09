@@ -12,7 +12,7 @@
   <body>
     <div id="AgePage">
       <section id="Header">
-        <a href="./index.html" class="prev"> </a>
+        <a href="./index.html" class="prev"></a>
         <h1>Information</h1>
       </section>
       <section id="Content">
@@ -22,7 +22,8 @@
             class="age-input"
             type="text"
             inputmode="numeric"
-            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+            oninput="this.value = this.value.replace(/[^0-9.]/g,
+          '').replace(/(\..*)\./g, '$1');"
           />
           <p class="des">Please enter a valid number.</p>
         </div>

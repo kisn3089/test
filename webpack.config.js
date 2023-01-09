@@ -35,6 +35,9 @@ module.exports = {
       crypto: false,
     },
   },
+  optimization: {
+    minimize: true,
+  },
   plugins: [
     new HtmlWebpackPlugin({
       title: "Face Health Monitoring",

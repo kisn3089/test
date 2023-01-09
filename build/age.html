@@ -7,12 +7,12 @@
     <link rel="stylesheet" type="text/css" href="./reset.css" />
     <link rel="stylesheet" type="text/css" href="./age.css" />
     <title>Face Health Monitoring</title>
-  <script defer src="age.bundle.js?1cd83e535170da1fcb37"></script></head>
+  <script defer src="age.bundle.js?7c417c3294ba16040240"></script></head>
 
   <body>
     <div id="AgePage">
       <section id="Header">
-        <a href="./index.html" class="prev"> </a>
+        <a href="./index.html" class="prev"></a>
         <h1>Information</h1>
       </section>
       <section id="Content">
@@ -22,7 +22,8 @@
             class="age-input"
             type="text"
             inputmode="numeric"
-            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+            oninput="this.value = this.value.replace(/[^0-9.]/g,
+          '').replace(/(\..*)\./g, '$1');"
           />
           <p class="des">Please enter a valid number.</p>
         </div>
