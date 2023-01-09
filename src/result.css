@@ -322,32 +322,41 @@ table {
   min-width: 26px;
   min-height: 20px;
   background: url(./util/icons/ic_you.svg) no-repeat center;
+  background-size: cover;
   position: absolute;
   top: -3.598200899550225vh;
 }
 
 #ResultPage #Content #ContentBody .result-rate .rate-img .my-position.healthy {
-  left: 14px;
+  /* left: 14px; */
+  left: 2.098950524737631vh;
 }
 
 #ResultPage #Content #ContentBody .result-rate .rate-img .my-position.normal {
-  left: 74px;
+  /* left: 74px; */
+  left: 11.094452773613193vh;
 }
 
 #ResultPage #Content #ContentBody .result-rate .rate-img .my-position.caution {
-  left: 134px;
+  /* left: 134px; */
+  left: 20.089955022488756vh;
 }
 
 #ResultPage #Content #ContentBody .result-rate .rate-img .my-position.warning {
-  left: 194px;
+  /* left: 194px; */
+  left: 29.08545727136432vh;
 }
 
 #ResultPage #Content #ContentBody .result-rate .rate-img .my-position.danger {
-  left: 254px;
+  /* left: 254px; */
+  left: 38.08095952023988vh;
 }
 
 #ResultPage #Content #ContentBody .result-rate .rate-img .stage {
-  width: 295px;
-  height: 20px;
+  /* width: 59.220389805097454vh; */
+  height: 2.9985007496251876vh;
+  min-width: 295px;
+  min-height: 20px;
   background: url(./util/icons/ic_stage.svg) no-repeat center;
+  background-size: cover;
 }
