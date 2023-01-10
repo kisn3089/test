@@ -33,6 +33,7 @@
     "@mediapipe/face_mesh": "^0.4.1633559619",
     "crypto-js": "^4.1.1",
     "fili": "^2.0.3",
+    "js-circle-progress": "^0.2.4",
     "lottie-web": "^5.10.1",
     "opencv.js": "^1.2.1"
   }

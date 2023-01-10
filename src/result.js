@@ -246,20 +246,20 @@ if (Number(msiScore) <= 0.1) {
 }
 
 // Resp Score
-if (Number(respScore) >= 6 && Number(respScore) <= 12) {
+if (Number(respScore) > 6 && Number(respScore) <= 12) {
   positions[1].classList.add("healthy");
   respPoint = 20;
 } else if (Number(respScore) > 12 && Number(respScore) <= 18) {
-  positions[2].classList.add("normal");
+  positions[1].classList.add("normal");
   respPoint = 15;
 } else if (Number(respScore) > 18 && Number(respScore) <= 21) {
-  positions[2].classList.add("caution");
+  positions[1].classList.add("caution");
   respPoint = 10;
 } else if (Number(respScore) > 21 && Number(respScore) <= 24) {
-  positions[2].classList.add("warning");
+  positions[1].classList.add("warning");
   respPoint = 5;
 } else if (Number(respScore) > 24 || Number(respScore) < 6) {
-  positions[2].classList.add("danger");
+  positions[1].classList.add("danger");
   respPoint = 0.5;
 }
 

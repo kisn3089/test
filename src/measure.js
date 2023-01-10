@@ -46,6 +46,7 @@ import lottie from "lottie-web";
 import animationData from "./util/animation/ani_heartrate.json";
 import loadingData from "./util/animation/loading.json";
 import { math } from "./util/js/math.js";
+import CircleProgress from "js-circle-progress";
 
 var cv = require("opencv.js");
 var Fili = require("fili");
@@ -115,7 +116,7 @@ networkBtn.addEventListener("click", () => {
 });
 
 Loading.classList.remove("Loaded");
-LoadingWrapper.classList.remove("remove");
+LoadingWrapper.remove("remove");
 preparation.classList.remove("off");
 measuring.classList.remove("on");
 Modal.classList.remove("alert");
@@ -236,6 +237,13 @@ for (var i = 0; i < 150; i++) {
   chart_sig1[i] = 0;
   chart_sig2[i] = 0;
 }
+
+let cp = new CircleProgress(container, {
+  value: 0,
+  max: maxHistLen,
+});
+
+cp;
 
 function onResults(results) {
   // lottieAnim.play();
@@ -366,6 +374,8 @@ function onResults(results) {
     sum_red = 0;
     sum_green = 0;
     sum_blue = 0;
+
+    cp.value = timingHist.length;
 
     // resp
     try {
@@ -522,15 +532,19 @@ const camera = new Camera(videoElement, {
 camera.start();
 
 // Progress Bar Handler
-var bar = new ProgressBar.Circle(container, {
-  strokeWidth: 3,
-  easing: "easeInOut",
-  duration: 85000,
-  color: "rgba(0, 111, 173, 1)",
-  trailColor: "#fff",
-  trailWidth: 3,
-  svgStyle: null,
-});
+// new CircleProgress(container, {
+//   value: timingHist.length,
+//   max: maxHistLen,
+// });
+// var bar = new ProgressBar.Circle(container, {
+//   strokeWidth: 3,
+//   easing: "linear",
+//   duration: 80000,
+//   color: "rgba(0, 111, 173, 1)",
+//   trailColor: "#fff",
+//   trailWidth: 3,
+//   svgStyle: null,
+// });
 
 bar.animate(1.0);
 
