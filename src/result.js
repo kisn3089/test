@@ -29,6 +29,9 @@ respRate.textContent = respScore;
 msiRate.textContent = msiScore.slice(0, 4);
 psiRate.textContent = psiScore.slice(0, 4);
 
+sessionStorage.setItem("age", "");
+sessionStorage.setItem("gender", "");
+
 // HR Score
 if (Number(age) <= 25) {
   if (Number(hrScore) >= 63 && Number(hrScore) <= 81) {
@@ -297,6 +300,4 @@ if (totalScore > 90) {
 
 okBtn.addEventListener("click", function () {
   location.href = "./index.html";
-  sessionStorage.setItem("age", "");
-  sessionStorage.setItem("gender", "");
 });

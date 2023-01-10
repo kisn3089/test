@@ -1,16 +1,8 @@
 import "./measure.css";
 import "./util/css/reset.css";
-import "./util/js/MathUtils.js";
-import "./util/js/Matrix3.js";
-import "./util/js/Quaternion.js";
-import "./util/js/convex.js";
-import "./util/js/extraction.js";
 import "./util/js/format.js";
-import "./util/js/geometry.js";
 import "./util/js/grid.js";
-import "./util/js/hull.js";
 import "./util/js/intersect.js";
-// import "./util/js/numjs.linalg.js";
 import "./util/js/math.js";
 import "./util/js/opencv.js";
 import ProgressBar from "./util/js/progressbar.js";
@@ -124,25 +116,16 @@ networkBtn.addEventListener("click", () => {
 
 Loading.classList.remove("Loaded");
 LoadingWrapper.classList.remove("remove");
-
-setTimeout(() => {
-  Loading.classList.add("Loaded");
-  LoadingWrapper.classList.add("remove");
-}, 2000);
-
-// var lottieAnim = lottie.loadAnimation({
-//   container: document.getElementById("lottie-player"), // the dom element that will contain the animation
-//   renderer: "svg",
-//   loop: true,
-//   autoplay: true,
-//   path: "./util/animation/ani_heartrate.json", // the path to the animation json
-// });
-
 preparation.classList.remove("off");
 measuring.classList.remove("on");
 Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
+
+setTimeout(() => {
+  Loading.classList.add("Loaded");
+  LoadingWrapper.classList.add("remove");
+}, 2000);
 
 const ctx = canvasElement.getContext("2d");
 const ctx2 = canvasElement2.getContext("2d");
@@ -152,22 +135,12 @@ let url =
   "https://siigjmw19n.apigw.ntruss.com/face_health_estimate/v1/calculate_face_ppg_stress_cors";
 let uri = "/face_health_estimate/v1/calculate_face_ppg_stress_cors";
 
-const DEFAULT_FPS = 30;
-const LOW_BPM = 50;
-const HIGH_BPM = 180;
-const REL_MIN_FACE_SIZE = 0.4;
-const SEC_PER_MIN = 60;
-const MSEC_PER_SEC = 1000;
 const MAX_CORNERS = 30;
-const MIN_CORNERS = 5;
 const QUALITY_LEVEL = 0.01;
 const MIN_DISTANCE = 1;
 const useHarrisDetector = true;
 const block_size = 3;
 
-var average = (array) => array.reduce((a, b) => a + b) / array.length;
-var argMax = (array) =>
-  array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
 let rgbArray = [];
 let sum_red = 0;
 let sum_green = 0;
@@ -175,8 +148,7 @@ let sum_blue = 0;
 var mean_red = [];
 var mean_green = [];
 var mean_blue = [];
-let fpos = [];
-// var maxHistLen = set_time ? Number(set_time) * 30 : 900;
+// second * 30
 var maxHistLen = 900;
 var timingHist = [];
 let frame = 0;
@@ -184,18 +156,10 @@ let H = [];
 let curPollFreq = 30;
 let graphData = [];
 
-let targetFps = 30;
-let windowSize = 5;
-let rppgInterval = 150;
-let window_frame = 1;
-
 let width;
 let height;
 var VIEW_WIDTH;
 var VIEW_HEIGHT;
-let streaming = false;
-let stream = null;
-var faceDetector;
 
 let init_frame;
 let lastFrameGray;
@@ -226,12 +190,6 @@ let p1_y;
 let winSize;
 let maxLevel;
 let criteria;
-// Create a mask image for drawing purposes
-let zeroEle;
-let mask;
-let color = [];
-let sig_show = 0;
-let date1;
 
 let boxLeft;
 let boxTop;
@@ -243,36 +201,8 @@ let respTop;
 let respWidth;
 let respHeight;
 
-const SAMPLE_FREQUENCY = 30;
-const HPF_CUTOFF = 3;
-const LPF_CUTOFF = 0.8;
-const iirCalculator = new Fili.CalcCascades();
-const bpfCoeffs = iirCalculator.bandpass({
-  order: 2,
-  characteristic: "butterworth",
-  Fs: curPollFreq,
-  Fc: LPF_CUTOFF,
-  Fc2: HPF_CUTOFF,
-  gain: 0,
-  preGain: false,
-});
 let timestamp = 0;
 
-const bpfCoeffs2 = iirCalculator.bandpass({
-  order: 2,
-  characteristic: "butterworth",
-  Fs: 30,
-  Fc: 0.1,
-  Fc2: 0.5,
-  gain: 0,
-  preGain: false,
-});
-
-const bandpassFilter = new Fili.IirFilter(bpfCoeffs);
-const bandpassFilter2 = new Fili.IirFilter(bpfCoeffs2);
-
-// cv["onRuntimeInitialized"] = () => {
-//   try {
 videoElement.width = 640;
 videoElement.height = 480;
 lastFrameGray = new cv.Mat(
@@ -306,12 +236,6 @@ for (var i = 0; i < 150; i++) {
   chart_sig1[i] = 0;
   chart_sig2[i] = 0;
 }
-
-date1 = new Date();
-// } catch (e) {
-//   console.log(e);
-// }
-// };
 
 function onResults(results) {
   // lottieAnim.play();
@@ -479,12 +403,11 @@ function onResults(results) {
       mean_green.shift();
       mean_blue.shift();
       timingHist.shift();
-      // resp_sig.shift();
       let textArr = [];
-      // let respArr = [];
 
       Loading.classList.remove("Loaded");
       LoadingWrapper.classList.remove("remove");
+      Ani.classList.add("off");
 
       for (let i = 0; i < maxHistLen; i++) {
         textArr.push(
@@ -540,7 +463,6 @@ function onResults(results) {
         .then((response) => response.json())
         .then((response) => {
           if (response.result === 200) {
-            // fpos = bandpassFilter.simulate(response.message.hr_graph);
             respBpm.textContent = `${response.message.hr} bpm`;
             sessionStorage.setItem("msi", response.message.mentalStress);
             sessionStorage.setItem("psi", response.message.physicalStress);
@@ -619,143 +541,6 @@ detectedBtn.addEventListener("click", function () {
 networkBtn.addEventListener("click", function () {
   location.href = "./measure.html";
 });
-
-var heartrate = 0;
-function updateChart(times, freq, data) {
-  // Get the bin frequencies from their index
-  data = data.map((elem) => Math.abs(elem));
-
-  let index_07 = math.round(0.8 / (15 / 513));
-  let index_4 = math.round(4 / (15 / 513));
-  let max = Math.max(...data.slice(index_07, index_4));
-  let maxloc = data.indexOf(max);
-  let maxHz = freq[maxloc];
-
-  document.getElementById("HR_indicator").innerHTML =
-    "Predicted heartrate: " + Math.round(maxHz * 60) + " BPM";
-}
-
-function pos(red, green, blue) {
-  let vred = nj.array([red]);
-  let vgreen = nj.array([green]);
-  let vblue = nj.array([blue]);
-  let C = [red, green, blue];
-
-  let mean_red = vred.mean();
-  let mean_green = vgreen.mean();
-  let mean_blue = vblue.mean();
-  let mean_color = nj.array([mean_red, mean_green, mean_blue]);
-
-  let a = [
-    [1, 2],
-    [3, 4],
-  ];
-
-  let diag_mean_color = nj.diag(mean_color);
-  let b = [
-    [
-      diag_mean_color.selection.data[0],
-      diag_mean_color.selection.data[1],
-      diag_mean_color.selection.data[2],
-    ],
-    [
-      diag_mean_color.selection.data[3],
-      diag_mean_color.selection.data[4],
-      diag_mean_color.selection.data[5],
-    ],
-    [
-      diag_mean_color.selection.data[6],
-      diag_mean_color.selection.data[7],
-      diag_mean_color.selection.data[8],
-    ],
-  ];
-
-  let diag_mean_color_inv = math.inv(b);
-  let Cn = multiply(diag_mean_color_inv, C);
-
-  for (var i = 0; i < C.length; i++) {
-    Cn[0][i] = Cn[0][i] - 1;
-    Cn[1][i] = Cn[1][i] - 1;
-    Cn[2][i] = Cn[2][i] - 1;
-  }
-
-  let projection_matrix = [
-    [0, 1, -1],
-    [-2, 1, 1],
-  ];
-  let S = multiply(projection_matrix, Cn);
-  let std = [1, math.std(S[0]) / math.std(S[1])];
-
-  let P = math.multiply(std, S);
-  for (var i = 0; i < P.length; i++) {
-    H[i] = (P[i] - math.mean(P)) / math.std(P);
-  }
-
-  return H;
-}
-
-function cpu_CHROM(red, green, blue) {
-  let vred = nj.array([red]);
-  let vgreen = nj.array([green]);
-  let vblue = nj.array([blue]);
-  let compRed = [];
-  let compGreen = [];
-  let compBlue = [];
-
-  for (let idx in vred.selection.data) {
-    compRed.push(vred.selection.data[idx] * 3);
-    compGreen.push(vgreen.selection.data[idx] * 2);
-  }
-
-  let Xcomp = [];
-  for (let comp in compRed) {
-    Xcomp.push(compRed[comp] - compGreen[comp]);
-  }
-
-  compRed = [];
-  compGreen = [];
-  let Ycomp = [];
-
-  for (let idx in vred.selection.data) {
-    compRed.push(vred.selection.data[idx] * 1.5);
-    compGreen.push(vgreen.selection.data[idx]);
-    compBlue.push(vblue.selection.data[idx] * 1.5);
-  }
-  for (let comp in compRed) {
-    Ycomp.push(compRed[comp] + compGreen[comp] - compBlue[comp]);
-  }
-
-  let sX = math.std(Xcomp);
-  let sY = math.std(Ycomp);
-  let alpha = sX / sY;
-  let alphaArr = [];
-  for (let i = 0; i < nj.array([Xcomp]).shape[1]; i++) {
-    alphaArr.push(alpha);
-  }
-  let multiply = multicomp(alphaArr, Ycomp);
-  let bvp = [];
-  for (let i = 0; i < Xcomp.length; i++) {
-    bvp.push(Xcomp[i] - multiply[i]);
-  }
-  return bvp;
-}
-
-function multiply(a, b) {
-  const transpose = (a) => a[0].map((x, i) => a.map((y) => y[i]));
-  const dotproduct = (a, b) =>
-    a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
-  const result = (a, b) =>
-    a.map((x) => transpose(b).map((y) => dotproduct(x, y)));
-  return result(a, b);
-}
-
-function multicomp(a, b) {
-  let resultArr = [];
-  for (let i = 0; i < a.length; i++) {
-    resultArr.push(a[i] * b[i]);
-  }
-  return resultArr;
-}
 
 function saveToFile_Chrome(fileName, content) {
   var blob = new Blob([content], { type: "text/plain" });

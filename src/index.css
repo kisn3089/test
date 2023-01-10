@@ -218,10 +218,12 @@ table {
   min-width: 30px;
   min-height: 30px;
   background: url(./util/icons/ic_male.svg) no-repeat center;
+  background-size: cover;
 }
 
 #GenderPage #Content .button-wrapper button .male-icon.clicked {
   background: url(./util/icons/ic_male_selected.svg) no-repeat center;
+  background-size: cover;
 }
 
 #GenderPage #Content .button-wrapper button .female-icon {
@@ -230,10 +232,12 @@ table {
   min-width: 30px;
   min-height: 30px;
   background: url(./util/icons/ic_female.svg) no-repeat center;
+  background-size: cover;
 }
 
 #GenderPage #Content .button-wrapper button .female-icon.clicked {
   background: url(./util/icons/ic_female_selected.svg) no-repeat center;
+  background-size: cover;
 }
 
 #GenderPage #Footer {
