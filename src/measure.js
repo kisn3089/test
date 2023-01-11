@@ -277,8 +277,6 @@ function testSupport(supportedDevices) {
   }
 }
 
-const controls = window;
-const drawingUtils = window;
 const mpFaceMesh = window;
 
 const config = {
