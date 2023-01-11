@@ -229,6 +229,31 @@ table {
   z-index: 50;
 }
 
+.circle-progress {
+  width: 35.98200899550225vh !important;
+  height: 35.98200899550225vh !important;
+  min-width: 240px !important;
+  min-height: 240px !important;
+}
+
+.circle-progress-circle {
+  width: 35.98200899550225vh;
+  height: 35.98200899550225vh;
+  min-width: 240px;
+  min-height: 240px;
+  stroke-width: 3 !important;
+  stroke: #fff !important;
+}
+
+.circle-progress-value {
+  stroke-width: 3 !important;
+  stroke: #006fad !important;
+}
+
+.circle-progress-text {
+  display: none !important;
+}
+
 #MeasurePage #Comment.Preparation {
   width: 50.22488755622189vh;
   height: 21.73913043478261vh;

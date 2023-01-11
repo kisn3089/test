@@ -10,6 +10,7 @@ module.exports = {
     measure: "./src/measure.js",
     result: "./src/result.js",
     progress: "./src/util/js/progressbar.js",
+    mediapipe: "./src/mediapipe.js",
   },
   output: {
     filename: "[name].bundle.js",
@@ -66,6 +67,13 @@ module.exports = {
       filename: "result.html",
       chunks: ["result"],
       template: "./src/result.html",
+    }),
+    new HtmlWebpackPlugin({
+      title: "Face Health Monitoring",
+      hash: true,
+      filename: "mediapipe.html",
+      chunks: ["mediapipe"],
+      template: "./src/mediapipe.html",
     }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
