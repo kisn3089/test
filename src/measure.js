@@ -129,37 +129,6 @@ setTimeout(() => {
   LoadingWrapper.classList.add("remove");
 }, 2000);
 
-testSupport([{ client: "Chrome" }]);
-
-function testSupport(supportedDevices) {
-  const deviceDetector = new DeviceDetector();
-  const detectedDevice = deviceDetector.parse(navigator.userAgent);
-
-  let isSupported = false;
-  for (const device of supportedDevices) {
-    if (device.client !== undefined) {
-      const re = new RegExp(`^${device.client}$`);
-      if (!re.test(detectedDevice.client.name)) {
-        continue;
-      }
-    }
-    if (device.os !== undefined) {
-      const re = new RegExp(`^${device.os}$`);
-      if (!re.test(detectedDevice.os.name)) {
-        continue;
-      }
-    }
-    isSupported = true;
-    break;
-  }
-  if (!isSupported) {
-    alert(
-      `This demo, running on ${detectedDevice.client.name}/${detectedDevice.os.name}, ` +
-        `is not well supported at this time, continue at your own risk.`
-    );
-  }
-}
-
 const ctx = canvasElement.getContext("2d");
 const ctx2 = canvasElement2.getContext("2d");
 
@@ -276,6 +245,50 @@ let cp = new CircleProgress(container, {
 });
 
 cp;
+
+testSupport([{ client: "Chrome" }]);
+
+function testSupport(supportedDevices) {
+  const deviceDetector = new DeviceDetector();
+  const detectedDevice = deviceDetector.parse(navigator.userAgent);
+
+  let isSupported = false;
+  for (const device of supportedDevices) {
+    if (device.client !== undefined) {
+      const re = new RegExp(`^${device.client}$`);
+      if (!re.test(detectedDevice.client.name)) {
+        continue;
+      }
+    }
+    if (device.os !== undefined) {
+      const re = new RegExp(`^${device.os}$`);
+      if (!re.test(detectedDevice.os.name)) {
+        continue;
+      }
+    }
+    isSupported = true;
+    break;
+  }
+  if (!isSupported) {
+    alert(
+      `This demo, running on ${detectedDevice.client.name}/${detectedDevice.os.name}, ` +
+        `is not well supported at this time, continue at your own risk.`
+    );
+  }
+}
+
+const controls = window;
+const drawingUtils = window;
+const mpFaceMesh = window;
+
+const config = {
+  locateFile: (file) => {
+    return (
+      `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@` +
+      `${mpFaceMesh.VERSION}/${file}`
+    );
+  },
+};
 
 function onResults(results) {
   // lottieAnim.play();
@@ -434,8 +447,8 @@ function onResults(results) {
       // Update the signal
       resp_sig.push(resp_y);
     } catch (e) {
-      Modal.classList.add("alert");
-      detectedModal.classList.add("on");
+      // Modal.classList.add("alert");
+      // detectedModal.classList.add("on");
       console.log("Error capturing frame:");
       console.log(e);
     }
@@ -521,6 +534,8 @@ function onResults(results) {
       frame = frame + 1;
     }
   } else {
+    Modal.classList.add("alert");
+    detectedModal.classList.add("on");
     ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     ctx2.clearRect(0, 0, canvasElement2.width, canvasElement2.height);
   }
@@ -528,19 +543,31 @@ function onResults(results) {
   ctx2.restore();
 }
 
-const faceMesh = new FaceMesh({
-  locateFile: (file) => {
-    return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
-  },
-});
+// const faceMesh = new FaceMesh({
+//   locateFile: (file) => {
+//     return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+//   },
+// });
 
-faceMesh.setOptions({
+// faceMesh.setOptions({
+//   maxNumFaces: 1,
+//   refineLandmarks: true,
+//   minDetectionConfidence: 0.5,
+//   minTrackingConfidence: 0.5,
+// });
+
+// faceMesh.onResults(onResults);
+
+const solutionOptions = {
+  enableFaceGeometry: false,
   maxNumFaces: 1,
-  refineLandmarks: true,
+  refineLandmarks: false,
   minDetectionConfidence: 0.5,
   minTrackingConfidence: 0.5,
-});
+};
 
+const faceMesh = new mpFaceMesh.FaceMesh(config);
+faceMesh.setOptions(solutionOptions);
 faceMesh.onResults(onResults);
 
 // Camera Handler
