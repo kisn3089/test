@@ -194,7 +194,7 @@ table {
 #MeasurePage #Content .output_canvas {
   width: 100%;
   height: calc(100vh - 9.745127436281859vh);
-  display: none;
+  /* display: none; */
   object-fit: cover;
 }
 

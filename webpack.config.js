@@ -10,7 +10,7 @@ module.exports = {
     measure: "./src/measure.js",
     result: "./src/result.js",
     progress: "./src/util/js/progressbar.js",
-    mediapipe: "./src/mediapipe.js",
+    mediapipe: "./src/measuretest.js",
   },
   output: {
     filename: "[name].bundle.js",

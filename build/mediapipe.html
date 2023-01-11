@@ -18,34 +18,63 @@
       src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"
       crossorigin="anonymous"
     ></script>
-  <script defer src="mediapipe.bundle.js?0e739184a13e80570d07"></script></head>
+  <script defer src="mediapipe.bundle.js?10f4c756baca74c389c0"></script></head>
 
   <body>
-    <div class="container">
-      <video class="input_video"></video>
-      <div class="canvas-container">
-        <canvas class="output_canvas" width="1280px" height="720px"> </canvas>
-      </div>
-      <div class="loading">
-        <div class="spinner"></div>
-        <div class="message">Loading</div>
-      </div>
-      <a class="abs logo" href="http://www.mediapipe.dev" target="_blank">
-        <div style="display: flex; align-items: center; bottom: 0; right: 10px">
-          <img class="logo" src="logo_white.png" alt="" style="height: 50px" />
-          <span class="title">MediaPipe</span>
+    <div id="MeasurePage">
+      <section id="Header">
+        <a href="./age.html" class="prev"> </a>
+        <h1>Information</h1>
+      </section>
+      <section id="Content">
+        <video
+          id="input_video"
+          class="input_video"
+          autoplay="true"
+          muted="true"
+          width="1280px"
+          height="640px"
+        ></video>
+        <canvas class="output_canvas" width="640px" height="480px"></canvas>
+        <canvas class="output_canvas2" width="640px" height="480px"></canvas>
+        <canvas
+          id="canvas"
+          class="resp-img"
+          width="640px"
+          height="480px"
+        ></canvas>
+        <div class="progress-bar"></div>
+      </section>
+      <section class="loading-wrapper"></section>
+      <section id="Comment" class="Measuring">
+        <button class="measure-btn">Measuring</button>
+        <span class="bpm">bpm</span>
+        <span>Measuring now... Don’t talk or move.</span>
+        <div class="lottie-container"></div>
+      </section>
+      <section id="Comment" class="Preparation">
+        <button class="prepare-btn">Preparation</button>
+        <span>Please position your face in the circle.</span>
+      </section>
+      <section id="Modal" class="modal">
+        <div class="detected">
+          <div class="message">
+            <span>No faces are detected.</span>
+            <span>Please try again.</span>
+          </div>
+          <button class="detected-btn">OK</button>
         </div>
-      </a>
-      <div class="shoutout">
-        <div>
-          <a href="https://solutions.mediapipe.dev/face_mesh">
-            Click here for more info
-          </a>
+        <div class="network">
+          <div class="message">
+            <span>The network is</span>
+            <span>currently unstable.</span>
+          </div>
+          <button class="network-btn">OK</button>
         </div>
-      </div>
+      </section>
     </div>
     <div class="control-panel"></div>
 
-    <script type="module" src="./mediapipe.js"></script>
+    <script type="module" src="./measuretest.js"></script>
   </body>
 </html>

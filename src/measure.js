@@ -277,6 +277,8 @@ function testSupport(supportedDevices) {
   }
 }
 
+const controls = window;
+const drawingUtils = window;
 const mpFaceMesh = window;
 
 const config = {
@@ -532,8 +534,8 @@ function onResults(results) {
       frame = frame + 1;
     }
   } else {
-    Modal.classList.add("alert");
-    detectedModal.classList.add("on");
+    // Modal.classList.add("alert");
+    // detectedModal.classList.add("on");
     ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     ctx2.clearRect(0, 0, canvasElement2.width, canvasElement2.height);
   }
@@ -603,7 +605,7 @@ camera.start();
 //   svgStyle: null,
 // });
 
-bar.animate(1.0);
+// bar.animate(1.0);
 
 // Button Handler
 detectedBtn.addEventListener("click", function () {
