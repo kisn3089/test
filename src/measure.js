@@ -47,6 +47,7 @@ import animationData from "./util/animation/ani_heartrate.json";
 import loadingData from "./util/animation/loading.json";
 import { math } from "./util/js/math.js";
 import CircleProgress from "js-circle-progress";
+import DeviceDetector from "device-detector-js";
 
 var cv = require("opencv.js");
 var Fili = require("fili");
@@ -127,6 +128,37 @@ setTimeout(() => {
   Loading.classList.add("Loaded");
   LoadingWrapper.classList.add("remove");
 }, 2000);
+
+testSupport([{ client: "Chrome" }]);
+
+function testSupport(supportedDevices) {
+  const deviceDetector = new DeviceDetector();
+  const detectedDevice = deviceDetector.parse(navigator.userAgent);
+
+  let isSupported = false;
+  for (const device of supportedDevices) {
+    if (device.client !== undefined) {
+      const re = new RegExp(`^${device.client}$`);
+      if (!re.test(detectedDevice.client.name)) {
+        continue;
+      }
+    }
+    if (device.os !== undefined) {
+      const re = new RegExp(`^${device.os}$`);
+      if (!re.test(detectedDevice.os.name)) {
+        continue;
+      }
+    }
+    isSupported = true;
+    break;
+  }
+  if (!isSupported) {
+    alert(
+      `This demo, running on ${detectedDevice.client.name}/${detectedDevice.os.name}, ` +
+        `is not well supported at this time, continue at your own risk.`
+    );
+  }
+}
 
 const ctx = canvasElement.getContext("2d");
 const ctx2 = canvasElement2.getContext("2d");
@@ -415,10 +447,6 @@ function onResults(results) {
       timingHist.shift();
       let textArr = [];
 
-      Loading.classList.remove("Loaded");
-      LoadingWrapper.classList.remove("remove");
-      Ani.classList.add("off");
-
       for (let i = 0; i < maxHistLen; i++) {
         textArr.push(
           `${timingHist[i]}	${mean_red[i]}	${mean_green[i]}	${mean_blue[i]}`
@@ -437,6 +465,10 @@ function onResults(results) {
       form.append("gender", sessionStorage.getItem("gender"));
 
       let signature = makeSignature();
+
+      Loading.classList.remove("Loaded");
+      LoadingWrapper.classList.remove("remove");
+      Ani.classList.add("off");
 
       const options = {
         method: "POST",
