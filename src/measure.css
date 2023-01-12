@@ -186,26 +186,27 @@ table {
 
 #MeasurePage #Content video {
   width: 100%;
-  height: calc(100vh - 9.745127436281859vh);
+  height: 100%;
   object-fit: cover;
   /* display: none; */
 }
 
 #MeasurePage #Content .output_canvas {
   width: 100%;
-  height: calc(100vh - 9.745127436281859vh);
+  height: 100%;
   display: none;
   object-fit: cover;
 }
 
 #MeasurePage #Content .output_canvas2 {
   width: 100%;
-  height: calc(100vh - 9.745127436281859vh);
+  height: 100%;
   position: absolute;
   left: 0;
   top: 0;
   z-index: 9;
-  /* object-fit: cover; */
+  object-fit: cover;
+  /* object-fit: fill; */
 }
 
 #MeasurePage #Content .resp-img {
