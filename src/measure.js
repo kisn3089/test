@@ -132,8 +132,8 @@ setTimeout(() => {
 const ctx = canvasElement.getContext("2d");
 const ctx2 = canvasElement2.getContext("2d");
 
-// canvasElement2.width = videoElement.videoWidth;
-// canvasElement2.height = videoElement.videoHeight;
+// canvasElement2.width = videoElement.width;
+// canvasElement2.height = videoElement.height;
 
 var last = performance.now();
 let url =
