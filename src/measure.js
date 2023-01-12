@@ -417,8 +417,8 @@ function onResults(results) {
       // Update the signal
       resp_sig.push(resp_y);
     } catch (e) {
-      Modal.classList.add("alert");
-      detectedModal.classList.add("on");
+      // Modal.classList.add("alert");
+      // detectedModal.classList.add("on");
       console.log("Error capturing frame:");
       console.log(e);
     }
@@ -479,7 +479,7 @@ function onResults(results) {
       let res = peakdet(resp_sig, 0.5);
 
       let timeInterval =
-        (timingHist[timingHist.length - 1] - timingHist[0]) / 1000000;
+        (timingHist[resp_sig.length - 1] - timingHist[0]) / 1000000;
       let second = Math.trunc(timeInterval);
       let count = 60 / second;
 
