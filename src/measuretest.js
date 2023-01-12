@@ -52,36 +52,36 @@ import DeviceDetector from "device-detector-js";
 var cv = require("opencv.js");
 var Fili = require("fili");
 
-testSupport([{ client: "Chrome" }]);
+// testSupport([{ client: "Chrome" }]);
 
-function testSupport(supportedDevices) {
-  const deviceDetector = new DeviceDetector();
-  const detectedDevice = deviceDetector.parse(navigator.userAgent);
+// function testSupport(supportedDevices) {
+//   const deviceDetector = new DeviceDetector();
+//   const detectedDevice = deviceDetector.parse(navigator.userAgent);
 
-  let isSupported = false;
-  for (const device of supportedDevices) {
-    if (device.client !== undefined) {
-      const re = new RegExp(`^${device.client}$`);
-      if (!re.test(detectedDevice.client.name)) {
-        continue;
-      }
-    }
-    if (device.os !== undefined) {
-      const re = new RegExp(`^${device.os}$`);
-      if (!re.test(detectedDevice.os.name)) {
-        continue;
-      }
-    }
-    isSupported = true;
-    break;
-  }
-  if (!isSupported) {
-    alert(
-      `This demo, running on ${detectedDevice.client.name}/${detectedDevice.os.name}, ` +
-        `is not well supported at this time, continue at your own risk.`
-    );
-  }
-}
+//   let isSupported = false;
+//   for (const device of supportedDevices) {
+//     if (device.client !== undefined) {
+//       const re = new RegExp(`^${device.client}$`);
+//       if (!re.test(detectedDevice.client.name)) {
+//         continue;
+//       }
+//     }
+//     if (device.os !== undefined) {
+//       const re = new RegExp(`^${device.os}$`);
+//       if (!re.test(detectedDevice.os.name)) {
+//         continue;
+//       }
+//     }
+//     isSupported = true;
+//     break;
+//   }
+//   if (!isSupported) {
+//     alert(
+//       `This demo, running on ${detectedDevice.client.name}/${detectedDevice.os.name}, ` +
+//         `is not well supported at this time, continue at your own risk.`
+//     );
+//   }
+// }
 
 const controls = window;
 const drawingUtils = window;
@@ -170,6 +170,8 @@ measuring.classList.remove("on");
 Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
+
+let stream;
 
 setTimeout(() => {
   Loading.classList.add("Loaded");
@@ -487,7 +489,12 @@ function onResults(results) {
 
       textArr = textArr.join("\n");
       saveToFile_Chrome("this", textArr);
-      camera.stop();
+      // stream = videoElement.srcObject;
+      // console.log(stream);
+      // let tracks = stream.getTracks();
+      // tracks.stop();
+      // location.href = "./result.html";
+      stop();
 
       var blob = new Blob([textArr], { type: "text/plain" });
 
@@ -564,35 +571,72 @@ function onResults(results) {
 
 const faceMesh = new mpFaceMesh.FaceMesh(config);
 faceMesh.setOptions(solutionOptions);
-faceMesh.onResults(onResults);
+// faceMesh.onResults(onResults);
+
+if (navigator.mediaDevices.getUserMedia) {
+  navigator.mediaDevices
+    .getUserMedia({ audio: false, video: { facingMode: "user" } })
+    .then(function (stream) {
+      videoElement.srcObject = stream;
+    })
+    .catch(function (err0r) {
+      console.log("Something went wrong! " + err0r);
+    });
+}
+
+const stopBtn = document.getElementsByClassName("stop")[0];
+stopBtn.addEventListener("click", () => {
+  stop();
+});
+
+function stop(e) {
+  var stream = videoElement.srcObject;
+  var tracks = stream.getTracks();
+
+  for (var i = 0; i < tracks.length; i++) {
+    var track = tracks[i];
+    track.stop();
+  }
+
+  videoElement.srcObject = null;
+}
+
+// const camera = new Camera(videoElement, {
+//   onFrame: async () => {
+//     await faceMesh.send({ image: videoElement });
+//   },
+//   width: 1280,
+//   height: 720,
+// });
+// camera.start();
 
 // Present a control panel through which the user can manipulate the solution
 // options.
-new controls.ControlPanel(controlsElement, solutionOptions)
-  .add([
-    fpsControl,
-    new controls.SourcePicker({
-      onFrame: async (input, size) => {
-        const aspect = size.height / size.width;
-        let width, height;
-        if (window.innerWidth > window.innerHeight) {
-          height = window.innerHeight;
-          width = height / aspect;
-        } else {
-          width = window.innerWidth;
-          height = width * aspect;
-        }
-        canvasElement.width = width;
-        canvasElement.height = height;
-        await faceMesh.send({ image: input });
-      },
-    }),
-  ])
-  .on((x) => {
-    const options = x;
-    videoElement.classList.toggle("selfie", options.selfieMode);
-    faceMesh.setOptions(options);
-  });
+// new controls.ControlPanel(controlsElement, solutionOptions)
+//   .add([
+//     fpsControl,
+//     new controls.SourcePicker({
+//       onFrame: async (input, size) => {
+//         const aspect = size.height / size.width;
+//         let width, height;
+//         if (window.innerWidth > window.innerHeight) {
+//           height = window.innerHeight;
+//           width = height / aspect;
+//         } else {
+//           width = window.innerWidth;
+//           height = width * aspect;
+//         }
+//         canvasElement.width = width;
+//         canvasElement.height = height;
+//         await faceMesh.send({ image: input });
+//       },
+//     }),
+//   ])
+//   .on((x) => {
+//     const options = x;
+//     videoElement.classList.toggle("selfie", options.selfieMode);
+//     faceMesh.setOptions(options);
+//   });
 
 // Button Handler
 detectedBtn.addEventListener("click", function () {

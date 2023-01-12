@@ -132,6 +132,9 @@ setTimeout(() => {
 const ctx = canvasElement.getContext("2d");
 const ctx2 = canvasElement2.getContext("2d");
 
+// canvasElement2.width = videoElement.videoWidth;
+// canvasElement2.height = videoElement.videoHeight;
+
 var last = performance.now();
 let url =
   "https://siigjmw19n.apigw.ntruss.com/face_health_estimate/v1/calculate_face_ppg_stress_cors";
@@ -205,8 +208,8 @@ let respHeight;
 
 let timestamp = 0;
 
-videoElement.width = 640;
-videoElement.height = 480;
+// videoElement.width = 640;
+// videoElement.height = 480;
 lastFrameGray = new cv.Mat(
   canvasElement2.height,
   canvasElement2.width,
@@ -246,39 +249,6 @@ let cp = new CircleProgress(container, {
 
 cp;
 
-testSupport([{ client: "Chrome" }]);
-
-function testSupport(supportedDevices) {
-  const deviceDetector = new DeviceDetector();
-  const detectedDevice = deviceDetector.parse(navigator.userAgent);
-
-  let isSupported = false;
-  for (const device of supportedDevices) {
-    if (device.client !== undefined) {
-      const re = new RegExp(`^${device.client}$`);
-      if (!re.test(detectedDevice.client.name)) {
-        continue;
-      }
-    }
-    if (device.os !== undefined) {
-      const re = new RegExp(`^${device.os}$`);
-      if (!re.test(detectedDevice.os.name)) {
-        continue;
-      }
-    }
-    isSupported = true;
-    break;
-  }
-  if (!isSupported) {
-    alert(
-      `This demo, running on ${detectedDevice.client.name}/${detectedDevice.os.name}, ` +
-        `is not well supported at this time, continue at your own risk.`
-    );
-  }
-}
-
-const controls = window;
-const drawingUtils = window;
 const mpFaceMesh = window;
 
 const config = {
@@ -447,8 +417,8 @@ function onResults(results) {
       // Update the signal
       resp_sig.push(resp_y);
     } catch (e) {
-      // Modal.classList.add("alert");
-      // detectedModal.classList.add("on");
+      Modal.classList.add("alert");
+      detectedModal.classList.add("on");
       console.log("Error capturing frame:");
       console.log(e);
     }
@@ -469,6 +439,7 @@ function onResults(results) {
       textArr = textArr.join("\n");
       saveToFile_Chrome("this", textArr);
       camera.stop();
+      stop();
 
       var blob = new Blob([textArr], { type: "text/plain" });
 
@@ -575,8 +546,6 @@ navigator.mediaDevices.getUserMedia({
   audio: false,
   video: {
     facingMode: "user",
-    width: 640,
-    height: 480,
   },
 });
 
@@ -584,28 +553,9 @@ const camera = new Camera(videoElement, {
   onFrame: async () => {
     await faceMesh.send({ image: videoElement });
   },
-  width: 640,
-  height: 480,
 });
 
 camera.start();
-
-// Progress Bar Handler
-// new CircleProgress(container, {
-//   value: timingHist.length,
-//   max: maxHistLen,
-// });
-// var bar = new ProgressBar.Circle(container, {
-//   strokeWidth: 3,
-//   easing: "linear",
-//   duration: 80000,
-//   color: "rgba(0, 111, 173, 1)",
-//   trailColor: "#fff",
-//   trailWidth: 3,
-//   svgStyle: null,
-// });
-
-// bar.animate(1.0);
 
 // Button Handler
 detectedBtn.addEventListener("click", function () {

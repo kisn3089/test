@@ -194,9 +194,6 @@ table {
   height: 4.497751124437781vh;
 }
 
-#AgePage #Content .input-wrapper {
-}
-
 #AgePage #Content .input-wrapper input {
   margin-top: 5.997001499250375vh;
   border-radius: 10px;
@@ -213,6 +210,7 @@ table {
   outline: none;
   border: none;
   font-family: "notoSansBold";
+  -webkit-appearance: none;
 }
 
 #AgePage #Content .input-wrapper input:focus,
