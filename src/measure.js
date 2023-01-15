@@ -351,7 +351,7 @@ function onResults(results) {
     ctx.fill();
 
     // rgb
-    ctx.strokeStyle = "tran";
+    ctx.strokeStyle = "transparent";
     ctx2.strokeStyle = "transparent";
     ctx.lineWidth = 2;
     ctx2.lineWidth = 2;
