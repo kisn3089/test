@@ -117,7 +117,7 @@ networkBtn.addEventListener("click", () => {
 });
 
 Loading.classList.remove("Loaded");
-LoadingWrapper.remove("remove");
+LoadingWrapper.classList.remove("remove");
 preparation.classList.remove("off");
 measuring.classList.remove("on");
 Modal.classList.remove("alert");
