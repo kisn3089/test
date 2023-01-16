@@ -367,7 +367,7 @@ function onResults(results) {
 
     // rgb
     ctx.strokeStyle = "transparent";
-    ctx2.strokeStyle = "transparent";
+    ctx2.strokeStyle = "cyan";
     ctx.lineWidth = 2;
     ctx2.lineWidth = 2;
     ctx.beginPath();
@@ -545,7 +545,7 @@ function onResults(results) {
 // faceMesh.onResults(onResults);
 
 const solutionOptions = {
-  // enableFaceGeometry: false,
+  enableFaceGeometry: false,
   maxNumFaces: 1,
   refineLandmarks: true,
   minDetectionConfidence: 0.5,
@@ -561,6 +561,8 @@ navigator.mediaDevices.getUserMedia({
   audio: false,
   video: {
     facingMode: "user",
+    width: 640,
+    height: 480,
   },
 });
 
@@ -568,6 +570,8 @@ const camera = new Camera(videoElement, {
   onFrame: async () => {
     await faceMesh.send({ image: videoElement });
   },
+  width: 640,
+  height: 480,
 });
 
 camera.start();
@@ -737,7 +741,7 @@ function peakdet(data, delta) {
   for (var i = 0; i < data.length; i++) {
     current = parseFloat(data[i]);
     if (isNaN(current) || !isFinite(current)) {
-      alert("Item that's not a number!");
+      // alert("Item that's not a number!");
       break;
     }
     if (current > max) {
