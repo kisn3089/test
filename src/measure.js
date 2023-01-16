@@ -210,6 +210,12 @@ let timestamp = 0;
 
 // videoElement.width = 640;
 // videoElement.height = 480;
+
+canvasElement.width = videoElement.width;
+canvasElement.height = videoElement.height;
+canvasElement2.width = videoElement.width;
+canvasElement2.height = videoElement.height;
+
 lastFrameGray = new cv.Mat(
   canvasElement2.height,
   canvasElement2.width,
@@ -285,13 +291,13 @@ function onResults(results) {
   let multiface = results.multiFaceLandmarks[0];
 
   if (results.multiFaceLandmarks[0]) {
-    boxLeft = multiface[234].x * 640;
-    boxTop = multiface[10].y * 480;
-    boxWidth = multiface[454].x * 640 - boxLeft;
-    boxHeight = multiface[152].y * 480 - boxTop;
+    boxLeft = multiface[234].x * VIEW_WIDTH;
+    boxTop = multiface[10].y * VIEW_HEIGHT;
+    boxWidth = multiface[454].x * VIEW_WIDTH - boxLeft;
+    boxHeight = multiface[152].y * VIEW_HEIGHT - boxTop;
 
-    respLeft = multiface[234].x * 640;
-    respTop = multiface[152].y * 480 + 50;
+    respLeft = multiface[234].x * VIEW_WIDTH;
+    respTop = multiface[152].y * VIEW_HEIGHT + 20;
     respHeight = 50;
 
     // face line, eye, mouse defined
@@ -310,43 +316,52 @@ function onResults(results) {
     ctx.globalCompositeOperation = "destination-in";
     ctx.beginPath();
     ctx.moveTo(
-      multiface[face_oval[0]].x * 640,
-      multiface[face_oval[0]].y * 480
+      multiface[face_oval[0]].x * VIEW_WIDTH,
+      multiface[face_oval[0]].y * VIEW_HEIGHT
     );
     for (let i = 0; i < face_oval.length; i++) {
       ctx.lineTo(
-        multiface[face_oval[i]].x * 640,
-        multiface[face_oval[i]].y * 480
+        multiface[face_oval[i]].x * VIEW_WIDTH,
+        multiface[face_oval[i]].y * VIEW_HEIGHT
       );
     }
     ctx.fillStyle = "white";
     ctx.fill();
     ctx.globalCompositeOperation = "source-over";
     ctx.beginPath();
-    ctx.moveTo(multiface[left_eye[0]].x * 640, multiface[left_eye[0]].y * 480);
+    ctx.moveTo(
+      multiface[left_eye[0]].x * VIEW_WIDTH,
+      multiface[left_eye[0]].y * VIEW_HEIGHT
+    );
     for (let i = 0; i < left_eye.length; i++) {
       ctx.lineTo(
-        multiface[left_eye[i]].x * 640,
-        multiface[left_eye[i]].y * 480
+        multiface[left_eye[i]].x * VIEW_WIDTH,
+        multiface[left_eye[i]].y * VIEW_HEIGHT
       );
     }
     ctx.fill();
     ctx.beginPath();
     ctx.moveTo(
-      multiface[right_eye[0]].x * 640,
-      multiface[right_eye[0]].y * 480
+      multiface[right_eye[0]].x * VIEW_WIDTH,
+      multiface[right_eye[0]].y * VIEW_HEIGHT
     );
     for (let i = 0; i < right_eye.length; i++) {
       ctx.lineTo(
-        multiface[right_eye[i]].x * 640,
-        multiface[right_eye[i]].y * 480
+        multiface[right_eye[i]].x * VIEW_WIDTH,
+        multiface[right_eye[i]].y * VIEW_HEIGHT
       );
     }
     ctx.fill();
     ctx.beginPath();
-    ctx.moveTo(multiface[lips[0]].x * 640, multiface[lips[0]].y * 480);
+    ctx.moveTo(
+      multiface[lips[0]].x * VIEW_WIDTH,
+      multiface[lips[0]].y * VIEW_HEIGHT
+    );
     for (let i = 0; i < lips.length; i++) {
-      ctx.lineTo(multiface[lips[i]].x * 640, multiface[lips[i]].y * 480);
+      ctx.lineTo(
+        multiface[lips[i]].x * VIEW_WIDTH,
+        multiface[lips[i]].y * VIEW_HEIGHT
+      );
     }
     ctx.fill();
 
@@ -530,9 +545,9 @@ function onResults(results) {
 // faceMesh.onResults(onResults);
 
 const solutionOptions = {
-  enableFaceGeometry: false,
+  // enableFaceGeometry: false,
   maxNumFaces: 1,
-  refineLandmarks: false,
+  refineLandmarks: true,
   minDetectionConfidence: 0.5,
   minTrackingConfidence: 0.5,
 };
@@ -604,26 +619,26 @@ function makeSignature() {
 }
 
 function fix_resp(lastFrameGray) {
-  if (respTop + 50 < lastFrameGray.rows) {
+  if (respTop + 20 < lastFrameGray.rows) {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      50
+      20
     );
   } else {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      respTop + 50 - lastFrameGray.rows
+      respTop + 20 - lastFrameGray.rows
     );
   }
 
   frame0 = new cv.Mat();
   frame0 = lastFrameGray.roi(rect);
 
-  // cv.imshow(canvasId, frame0);
+  cv.imshow(canvasId, frame0);
 
   let none = new cv.Mat();
 
@@ -643,19 +658,19 @@ function fix_resp(lastFrameGray) {
 }
 
 function resp_call(frameGray, lastFrameGray) {
-  if (respTop + 50 < lastFrameGray.rows) {
+  if (respTop + 20 < lastFrameGray.rows) {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      50
+      20
     );
   } else {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      respTop + 50 - lastFrameGray.rows
+      respTop + 20 - lastFrameGray.rows
     );
   }
 
@@ -663,7 +678,7 @@ function resp_call(frameGray, lastFrameGray) {
   frame0 = lastFrameGray.roi(rect);
   frame1 = new cv.Mat();
   frame1 = frameGray.roi(rect);
-  // cv.imshow("canvas", frame1);
+  cv.imshow("canvas", frame1);
 
   p1 = new cv.Mat();
   st = new cv.Mat();
