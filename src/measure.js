@@ -325,8 +325,8 @@ function onResults(results) {
         multiface[face_oval[i]].y * VIEW_HEIGHT
       );
     }
-    ctx.fillStyle = "white";
     ctx.fill();
+    ctx.fillStyle = "white";
     ctx.globalCompositeOperation = "source-over";
     ctx.beginPath();
     ctx.moveTo(
@@ -408,35 +408,35 @@ function onResults(results) {
     cp.value = timingHist.length;
 
     // resp
-    try {
-      if (!frameGray.empty()) {
-        frameGray.copyTo(lastFrameGray); // Save last frame
-      }
+    // try {
+    //   if (!frameGray.empty()) {
+    //     frameGray.copyTo(lastFrameGray); // Save last frame
+    //   }
 
-      let imgData = ctx2.getImageData(
-        0,
-        0,
-        canvasElement2.width,
-        canvasElement2.height
-      );
+    //   let imgData = ctx2.getImageData(
+    //     0,
+    //     0,
+    //     canvasElement2.width,
+    //     canvasElement2.height
+    //   );
 
-      let src = cv.matFromImageData(imgData);
-      cv.cvtColor(src, frameGray, cv.COLOR_RGBA2GRAY);
+    //   let src = cv.matFromImageData(imgData);
+    //   cv.cvtColor(src, frameGray, cv.COLOR_RGBA2GRAY);
 
-      if (mean_red.length < 2) {
-        fix_resp(frameGray);
-      } else {
-        resp_y = resp_call(frameGray, lastFrameGray);
-      }
+    //   if (mean_red.length < 2) {
+    //     fix_resp(frameGray);
+    //   } else {
+    //     resp_y = resp_call(frameGray, lastFrameGray);
+    //   }
 
-      // Update the signal
-      resp_sig.push(resp_y);
-    } catch (e) {
-      // Modal.classList.add("alert");
-      // detectedModal.classList.add("on");
-      console.log("Error capturing frame:");
-      console.log(e);
-    }
+    //   // Update the signal
+    //   resp_sig.push(resp_y);
+    // } catch (e) {
+    //   // Modal.classList.add("alert");
+    //   // detectedModal.classList.add("on");
+    //   console.log("Error capturing frame:");
+    //   console.log(e);
+    // }
     // resp-end
     if (mean_red.length > maxHistLen) {
       mean_red.shift();

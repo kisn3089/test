@@ -1,44 +1,41 @@
 <!DOCTYPE html>
-<html>
-  <head profile="http://www.w3.org/2005/10/profile">
-    <meta charset="utf-8" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"
-      crossorigin="anonymous"
-    ></script>
-  </head>
+<html lang="en">
+  <head>
+    <!-- Robots start reading here -->
+    <meta name="title" content="Face Mesh Demos by Andy Kong" />
+    <meta
+      name="description"
+      content="Demonstration of machine learning models in the web, made for a Medium post. Examples of photoplethysmography, face tracking, Snapchat filters"
+    />
+    <meta
+      name="keywords"
+      content="machine learning, mediapipe, face mesh, tensorflow, tensorflow javascript, ppg, photoplethysmography, medium, github, code, javascript,"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="language" content="English" />
 
-  <body>
+    <title>Webcam Heartrate Monitor | Face Mesh</title>
+    <script src="https://unpkg.com/mathjs/lib/browser/math.js"></script>
+  </head>
+  <body style="background-color: aliceblue">
     <div id="MeasurePage">
       <section id="Header">
         <a href="./age.html" class="prev"> </a>
         <h1>Information</h1>
-        <button class="stop">STOP</button>
       </section>
       <section id="Content">
         <video
           id="input_video"
           class="input_video"
+          muted="true"
+          width="auto"
+          height="auto"
           autoplay
           playsinline
-          muted="true"
-          width="1280px"
-          height="640px"
         ></video>
-        <canvas class="output_canvas" width="640px" height="480px"></canvas>
-        <canvas class="output_canvas2" width="640px" height="480px"></canvas>
+        <canvas class="output_canvas"></canvas>
+        <canvas class="output_canvas2"></canvas>
         <canvas
           id="canvas"
           class="resp-img"
@@ -75,8 +72,27 @@
         </div>
       </section>
     </div>
-    <div class="control-panel"></div>
+    <!-- <video
+      autoplay
+      muted
+      playsinline
+      hidden
+      id="video"
+      style="width: auto; height: auto"
+    ></video>
+    <a href="../" style="text-decoration: none">Home</a>
+    <div id="cameraFPS"></div>
+    <div id="HR_indicator">Heartrate here:</div>
 
-    <script type="module" src="./mediapipetesst.js"></script>
+    <div style="display: inline-block; width: 320" id="graphdiv"></div>
+    <div style="display: inline-block; width: 320" id="graphdiv2"></div>
+
+    <canvas id="facecanvas"></canvas>
+
+    <div>
+      <button id="toggleStream">Play</button>
+      <button id="Stop">Stop</button>
+    </div> -->
+    <script src="./mediapipetesst.js"></script>
   </body>
 </html>

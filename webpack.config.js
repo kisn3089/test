@@ -10,7 +10,7 @@ module.exports = {
     measure: "./src/measure.js",
     result: "./src/result.js",
     progress: "./src/util/js/progressbar.js",
-    mediapipe: "./src/measuretest.js",
+    mediapipe: "./src/mediapipetesst.js",
   },
   output: {
     filename: "[name].bundle.js",
@@ -38,6 +38,9 @@ module.exports = {
   },
   optimization: {
     minimize: true,
+  },
+  experiments: {
+    topLevelAwait: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
