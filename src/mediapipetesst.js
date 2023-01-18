@@ -60,8 +60,8 @@ tf.setBackend("wasm").then(() => main());
 // html tag
 const video = document.getElementsByClassName("input_video")[0];
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
-const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
-const canvasId = document.getElementById("canvas");
+// const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
+// const canvasId = document.getElementById("canvas");
 const respBpm = document.getElementsByClassName("bpm")[0];
 
 const container = document.getElementsByClassName("progress-bar")[0];
@@ -139,7 +139,7 @@ setTimeout(() => {
 }, 2000);
 
 const ctx = canvasElement.getContext("2d");
-const ctx2 = canvasElement2.getContext("2d");
+// const ctx2 = canvasElement2.getContext("2d");
 
 var last = performance.now();
 let url =
@@ -216,21 +216,17 @@ let timestamp = 0;
 
 // init
 lastFrameGray = new cv.Mat(
-  canvasElement2.height,
-  canvasElement2.width,
+  canvasElement.height,
+  canvasElement.width,
   cv.CV_8UC1
 );
-frameGray = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC1);
-overlayMask = new cv.Mat(
-  canvasElement2.height,
-  canvasElement2.width,
-  cv.CV_8UC1
-);
-frame0 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
-frame1 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
+frameGray = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC1);
+overlayMask = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC1);
+frame0 = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC4);
+frame1 = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC4);
 
-VIEW_WIDTH = canvasElement2.width;
-VIEW_HEIGHT = canvasElement2.height;
+VIEW_WIDTH = canvasElement.width;
+VIEW_HEIGHT = canvasElement.height;
 
 p0 = new cv.Mat();
 
@@ -305,24 +301,18 @@ async function main() {
 
 // Calls face mesh on the video and outputs the eyes and face bounding boxes to global vars
 async function renderPrediction() {
-  const facepred = await fmesh.estimateFaces(canvasElement);
-  ctx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-
-  if (facepred.length > 0) {
-    // If we find a face, process it
-    curFaces = facepred;
-    await drawFaces();
-  } //else {
+  await drawFaces();
+  //else {
   //   Modal.classList.add("alert");
   //   detectedModal.classList.add("on");
   // }
 
-  requestAnimationFrame(renderPrediction);
+  setTimeout(renderPrediction, 1000 / 30);
 }
 
 // At around 10 Hz for the camera, we want like 5 seconds of history
 var bloodHist = Array(maxHistLen).fill(0);
-var timingHist = Array(maxHistLen).fill(0);
+var timingHist = [];
 var last = performance.now();
 var average = (array) => array.reduce((a, b) => a + b) / array.length;
 var argMax = (array) =>
@@ -340,27 +330,29 @@ async function drawFaces() {
 
   ctx.strokeStyle = "cyan";
   ctx.lineWidth = 2;
-
+  // ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  ctx.save();
+  const facepred = await fmesh.estimateFaces(canvasElement);
+  ctx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+  // curFaces = facepred;
   let face_oval = [];
   let left_eye = [];
   let right_eye = [];
   let lips = [];
 
-  for (let face of curFaces) {
+  for (let face of facepred) {
     if (face.faceInViewConfidence > 0.5) {
       let mesh = face.scaledMesh;
 
       // Get the facial region of interest's bounds
-      let boxLeft = mesh[234][0];
-      let boxTop = mesh[10][1];
-      let boxWidth = mesh[454][0] - boxLeft;
-      let boxHeight = mesh[152][1] - boxTop;
+      boxLeft = mesh[234][0];
+      boxTop = mesh[10][1];
+      boxWidth = mesh[454][0] - boxLeft;
+      boxHeight = mesh[152][1] - boxTop;
 
       respLeft = mesh[234][0];
       respTop = mesh[152][1] + 50;
       respHeight = 50;
-
-      console.log(mesh);
 
       // face line, eye, mouse defined
       for (let i = 0; i < FACEMESH_FACE_OVAL.length; i++) {
@@ -376,14 +368,14 @@ async function drawFaces() {
         lips.push(FACEMESH_LIPS[i][0], FACEMESH_LIPS[i][1]);
       }
 
-      console.log(face_oval);
-      ctx.globalCompositeOperation = "destination-atop";
-      ctx.beginPath();
-      ctx.moveTo(mesh[face_oval[0]][0], mesh[face_oval[0]][1]);
-      for (let i = 0; i < face_oval.length; i++) {
-        ctx.lineTo(mesh[face_oval[i]][0], mesh[face_oval[i]][1]);
-      }
-      ctx.fill();
+      // ctx.globalCompositeOperation = "destination-in";
+      // ctx.beginPath();
+      // ctx.moveTo(mesh[face_oval[0]][0], mesh[face_oval[0]][1]);
+      // for (let i = 0; i < face_oval.length; i++) {
+      //   ctx.lineTo(mesh[face_oval[i]][0], mesh[face_oval[i]][1]);
+      // }
+      // ctx.rect(boxLeft, boxTop, boxWidth, boxHeight);
+      // ctx.fill();
       ctx.fillStyle = "white";
       ctx.globalCompositeOperation = "source-over";
       ctx.beginPath();
@@ -415,8 +407,6 @@ async function drawFaces() {
       // Get the image data from that region
       let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
       const data = faceRegion.data;
-      console.log(faceRegion);
-      console.log(data);
       for (var i = 0; i < data.length; i += 4) {
         if (
           data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
@@ -449,35 +439,35 @@ async function drawFaces() {
       cp.value = mean_red.length;
 
       // resp
-      // try {
-      //   if (!frameGray.empty()) {
-      //     frameGray.copyTo(lastFrameGray); // Save last frame
-      //   }
+      try {
+        if (!frameGray.empty()) {
+          frameGray.copyTo(lastFrameGray); // Save last frame
+        }
 
-      //   let imgData = ctx2.getImageData(
-      //     0,
-      //     0,
-      //     canvasElement2.width,
-      //     canvasElement2.height
-      //   );
+        let imgData = ctx.getImageData(
+          0,
+          0,
+          canvasElement.width,
+          canvasElement.height
+        );
 
-      //   let src = cv.matFromImageData(imgData);
-      //   cv.cvtColor(src, frameGray, cv.COLOR_RGBA2GRAY);
+        let src = cv.matFromImageData(imgData);
+        cv.cvtColor(src, frameGray, cv.COLOR_RGBA2GRAY);
 
-      //   if (mean_red.length < 2) {
-      //     fix_resp(frameGray);
-      //   } else {
-      //     resp_y = resp_call(frameGray, lastFrameGray);
-      //   }
+        if (mean_red.length < 2) {
+          fix_resp(frameGray);
+        } else {
+          resp_y = resp_call(frameGray, lastFrameGray);
+        }
 
-      //   // Update the signal
-      //   resp_sig.push(resp_y);
-      // } catch (e) {
-      //   // Modal.classList.add("alert");
-      //   // detectedModal.classList.add("on");
-      //   console.log("Error capturing frame:");
-      //   console.log(e);
-      // }
+        // Update the signal
+        resp_sig.push(resp_y);
+      } catch (e) {
+        // Modal.classList.add("alert");
+        // detectedModal.classList.add("on");
+        console.log("Error capturing frame:");
+        console.log(e);
+      }
       // resp-end
 
       if (mean_red.length > maxHistLen) {
@@ -486,7 +476,6 @@ async function drawFaces() {
         mean_blue.shift();
         timingHist.shift();
         let textArr = [];
-        console.log(timingHist);
 
         for (let i = 0; i < maxHistLen; i++) {
           textArr.push(
@@ -496,7 +485,7 @@ async function drawFaces() {
 
         stop();
         textArr = textArr.join("\n");
-        saveToFile_Chrome("this", textArr);
+        // saveToFile_Chrome("this", textArr);
 
         var blob = new Blob([textArr], { type: "text/plain" });
 
@@ -533,16 +522,14 @@ async function drawFaces() {
         // var fps = Math.round(curPollFreq);
         // movingAverage(resp_signals, 3, Math.max(Math.floor(fps / 6), 2));
 
-        // let res = peakdet(resp_sig, 0.5);
+        let res = peakdet(resp_sig, 0.5);
 
-        // let timeInterval =
-        //   (timingHist[resp_sig.length - 1] - timingHist[0]) / 1000000;
-        // let second = Math.trunc(timeInterval);
-        // let count = 60 / second;
+        let timeInterval =
+          (timingHist[timingHist.length - 1] - timingHist[0]) / 1000000;
+        let second = Math.trunc(timeInterval);
+        let count = 60 / second;
 
-        // resp = res.peaks.length * count;
-
-        console.log(resp);
+        resp = res.peaks.length * count;
         try {
           fetch(url, options)
             .then((response) => response.json())
@@ -568,6 +555,7 @@ async function drawFaces() {
       }
     }
   }
+  ctx.restore();
 }
 
 var heartrate = 0;
@@ -578,26 +566,11 @@ let win_blue = [];
 
 // Button Handler
 detectedBtn.addEventListener("click", function () {
-  location.href = "./mediapipe.html";
+  location.href = "./measure.html";
 });
 networkBtn.addEventListener("click", function () {
-  location.href = "./mediapipe.html";
+  location.href = "./measure.html";
 });
-
-function saveToFile_Chrome(fileName, content) {
-  var blob = new Blob([content], { type: "text/plain" });
-  let objURL = window.URL.createObjectURL(blob);
-
-  // 이전에 생성된 메모리 해제
-  if (window.__Xr_objURL_forCreatingFile__) {
-    window.URL.revokeObjectURL(window.__Xr_objURL_forCreatingFile__);
-  }
-  window.__Xr_objURL_forCreatingFile__ = objURL;
-  var a = document.createElement("a");
-  a.download = fileName;
-  a.href = objURL;
-  a.click();
-}
 
 function makeSignature() {
   var space = " "; // one space
@@ -623,26 +596,26 @@ function makeSignature() {
 }
 
 function fix_resp(lastFrameGray) {
-  if (respTop + 20 < lastFrameGray.rows) {
+  if (respTop + 50 < lastFrameGray.rows) {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      20
+      50
     );
   } else {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      respTop + 20 - lastFrameGray.rows
+      respTop + 50 - lastFrameGray.rows
     );
   }
 
   frame0 = new cv.Mat();
   frame0 = lastFrameGray.roi(rect);
 
-  cv.imshow(canvasId, frame0);
+  // cv.imshow(canvasId, frame0);
 
   let none = new cv.Mat();
 
@@ -662,19 +635,19 @@ function fix_resp(lastFrameGray) {
 }
 
 function resp_call(frameGray, lastFrameGray) {
-  if (respTop + 20 < lastFrameGray.rows) {
+  if (respTop + 50 < lastFrameGray.rows) {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      20
+      50
     );
   } else {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      respTop + 20 - lastFrameGray.rows
+      respTop + 50 - lastFrameGray.rows
     );
   }
 
@@ -682,7 +655,7 @@ function resp_call(frameGray, lastFrameGray) {
   frame0 = lastFrameGray.roi(rect);
   frame1 = new cv.Mat();
   frame1 = frameGray.roi(rect);
-  cv.imshow("canvas", frame1);
+  // cv.imshow("canvas", frame1);
 
   p1 = new cv.Mat();
   st = new cv.Mat();

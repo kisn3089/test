@@ -54,8 +54,8 @@ var Fili = require("fili");
 
 const videoElement = document.getElementsByClassName("input_video")[0];
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
-const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
-const canvasId = document.getElementById("canvas");
+// const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
+// const canvasId = document.getElementById("canvas");
 const respBpm = document.getElementsByClassName("bpm")[0];
 
 const container = document.getElementsByClassName("progress-bar")[0];
@@ -130,10 +130,7 @@ setTimeout(() => {
 }, 2000);
 
 const ctx = canvasElement.getContext("2d");
-const ctx2 = canvasElement2.getContext("2d");
-
-// canvasElement2.width = videoElement.width;
-// canvasElement2.height = videoElement.height;
+// const ctx2 = canvasElement2.getContext("2d");
 
 var last = performance.now();
 let url =
@@ -216,37 +213,37 @@ canvasElement.height = videoElement.height;
 canvasElement2.width = videoElement.width;
 canvasElement2.height = videoElement.height;
 
-lastFrameGray = new cv.Mat(
-  canvasElement2.height,
-  canvasElement2.width,
-  cv.CV_8UC1
-);
-frameGray = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC1);
-overlayMask = new cv.Mat(
-  canvasElement2.height,
-  canvasElement2.width,
-  cv.CV_8UC1
-);
-frame0 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
-frame1 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
+// lastFrameGray = new cv.Mat(
+//   canvasElement2.height,
+//   canvasElement2.width,
+//   cv.CV_8UC1
+// );
+// frameGray = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC1);
+// overlayMask = new cv.Mat(
+//   canvasElement2.height,
+//   canvasElement2.width,
+//   cv.CV_8UC1
+// );
+// frame0 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
+// frame1 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
 
-VIEW_WIDTH = canvasElement2.width;
-VIEW_HEIGHT = canvasElement2.height;
+VIEW_WIDTH = canvasElement.width;
+VIEW_HEIGHT = canvasElement.height;
 
-p0 = new cv.Mat();
+// p0 = new cv.Mat();
 
-winSize = new cv.Size(75, 75);
-maxLevel = 3;
-criteria = new cv.TermCriteria(
-  cv.TERM_CRITERIA_EPS | cv.TERM_CRITERIA_COUNT,
-  30,
-  0.01
-);
+// winSize = new cv.Size(75, 75);
+// maxLevel = 3;
+// criteria = new cv.TermCriteria(
+//   cv.TERM_CRITERIA_EPS | cv.TERM_CRITERIA_COUNT,
+//   30,
+//   0.01
+// );
 
-for (var i = 0; i < 150; i++) {
-  chart_sig1[i] = 0;
-  chart_sig2[i] = 0;
-}
+// for (var i = 0; i < 150; i++) {
+//   chart_sig1[i] = 0;
+//   chart_sig2[i] = 0;
+// }
 
 let cp = new CircleProgress(container, {
   value: 0,
@@ -272,17 +269,17 @@ function onResults(results) {
   measuring.classList.add("on");
   lottie.src = "";
   ctx.save();
-  ctx2.save();
+  // ctx2.save();
   ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  ctx2.clearRect(0, 0, canvasElement2.width, canvasElement2.height);
+  // ctx2.clearRect(0, 0, canvasElement2.width, canvasElement2.height);
   ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-  ctx2.drawImage(
-    results.image,
-    0,
-    0,
-    canvasElement2.width,
-    canvasElement2.height
-  );
+  // ctx2.drawImage(
+  //   results.image,
+  //   0,
+  //   0,
+  //   canvasElement2.width,
+  //   canvasElement2.height
+  // );
 
   let face_oval = [];
   let left_eye = [];
@@ -339,6 +336,7 @@ function onResults(results) {
         multiface[left_eye[i]].y * VIEW_HEIGHT
       );
     }
+
     ctx.fill();
     ctx.beginPath();
     ctx.moveTo(
@@ -351,6 +349,7 @@ function onResults(results) {
         multiface[right_eye[i]].y * VIEW_HEIGHT
       );
     }
+
     ctx.fill();
     ctx.beginPath();
     ctx.moveTo(
@@ -366,16 +365,16 @@ function onResults(results) {
     ctx.fill();
 
     // rgb
-    ctx.strokeStyle = "transparent";
-    ctx2.strokeStyle = "cyan";
+    ctx.strokeStyle = "cyan";
+    // ctx2.strokeStyle = "cyan";
     ctx.lineWidth = 2;
-    ctx2.lineWidth = 2;
+    // ctx2.lineWidth = 2;
     ctx.beginPath();
-    ctx2.beginPath();
+    // ctx2.beginPath();
     ctx.rect(boxLeft, boxTop, boxWidth, boxHeight);
-    ctx2.rect(boxLeft, boxTop, boxWidth, boxHeight);
+    // ctx2.rect(boxLeft, boxTop, boxWidth, boxHeight);
     ctx.stroke();
-    ctx2.stroke();
+    // ctx2.stroke();
 
     let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
     const data = faceRegion.data;
@@ -454,7 +453,7 @@ function onResults(results) {
       textArr = textArr.join("\n");
       saveToFile_Chrome("this", textArr);
       camera.stop();
-      stop();
+      // stop();
 
       var blob = new Blob([textArr], { type: "text/plain" });
 
@@ -481,24 +480,24 @@ function onResults(results) {
 
       options.body = form;
 
-      let resp_signals = cv.matFromArray(
-        resp_sig.length,
-        1,
-        cv.CV_32FC1,
-        resp_sig
-      );
+      // let resp_signals = cv.matFromArray(
+      //   resp_sig.length,
+      //   1,
+      //   cv.CV_32FC1,
+      //   resp_sig
+      // );
 
-      var fps = Math.round(curPollFreq);
-      movingAverage(resp_signals, 3, Math.max(Math.floor(fps / 6), 2));
+      // var fps = Math.round(curPollFreq);
+      // movingAverage(resp_signals, 3, Math.max(Math.floor(fps / 6), 2));
 
-      let res = peakdet(resp_sig, 0.5);
+      // let res = peakdet(resp_sig, 0.5);
 
-      let timeInterval =
-        (timingHist[resp_sig.length - 1] - timingHist[0]) / 1000000;
-      let second = Math.trunc(timeInterval);
-      let count = 60 / second;
+      // let timeInterval =
+      //   (timingHist[resp_sig.length - 1] - timingHist[0]) / 1000000;
+      // let second = Math.trunc(timeInterval);
+      // let count = 60 / second;
 
-      resp = res.peaks.length * count;
+      // resp = res.peaks.length * count;
 
       fetch(url, options)
         .then((response) => response.json())
@@ -508,7 +507,9 @@ function onResults(results) {
             sessionStorage.setItem("msi", response.message.mentalStress);
             sessionStorage.setItem("psi", response.message.physicalStress);
             sessionStorage.setItem("hr", response.message.hr);
-            sessionStorage.setItem("resp", Math.trunc(resp));
+            // sessionStorage.setItem("resp", Math.trunc(resp));
+            sessionStorage.setItem("resp", 0);
+
             location.href = "./result.html";
           }
         })
@@ -523,10 +524,10 @@ function onResults(results) {
     // Modal.classList.add("alert");
     // detectedModal.classList.add("on");
     ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    ctx2.clearRect(0, 0, canvasElement2.width, canvasElement2.height);
+    // ctx2.clearRect(0, 0, canvasElement2.width, canvasElement2.height);
   }
   ctx.restore();
-  ctx2.restore();
+  // ctx2.restore();
 }
 
 // const faceMesh = new FaceMesh({
@@ -622,157 +623,157 @@ function makeSignature() {
   return hash.toString(CryptoJS.enc.Base64);
 }
 
-function fix_resp(lastFrameGray) {
-  if (respTop + 20 < lastFrameGray.rows) {
-    rect = new cv.Rect(
-      Math.round(respLeft),
-      Math.round(respTop),
-      Math.round(boxWidth),
-      20
-    );
-  } else {
-    rect = new cv.Rect(
-      Math.round(respLeft),
-      Math.round(respTop),
-      Math.round(boxWidth),
-      respTop + 20 - lastFrameGray.rows
-    );
-  }
+// function fix_resp(lastFrameGray) {
+//   if (respTop + 20 < lastFrameGray.rows) {
+//     rect = new cv.Rect(
+//       Math.round(respLeft),
+//       Math.round(respTop),
+//       Math.round(boxWidth),
+//       20
+//     );
+//   } else {
+//     rect = new cv.Rect(
+//       Math.round(respLeft),
+//       Math.round(respTop),
+//       Math.round(boxWidth),
+//       respTop + 20 - lastFrameGray.rows
+//     );
+//   }
 
-  frame0 = new cv.Mat();
-  frame0 = lastFrameGray.roi(rect);
+//   frame0 = new cv.Mat();
+//   frame0 = lastFrameGray.roi(rect);
 
-  cv.imshow(canvasId, frame0);
+//   cv.imshow(canvasId, frame0);
 
-  let none = new cv.Mat();
+//   let none = new cv.Mat();
 
-  p0 = new cv.Mat();
+//   p0 = new cv.Mat();
 
-  cv.goodFeaturesToTrack(
-    frame0,
-    p0,
-    MAX_CORNERS,
-    QUALITY_LEVEL,
-    MIN_DISTANCE,
-    none,
-    block_size,
-    useHarrisDetector,
-    0.05
-  );
-}
+//   cv.goodFeaturesToTrack(
+//     frame0,
+//     p0,
+//     MAX_CORNERS,
+//     QUALITY_LEVEL,
+//     MIN_DISTANCE,
+//     none,
+//     block_size,
+//     useHarrisDetector,
+//     0.05
+//   );
+// }
 
-function resp_call(frameGray, lastFrameGray) {
-  if (respTop + 20 < lastFrameGray.rows) {
-    rect = new cv.Rect(
-      Math.round(respLeft),
-      Math.round(respTop),
-      Math.round(boxWidth),
-      20
-    );
-  } else {
-    rect = new cv.Rect(
-      Math.round(respLeft),
-      Math.round(respTop),
-      Math.round(boxWidth),
-      respTop + 20 - lastFrameGray.rows
-    );
-  }
+// function resp_call(frameGray, lastFrameGray) {
+//   if (respTop + 20 < lastFrameGray.rows) {
+//     rect = new cv.Rect(
+//       Math.round(respLeft),
+//       Math.round(respTop),
+//       Math.round(boxWidth),
+//       20
+//     );
+//   } else {
+//     rect = new cv.Rect(
+//       Math.round(respLeft),
+//       Math.round(respTop),
+//       Math.round(boxWidth),
+//       respTop + 20 - lastFrameGray.rows
+//     );
+//   }
 
-  frame0 = new cv.Mat();
-  frame0 = lastFrameGray.roi(rect);
-  frame1 = new cv.Mat();
-  frame1 = frameGray.roi(rect);
-  cv.imshow("canvas", frame1);
+//   frame0 = new cv.Mat();
+//   frame0 = lastFrameGray.roi(rect);
+//   frame1 = new cv.Mat();
+//   frame1 = frameGray.roi(rect);
+//   cv.imshow("canvas", frame1);
 
-  p1 = new cv.Mat();
-  st = new cv.Mat();
-  err = new cv.Mat();
+//   p1 = new cv.Mat();
+//   st = new cv.Mat();
+//   err = new cv.Mat();
 
-  cv.calcOpticalFlowPyrLK(
-    frame0,
-    frame1,
-    p0,
-    p1,
-    st,
-    err,
-    winSize,
-    maxLevel,
-    criteria
-  );
+//   cv.calcOpticalFlowPyrLK(
+//     frame0,
+//     frame1,
+//     p0,
+//     p1,
+//     st,
+//     err,
+//     winSize,
+//     maxLevel,
+//     criteria
+//   );
 
-  // select good points
-  let goodNew = [];
-  let goodOld = [];
-  for (let i = 0; i < st.rows; i++) {
-    if (st.data[i] === 1) {
-      goodNew.push(new cv.Point(p1.data32F[i * 2], p1.data32F[i * 2 + 1]));
-      goodOld.push(new cv.Point(p0.data32F[i * 2], p0.data32F[i * 2 + 1]));
-    }
-  }
-  let result = 0;
-  for (let i = 0; i < goodNew.length; i++) {
-    result += goodNew[i].y;
-  }
-  p1_y = result / goodNew.length;
+//   // select good points
+//   let goodNew = [];
+//   let goodOld = [];
+//   for (let i = 0; i < st.rows; i++) {
+//     if (st.data[i] === 1) {
+//       goodNew.push(new cv.Point(p1.data32F[i * 2], p1.data32F[i * 2 + 1]));
+//       goodOld.push(new cv.Point(p0.data32F[i * 2], p0.data32F[i * 2 + 1]));
+//     }
+//   }
+//   let result = 0;
+//   for (let i = 0; i < goodNew.length; i++) {
+//     result += goodNew[i].y;
+//   }
+//   p1_y = result / goodNew.length;
 
-  p0.delete();
-  p0 = null;
-  p0 = new cv.Mat(goodNew.length, 1, cv.CV_32FC2);
-  for (let i = 0; i < goodNew.length; i++) {
-    p0.data32F[i * 2] = goodNew[i].x;
-    p0.data32F[i * 2 + 1] = goodNew[i].y;
-  }
+//   p0.delete();
+//   p0 = null;
+//   p0 = new cv.Mat(goodNew.length, 1, cv.CV_32FC2);
+//   for (let i = 0; i < goodNew.length; i++) {
+//     p0.data32F[i * 2] = goodNew[i].x;
+//     p0.data32F[i * 2 + 1] = goodNew[i].y;
+//   }
 
-  return p1_y;
-}
+//   return p1_y;
+// }
 
-function peakdet(data, delta) {
-  var peaks = [];
-  var valleys = [];
+// function peakdet(data, delta) {
+//   var peaks = [];
+//   var valleys = [];
 
-  var min = Infinity;
-  var max = -Infinity;
-  var minPosition = Number.NaN;
-  var maxPosition = Number.NaN;
+//   var min = Infinity;
+//   var max = -Infinity;
+//   var minPosition = Number.NaN;
+//   var maxPosition = Number.NaN;
 
-  var lookForMax = true;
+//   var lookForMax = true;
 
-  var current;
-  for (var i = 0; i < data.length; i++) {
-    current = parseFloat(data[i]);
-    if (isNaN(current) || !isFinite(current)) {
-      // alert("Item that's not a number!");
-      break;
-    }
-    if (current > max) {
-      max = current;
-      maxPosition = i;
-    }
-    if (current < min) {
-      min = current;
-      minPosition = i;
-    }
-    if (lookForMax) {
-      if (current < max - delta) {
-        peaks.push({ position: maxPosition, value: max });
-        min = current;
-        minPosition = i;
-        lookForMax = false;
-      }
-    } else {
-      if (current > min + delta) {
-        valleys.push({ position: minPosition, value: min });
-        max = current;
-        maxPosition = i;
-        lookForMax = true;
-      }
-    }
-  }
-  return { peaks: peaks, valleys: valleys };
-}
+//   var current;
+//   for (var i = 0; i < data.length; i++) {
+//     current = parseFloat(data[i]);
+//     if (isNaN(current) || !isFinite(current)) {
+//       // alert("Item that's not a number!");
+//       break;
+//     }
+//     if (current > max) {
+//       max = current;
+//       maxPosition = i;
+//     }
+//     if (current < min) {
+//       min = current;
+//       minPosition = i;
+//     }
+//     if (lookForMax) {
+//       if (current < max - delta) {
+//         peaks.push({ position: maxPosition, value: max });
+//         min = current;
+//         minPosition = i;
+//         lookForMax = false;
+//       }
+//     } else {
+//       if (current > min + delta) {
+//         valleys.push({ position: minPosition, value: min });
+//         max = current;
+//         maxPosition = i;
+//         lookForMax = true;
+//       }
+//     }
+//   }
+//   return { peaks: peaks, valleys: valleys };
+// }
 
-function movingAverage(signal, n, kernelSize) {
-  for (var i = 0; i < n; i++) {
-    cv.blur(signal, signal, { height: kernelSize, width: 1 });
-  }
-}
+// function movingAverage(signal, n, kernelSize) {
+//   for (var i = 0; i < n; i++) {
+//     cv.blur(signal, signal, { height: kernelSize, width: 1 });
+//   }
+// }
