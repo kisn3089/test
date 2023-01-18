@@ -496,10 +496,6 @@ async function drawFaces() {
 
         let signature = makeSignature();
 
-        Loading.classList.remove("Loaded");
-        LoadingWrapper.classList.remove("remove");
-        Ani.classList.add("off");
-
         const options = {
           method: "POST",
           headers: {
@@ -522,6 +518,10 @@ async function drawFaces() {
         // var fps = Math.round(curPollFreq);
         // movingAverage(resp_signals, 3, Math.max(Math.floor(fps / 6), 2));
 
+        Loading.classList.remove("Loaded");
+        LoadingWrapper.classList.remove("remove");
+        Ani.classList.add("off");
+
         let res = peakdet(resp_sig, 0.5);
 
         let timeInterval =
@@ -542,15 +542,15 @@ async function drawFaces() {
                 sessionStorage.setItem("hr", response.message.hr);
                 sessionStorage.setItem("resp", Math.trunc(resp));
                 location.href = "./result.html";
+              } else {
+                Modal.classList.add("alert");
+                networkModal.classList.add("on");
               }
             })
             .catch((err) => {
               console.error(err);
             });
-        } catch {
-          Modal.classList.add("alert");
-          networkModal.classList.add("on");
-        }
+        } catch {}
         frame = frame + 1;
       }
     }
