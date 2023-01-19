@@ -133,10 +133,10 @@ Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
 
-setTimeout(() => {
-  Loading.classList.add("Loaded");
-  LoadingWrapper.classList.add("remove");
-}, 2000);
+// setTimeout(() => {
+//   Loading.classList.add("Loaded");
+//   LoadingWrapper.classList.add("remove");
+// }, 2000);
 
 const ctx = canvasElement.getContext("2d");
 // const ctx2 = canvasElement2.getContext("2d");
@@ -324,6 +324,9 @@ let fpos = [];
 
 // Draws the current eyes onto the canvas, directly from video streams
 async function drawFaces() {
+  Loading.classList.add("Loaded");
+  LoadingWrapper.classList.add("remove");
+
   lottie.src = "";
 
   ctx.strokeStyle = "cyan";
@@ -465,8 +468,8 @@ async function drawFaces() {
           // Update the signal
           resp_sig.push(resp_y);
         } catch (e) {
-          Modal.classList.add("alert");
-          detectedModal.classList.add("on");
+          // Modal.classList.add("alert");
+          // detectedModal.classList.add("on");
           console.log("Error capturing frame:");
           console.log(e);
         }
@@ -559,8 +562,10 @@ async function drawFaces() {
           frame = frame + 1;
         }
       } else {
-        Modal.classList.add("alert");
-        detectedModal.classList.add("on");
+        if (!sessionStorage.getItem("hr")) {
+          Modal.classList.add("alert");
+          detectedModal.classList.add("on");
+        }
       }
     }
   }

@@ -123,6 +123,10 @@ measuring.classList.remove("on");
 Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
+sessionStorage.setItem("resp", "");
+sessionStorage.setItem("hr", "");
+sessionStorage.setItem("psi", "");
+sessionStorage.setItem("msi", "");
 
 setTimeout(() => {
   Loading.classList.add("Loaded");
@@ -579,9 +583,17 @@ camera.start();
 
 // Button Handler
 detectedBtn.addEventListener("click", function () {
+  sessionStorage.setItem("resp", "");
+  sessionStorage.setItem("hr", "");
+  sessionStorage.setItem("psi", "");
+  sessionStorage.setItem("msi", "");
   location.href = "./measure.html";
 });
 networkBtn.addEventListener("click", function () {
+  sessionStorage.setItem("resp", "");
+  sessionStorage.setItem("hr", "");
+  sessionStorage.setItem("psi", "");
+  sessionStorage.setItem("msi", "");
   location.href = "./measure.html";
 });
 

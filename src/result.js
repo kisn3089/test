@@ -299,5 +299,11 @@ if (totalScore > 90) {
 }
 
 okBtn.addEventListener("click", function () {
+  sessionStorage.setItem("resp", "");
+  sessionStorage.setItem("hr", "");
+  sessionStorage.setItem("psi", "");
+  sessionStorage.setItem("msi", "");
+  sessionStorage.setItem("gender", "");
+  sessionStorage.setItem("age", "");
   location.href = "./index.html";
 });
