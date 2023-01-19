@@ -477,7 +477,9 @@ async function drawFaces() {
         // resp-end
 
         if (mean_red.length > maxHistLen) {
-          location.href = "./result.html";
+          setTimeout(function () {
+            document.location.href = "./result.html";
+          });
           alert("여기가 문제입니다. 0");
           mean_red.shift();
           mean_green.shift();
