@@ -303,9 +303,11 @@ table {
 
 #MeasurePage #Comment.Measuring {
   width: 50.22488755622189vh;
-  height: 35.98200899550225vh;
+  /* height: 35.98200899550225vh; */
+  height: 29.985007496251875vh;
   min-width: 335px;
-  min-height: 240px;
+  /* min-height: 240px; */
+  min-height: 200px;
   background-color: #fff;
   border-radius: 20px;
   display: flex;
@@ -338,7 +340,8 @@ table {
   border-radius: 5.997001499250375vh;
   outline: none;
   border: none;
-  margin-bottom: 2.9985007496251876vh;
+  /* margin-bottom: 2.9985007496251876vh; */
+  margin-bottom: 1.4992503748125938vh;
 }
 
 #MeasurePage #Comment.Measuring span {
@@ -365,7 +368,8 @@ table {
   height: 8.095952023988007vh;
   min-width: 96px;
   min-height: 54px;
-  margin-top: 2.9985007496251876vh;
+  /* margin-top: 2.9985007496251876vh; */
+  margin-top: 1.4992503748125938vh;
 }
 
 .lottie-container .container.off {

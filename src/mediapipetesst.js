@@ -270,6 +270,7 @@ async function setupCamera() {
 }
 
 function stop() {
+  alert("여기가 문제입니다. stop()");
   const stream = video.srcObject;
   const tracks = stream.getTracks();
   tracks.forEach((track) => {
@@ -476,21 +477,27 @@ async function drawFaces() {
         // resp-end
 
         if (mean_red.length > maxHistLen) {
+          location.href = "./result.html";
+          alert("여기가 문제입니다. 0");
           mean_red.shift();
           mean_green.shift();
           mean_blue.shift();
           timingHist.shift();
           let textArr = [];
 
+          alert("여기가 문제입니다. 1");
           for (let i = 0; i < maxHistLen; i++) {
             textArr.push(
               `${timingHist[i]}	${mean_red[i]}	${mean_green[i]}	${mean_blue[i]}`
             );
           }
 
-          stop();
+          alert("여기가 문제입니다. 2");
+
           textArr = textArr.join("\n");
+          alert("여기가 문제입니다. 3");
           // saveToFile_Chrome("this", textArr);
+          stop();
 
           var blob = new Blob([textArr], { type: "text/plain" });
 
@@ -500,6 +507,10 @@ async function drawFaces() {
           form.append("gender", sessionStorage.getItem("gender"));
 
           let signature = makeSignature();
+
+          // Loading.classList.remove("Loaded");
+          // LoadingWrapper.classList.remove("remove");
+          // Ani.classList.add("off");
 
           const options = {
             method: "POST",
@@ -523,10 +534,6 @@ async function drawFaces() {
           // var fps = Math.round(curPollFreq);
           // movingAverage(resp_signals, 3, Math.max(Math.floor(fps / 6), 2));
 
-          Loading.classList.remove("Loaded");
-          LoadingWrapper.classList.remove("remove");
-          Ani.classList.add("off");
-
           let res = peakdet(resp_sig, 0.5);
 
           let timeInterval =
@@ -535,30 +542,28 @@ async function drawFaces() {
           let count = 60 / second;
 
           resp = res.peaks.length * count;
-          try {
-            fetch(url, options)
-              .then((response) => response.json())
-              .then((response) => {
-                console.log(response);
-                if (response.result === 200) {
-                  respBpm.textContent = `${response.message.hr} bpm`;
-                  sessionStorage.setItem("msi", response.message.mentalStress);
-                  sessionStorage.setItem(
-                    "psi",
-                    response.message.physicalStress
-                  );
-                  sessionStorage.setItem("hr", response.message.hr);
-                  sessionStorage.setItem("resp", Math.trunc(resp));
-                  location.href = "./result.html";
-                } else {
-                  Modal.classList.add("alert");
-                  networkModal.classList.add("on");
-                }
-              })
-              .catch((err) => {
-                console.error(err);
-              });
-          } catch {}
+          fetch(url, options)
+            .then((response) => response.json())
+            .then((response) => {
+              alert("들어왔습니다 API");
+              if (response.result === 200) {
+                respBpm.textContent = `${response.message.hr} bpm`;
+                sessionStorage.setItem("msi", response.message.mentalStress);
+                sessionStorage.setItem("psi", response.message.physicalStress);
+                sessionStorage.setItem("hr", response.message.hr);
+                sessionStorage.setItem("resp", Math.trunc(resp));
+                // sessionStorage.setItem("resp", 0);
+                location.href = "./result.html";
+              } else {
+                alert("1" + response.result);
+                Modal.classList.add("alert");
+                networkModal.classList.add("on");
+              }
+            })
+            .catch((err) => {
+              alert("2" + err);
+              console.error(err);
+            });
           frame = frame + 1;
         }
       } else {

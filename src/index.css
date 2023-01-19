@@ -244,7 +244,9 @@ table {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 23.68815592203898vh auto 0;
+  margin: 14.2vh auto 0;
+  /* margin: 23.68815592203898vh auto 0; */
+  /* margin: 47.467vw auto 0; */
 }
 
 #GenderPage #Footer button {
