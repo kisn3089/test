@@ -7,7 +7,8 @@ module.exports = {
   entry: {
     index: "./src/index.js",
     age: "./src/age.js",
-    measure: "./src/mediapipetesst.js",
+    winmeasure: "./src/mediapipetesst.js",
+    iosmeasure: "./src/measure.js",
     result: "./src/result.js",
   },
   output: {
@@ -45,7 +46,7 @@ module.exports = {
       title: "Face Health Monitoring",
       hash: true,
       filename: "index.html",
-      excludeChunks: ["age", "measure", "result"], // entry에서 해당 리스트를 제외한 나머지
+      excludeChunks: ["age", "winmeasure", "iosmeasure", "result"], // entry에서 해당 리스트를 제외한 나머지
       template: "./src/index.html",
     }),
     new HtmlWebpackPlugin({
@@ -59,8 +60,15 @@ module.exports = {
       title: "Face Health Monitoring",
       hash: true,
       filename: "measure.html",
-      chunks: ["measure"],
+      chunks: ["winmeasure"],
       template: "./src/measure.html",
+    }),
+    new HtmlWebpackPlugin({
+      title: "Face Health Monitoring",
+      hash: true,
+      filename: "mediapipe.html",
+      chunks: ["iosmeasure"],
+      template: "./src/mediapipe.html",
     }),
     new HtmlWebpackPlugin({
       title: "Face Health Monitoring",

@@ -5,8 +5,6 @@ const next = document.getElementsByClassName("next-btn");
 const prev = document.getElementsByClassName("prev");
 const des = document.getElementsByClassName("des");
 
-const link = "./measure.html";
-
 function handleChage(event) {
   next[0].classList.remove("clicked");
   if (event.target.value == "0") {
@@ -32,7 +30,11 @@ function handleChage(event) {
 
 function handleClickNext() {
   if (sessionStorage.getItem("age") !== "") {
-    location.href = link;
+    if (sessionStorage.getItem("os") === true) {
+      location.href = "./mediapipe.html";
+    } else {
+      location.href = "./measure.html";
+    }
   }
 }
 
@@ -46,6 +48,36 @@ function init() {
   input[0].addEventListener("keyup", handleChage);
   next[0].addEventListener("click", handleClickNext);
   prev[0].addEventListener("click", handleClickPrev);
+  // sessionStorage.setItem("os", getAgentSystem());
+  sessionStorage.setItem("os", detectMobileDevice(window.navigator.userAgent));
+  alert(window.navigator.userAgent);
+}
+
+function detectMobileDevice(agent) {
+  const mobileRegex = [/iPhone/i, /iPad/i, /iPod/i];
+
+  return mobileRegex.some((mobile) => agent.match(mobile));
+}
+
+export function getAgentSystem() {
+  // if (!("navigator" in window)) {
+  //   return "unknown";
+  // }
+
+  // // Use the modern 'web hints' provied by
+  // // 'userAgentData' if available, else use
+  // // the deprecated 'platform' as fallback.
+  // const platform = (
+  //   navigator.userAgentData?.platform || navigator.platform
+  // )?.toLowerCase();
+
+  // if (platform.startsWith("win")) return "windows";
+  // if (platform.startsWith("mac")) return "macos";
+  // if (platform.startsWith("linux")) return "linux";
+  // return "unknown";
+  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    return true;
+  } else return false;
 }
 
 init();
