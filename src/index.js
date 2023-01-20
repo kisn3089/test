@@ -48,11 +48,16 @@ function handleClickNext() {
   }
 }
 
+///index.html?signature=""
 function init() {
   for (var i = 0; i < btns.length; i++) {
     btns[i].addEventListener("click", handleClick);
   }
   next[0].addEventListener("click", handleClickNext);
+  if (window.location.href.includes("signature")) {
+    let signature = window.location.href.split("?signature=")[1];
+    sessionStorage.setItem("signature", signature);
+  }
 }
 
 init();
