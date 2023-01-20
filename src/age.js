@@ -50,7 +50,6 @@ function init() {
   prev[0].addEventListener("click", handleClickPrev);
   // sessionStorage.setItem("os", getAgentSystem());
   sessionStorage.setItem("os", detectMobileDevice(window.navigator.userAgent));
-  alert(window.navigator.userAgent);
 }
 
 function detectMobileDevice(agent) {
