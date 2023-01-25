@@ -128,8 +128,16 @@ table {
   border-spacing: 0;
 }
 
+#AgePage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 #AgePage #Header {
-  width: 100%;
+  /* width: 100%; */
+  width: 56.22188905547227vh;
+  min-width: 375px;
   height: 6.5967016491754125vh;
   min-height: 44px;
   text-align: center;
@@ -140,6 +148,7 @@ table {
   align-items: center;
   justify-content: center;
   position: relative;
+  margin: 0 auto;
 }
 
 /* font 정의 */

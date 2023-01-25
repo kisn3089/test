@@ -268,3 +268,57 @@ table {
   background-color: #006fad;
   color: #fff;
 }
+
+#GenderPage #Modal {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}
+
+#GenderPage #Modal .wrong {
+  width: 50.22488755622189vh;
+  height: 34.48275862068966vh;
+  min-width: 335px;
+  min-height: 230px;
+  border-radius: 2.9985007496251876vh;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+#GenderPage #Modal .wrong .message {
+  width: 100%;
+  height: 25.337331334332834vh;
+  min-height: 169px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 2.9985007496251876vh;
+  font-family: "notoSansBold";
+}
+
+#GenderPage #Modal .wrong .wrong-btn {
+  width: 100%;
+  height: 8.995502248875562vh;
+  min-height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 2.9985007496251876vh;
+  color: #006fad;
+}
+
+#GenderPage #Modal.on {
+  visibility: visible;
+}

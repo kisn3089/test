@@ -62,7 +62,6 @@ const video = document.getElementsByClassName("input_video")[0];
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
 // const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
 // const canvasId = document.getElementById("canvas");
-const respBpm = document.getElementsByClassName("bpm")[0];
 
 const container = document.getElementsByClassName("progress-bar")[0];
 
@@ -298,6 +297,9 @@ async function main() {
   canvasElement.width = videoWidth / 2;
   canvasElement.height = videoHeight / 2;
 
+  Loading.classList.add("Loaded");
+  LoadingWrapper.classList.add("remove");
+
   // start prediction loop
   renderPrediction();
 }
@@ -329,9 +331,6 @@ let fpos = [];
 
 // Draws the current eyes onto the canvas, directly from video streams
 async function drawFaces() {
-  Loading.classList.add("Loaded");
-  LoadingWrapper.classList.add("remove");
-
   lottie.src = "";
 
   ctx.strokeStyle = "cyan";
@@ -478,27 +477,19 @@ async function drawFaces() {
       // resp-end
 
       if (mean_red.length > maxHistLen) {
-        // setTimeout(function () {
-        //   document.location.href = "./result.html";
-        // });
-        // alert("여기가 문제입니다. 0");
         mean_red.shift();
         mean_green.shift();
         mean_blue.shift();
         timingHist.shift();
         let textArr = [];
 
-        // alert("여기가 문제입니다. 1");
         for (let i = 0; i < maxHistLen; i++) {
           textArr.push(
             `${timingHist[i]}	${mean_red[i]}	${mean_green[i]}	${mean_blue[i]}`
           );
         }
 
-        // alert("여기가 문제입니다. 2");
-
         textArr = textArr.join("\n");
-        // alert("여기가 문제입니다. 3");
         // saveToFile_Chrome("this", textArr);
         stop();
 
@@ -548,9 +539,7 @@ async function drawFaces() {
         fetch(url, options)
           .then((response) => response.json())
           .then((response) => {
-            // alert("들어왔습니다 API");
             if (response.result === 200) {
-              respBpm.textContent = `${response.message.hr} bpm`;
               sessionStorage.setItem("msi", response.message.mentalStress);
               sessionStorage.setItem("psi", response.message.physicalStress);
               sessionStorage.setItem("hr", response.message.hr);
@@ -558,23 +547,22 @@ async function drawFaces() {
               // sessionStorage.setItem("resp", 0);
               location.href = "./result.html";
             } else {
-              // alert("1" + response.result);
               Modal.classList.add("alert");
               networkModal.classList.add("on");
             }
           })
           .catch((err) => {
-            // alert("2" + err);
             console.error(err);
           });
         frame = frame + 1;
       }
-    } //else {
-    //   if (!sessionStorage.getItem("hr")) {
-    //     Modal.classList.add("alert");
-    //     detectedModal.classList.add("on");
-    //   }
-    // }
+    } else {
+      if (!sessionStorage.getItem("hr")) {
+        stop();
+        Modal.classList.add("alert");
+        detectedModal.classList.add("on");
+      }
+    }
   }
 }
 

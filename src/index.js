@@ -4,6 +4,8 @@ const btns = document.getElementsByClassName("btn");
 const next = document.getElementsByClassName("next-btn");
 const maleIcon = document.getElementsByClassName("male-icon");
 const femaleIcon = document.getElementsByClassName("female-icon");
+const wrongBtn = document.getElementsByClassName("wrong-btn")[0];
+const modal = document.getElementsByClassName("modal")[0];
 
 const link = "./age.html";
 
@@ -44,9 +46,21 @@ function handleClick(event) {
 
 function handleClickNext() {
   if (sessionStorage.getItem("gender") !== "") {
-    location.href = link;
+    if (sessionStorage.getItem("signature")) {
+      location.href = link;
+    } else {
+      modal.classList.add("on");
+      sessionStorage.setItem("gender", "");
+    }
   }
 }
+
+const handleClickWrong = () => {
+  modal.classList.remove("on");
+  window.close();
+};
+
+wrongBtn.addEventListener("click", handleClickWrong);
 
 ///index.html?signature=""
 function init() {
@@ -58,6 +72,8 @@ function init() {
     let signature = window.location.href.split("?signature=")[1];
     sessionStorage.setItem("signature", signature);
   }
+
+  modal.classList.remove("on");
 }
 
 init();

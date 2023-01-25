@@ -144,8 +144,16 @@ table {
   src: url("./util/fonts/NotoSansCJKkr-Light.otf");
 }
 
+#MeasurePage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 #MeasurePage #Header {
-  width: 100%;
+  /* width: 100%; */
+  width: 56.22188905547227vh;
+  min-width: 375px;
   height: 6.5967016491754125vh;
   min-height: 44px;
   text-align: center;
@@ -156,6 +164,7 @@ table {
   align-items: center;
   justify-content: center;
   position: relative;
+  margin: 0 auto;
 }
 
 #MeasurePage #Header .prev {
@@ -304,10 +313,12 @@ table {
 #MeasurePage #Comment.Measuring {
   width: 50.22488755622189vh;
   /* height: 35.98200899550225vh; */
-  height: 29.985007496251875vh;
+  /* height: 29.985007496251875vh; */
+  height: 26.38680659670165vh;
   min-width: 335px;
   /* min-height: 240px; */
-  min-height: 200px;
+  /* min-height: 200px; */
+  min-height: 176px;
   background-color: #fff;
   border-radius: 20px;
   display: flex;
@@ -349,18 +360,6 @@ table {
   min-height: 24px;
   font-family: "notoSansLight";
   font-size: 2.39880059970015vh;
-}
-
-#MeasurePage #Comment.Measuring span.bpm {
-  width: 10.794602698650674vh;
-  height: 4.497751124437781vh;
-  min-width: 72px;
-  min-height: 30px;
-  font-size: 2.9985007496251876vh;
-  font-family: "notoSansBold";
-  margin-bottom: 1.7991004497751124vh;
-  color: #006fad;
-  display: flex;
 }
 
 .lottie-container {

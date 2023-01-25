@@ -144,8 +144,16 @@ table {
   src: url("./util/fonts/NotoSansCJKkr-Light.otf");
 }
 
+#ResultPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 #ResultPage #Header {
-  width: 100%;
+  /* width: 100%; */
+  width: 56.22188905547227vh;
+  min-width: 375px;
   height: 6.5967016491754125vh;
   min-height: 44px;
   text-align: center;
@@ -156,6 +164,7 @@ table {
   align-items: center;
   justify-content: center;
   position: relative;
+  margin: 0 auto;
 }
 
 #ResultPage #Header .ok-btn {
