@@ -305,8 +305,8 @@ const handleClickOk = () => {
   sessionStorage.setItem("msi", "");
   sessionStorage.setItem("gender", "");
   sessionStorage.setItem("age", "");
-  // location.href = "./index.html";
-  window.close();
+  location.href = "./index.html";
+  // window.close();
 };
 
 okBtn.addEventListener("click", handleClickOk);

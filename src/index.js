@@ -46,12 +46,12 @@ function handleClick(event) {
 
 function handleClickNext() {
   if (sessionStorage.getItem("gender") !== "") {
-    if (sessionStorage.getItem("signature")) {
-      location.href = link;
-    } else {
-      modal.classList.add("on");
-      sessionStorage.setItem("gender", "");
-    }
+    // if (sessionStorage.getItem("signature")) {
+    location.href = link;
+    // } else {
+    // modal.classList.add("on");
+    // sessionStorage.setItem("gender", "");
+    // }
   }
 }
 
