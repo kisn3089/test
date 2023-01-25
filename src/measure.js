@@ -502,6 +502,9 @@ function onResults(results) {
 
       resp = res.peaks.length * count;
 
+      Modal.classList.remove("alert");
+      detectedModal.classList.remove("on");
+
       fetch(url, options)
         .then((response) => response.json())
         .then((response) => {
@@ -517,6 +520,7 @@ function onResults(results) {
         })
         .catch((err) => {
           Modal.classList.add("alert");
+          detectedModal.classList.remove("on");
           networkModal.classList.add("on");
           console.error(err);
         });

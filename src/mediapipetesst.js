@@ -536,6 +536,10 @@ async function drawFaces() {
         let count = 60 / second;
 
         resp = res.peaks.length * count;
+
+        Modal.classList.add("alert");
+        detectedModal.classList.remove("on");
+
         fetch(url, options)
           .then((response) => response.json())
           .then((response) => {
@@ -548,6 +552,7 @@ async function drawFaces() {
               location.href = "./result.html";
             } else {
               Modal.classList.add("alert");
+              detectedModal.classList.remove("on");
               networkModal.classList.add("on");
             }
           })
@@ -558,9 +563,9 @@ async function drawFaces() {
       }
     } else {
       if (!sessionStorage.getItem("hr")) {
-        stop();
         Modal.classList.add("alert");
         detectedModal.classList.add("on");
+        stop();
       }
     }
   }
