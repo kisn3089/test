@@ -654,7 +654,7 @@ function fix_resp(lastFrameGray) {
   frame0 = new cv.Mat();
   frame0 = lastFrameGray.roi(rect);
 
-  cv.imshow(canvasId, frame0);
+  // cv.imshow(canvasId, frame0);
 
   let none = new cv.Mat();
 
@@ -694,7 +694,7 @@ function resp_call(frameGray, lastFrameGray) {
   frame0 = lastFrameGray.roi(rect);
   frame1 = new cv.Mat();
   frame1 = frameGray.roi(rect);
-  cv.imshow("canvas", frame1);
+  // cv.imshow("canvas", frame1);
 
   p1 = new cv.Mat();
   st = new cv.Mat();
