@@ -455,7 +455,7 @@ async function drawFaces() {
       mean_green.push(rgbData[1]);
       mean_blue.push(rgbData[2]);
 
-      rgbArray = [];
+      // rgbArray = [];
       // sum_red = 0;
       // sum_green = 0;
       // sum_blue = 0;

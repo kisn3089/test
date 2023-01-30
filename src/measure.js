@@ -369,32 +369,42 @@ function onResults(results) {
     ctx2.stroke();
 
     let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
-    const data = faceRegion.data;
-    for (var i = 0; i < data.length; i += 4) {
-      if (
-        data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
-        data[i + 1] + data[i + 2] + data[i + 3] != 0
-      )
-        rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
-    }
+    let faceSrc = cv.matFromImageData(faceRegion);
+    let faceScaled = new cv.Mat();
+    cv.resize(faceSrc, faceScaled, new cv.Size(32, 32), 0, 0, cv.INTER_NEAREST);
 
-    for (var i = 0; i < rgbArray.length; i++) {
-      sum_red = sum_red + rgbArray[i][0];
-      sum_green = sum_green + rgbArray[i][1];
-      sum_blue = sum_blue + rgbArray[i][2];
-    }
+    let rgbData = cv.mean(faceScaled);
+
+    // const data = faceRegion.data;
+    // for (var i = 0; i < data.length; i += 4) {
+    //   if (
+    //     data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
+    //     data[i + 1] + data[i + 2] + data[i + 3] != 0
+    //   )
+    //     rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
+    // }
+
+    // for (var i = 0; i < rgbArray.length; i++) {
+    //   sum_red = sum_red + rgbArray[i][0];
+    //   sum_green = sum_green + rgbArray[i][1];
+    //   sum_blue = sum_blue + rgbArray[i][2];
+    // }
 
     timingHist.push(String(Date.now() * 1000));
     last = performance.now();
 
-    mean_red.push(sum_red / rgbArray.length);
-    mean_green.push(sum_green / rgbArray.length);
-    mean_blue.push(sum_blue / rgbArray.length);
+    // mean_red.push(sum_red / rgbArray.length);
+    // mean_green.push(sum_green / rgbArray.length);
+    // mean_blue.push(sum_blue / rgbArray.length);
 
-    rgbArray = [];
-    sum_red = 0;
-    sum_green = 0;
-    sum_blue = 0;
+    mean_red.push(rgbData[0]);
+    mean_green.push(rgbData[1]);
+    mean_blue.push(rgbData[2]);
+
+    // rgbArray = [];
+    // sum_red = 0;
+    // sum_green = 0;
+    // sum_blue = 0;
 
     cp.value = timingHist.length;
 
