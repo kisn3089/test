@@ -151,9 +151,7 @@ table {
 }
 
 #MeasurePage #Header {
-  /* width: 100%; */
-  width: 56.22188905547227vh;
-  min-width: 375px;
+  width: 100vw;
   height: 6.5967016491754125vh;
   min-height: 44px;
   text-align: center;
@@ -186,11 +184,14 @@ table {
 }
 
 #MeasurePage #Content {
-  width: 56.22188905547227vh;
+  width: 100vw;
   min-width: 375px;
   height: calc(100vh - 9.745127436281859vh);
   margin: 0 auto;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #MeasurePage #Content video {
@@ -238,6 +239,10 @@ table {
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .circle-progress {
@@ -361,6 +366,18 @@ table {
   font-family: "notoSansLight";
   font-size: 2.39880059970015vh;
 }
+
+/* #MeasurePage #Comment.Measuring span.bpm {
+  width: 10.794602698650674vh;
+  height: 4.497751124437781vh;
+  min-width: 72px;
+  min-height: 30px;
+  font-size: 2.9985007496251876vh;
+  font-family: "notoSansBold";
+  margin-bottom: 1.7991004497751124vh;
+  color: #006fad;
+  display: flex;
+} */
 
 .lottie-container {
   width: 14.3928035982009vh;

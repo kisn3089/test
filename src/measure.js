@@ -45,6 +45,7 @@ const videoElement = document.getElementsByClassName("input_video")[0];
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
 const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
 const canvasId = document.getElementById("canvas");
+// const respBpm = document.getElementsByClassName("bpm")[0];
 
 const container = document.getElementsByClassName("progress-bar")[0];
 
@@ -507,6 +508,7 @@ function onResults(results) {
           Modal.classList.remove("alert");
           detectedModal.classList.remove("on");
           if (response.result === 200) {
+            // respBpm.textContent = `${response.message.hr} bpm`;
             sessionStorage.setItem("msi", response.message.mentalStress);
             sessionStorage.setItem("psi", response.message.physicalStress);
             sessionStorage.setItem("hr", response.message.hr);

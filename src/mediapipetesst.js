@@ -52,8 +52,6 @@ import "@tensorflow/tfjs-backend-wasm";
 const facemesh = require("@tensorflow-models/facemesh");
 
 var cv = require("opencv.js");
-// var Fili = require("fili");
-// var nj = require("numjs");
 
 require("@tensorflow/tfjs-backend-wasm");
 tf.setBackend("wasm").then(() => main());
@@ -63,6 +61,7 @@ const video = document.getElementsByClassName("input_video")[0];
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
 // const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
 // const canvasId = document.getElementById("canvas");
+// const respBpm = document.getElementsByClassName("bpm")[0];
 
 const container = document.getElementsByClassName("progress-bar")[0];
 
@@ -501,7 +500,9 @@ async function drawFaces() {
         timingHist.shift();
         let textArr = [];
 
-        // document.location.href = "./result.html";
+        Loading.classList.remove("Loaded");
+        LoadingWrapper.classList.remove("remove");
+        Ani.classList.add("off");
 
         for (let i = 0; i < maxHistLen; i++) {
           textArr.push(
@@ -521,10 +522,6 @@ async function drawFaces() {
         form.append("gender", sessionStorage.getItem("gender"));
 
         let signature = makeSignature();
-
-        Loading.classList.remove("Loaded");
-        LoadingWrapper.classList.remove("remove");
-        Ani.classList.add("off");
 
         const options = {
           method: "POST",
@@ -564,10 +561,14 @@ async function drawFaces() {
           .then((response) => response.json())
           .then((response) => {
             if (response.result === 200) {
+              // respBpm.textContent = `${response.message.hr} bpm`;
               sessionStorage.setItem("msi", response.message.mentalStress);
               sessionStorage.setItem("psi", response.message.physicalStress);
               sessionStorage.setItem("hr", response.message.hr);
-              sessionStorage.setItem("resp", Math.trunc(resp));
+              sessionStorage.setItem(
+                "resp",
+                Math.trunc(resp) > 26 ? 26 : Math.trunc(resp)
+              );
               // sessionStorage.setItem("resp", 0);
               location.href = "./result.html";
             } else {
@@ -582,11 +583,10 @@ async function drawFaces() {
         frame = frame + 1;
       }
     } else {
-      if (!sessionStorage.getItem("hr")) {
+      if (video.srcObject.active !== false) {
+        stop();
         Modal.classList.add("alert");
         detectedModal.classList.add("on");
-        ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-        stop();
       }
     }
   }
