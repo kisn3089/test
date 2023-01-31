@@ -457,7 +457,7 @@ function onResults(results) {
       }
 
       textArr = textArr.join("\n");
-      saveToFile_Chrome("this", textArr);
+      // saveToFile_Chrome("this", textArr);
       camera.stop();
       // stop();
 
@@ -501,12 +501,11 @@ function onResults(results) {
 
       resp = res.peaks.length * count;
 
-      Modal.classList.remove("alert");
-      detectedModal.classList.remove("on");
-
       fetch(url, options)
         .then((response) => response.json())
         .then((response) => {
+          Modal.classList.remove("alert");
+          detectedModal.classList.remove("on");
           if (response.result === 200) {
             sessionStorage.setItem("msi", response.message.mentalStress);
             sessionStorage.setItem("psi", response.message.physicalStress);
@@ -514,7 +513,7 @@ function onResults(results) {
             sessionStorage.setItem("resp", Math.trunc(resp));
             // sessionStorage.setItem("resp", 0);
 
-            location.href = "./result.html";
+            document.location.href = "./result.html";
           }
         })
         .catch((err) => {
