@@ -160,12 +160,13 @@ table {
 
 #ResultPage #Header .ok-btn {
   display: inline-block;
-  width: 5.9985007496251876vh;
+  width: 6.2985007496251876vh;
   height: 3.9985007496251876vh;
   min-width: 20px;
   min-height: 20px;
   position: absolute;
-  right: 3.9985007496251876vh;
+  /* right: 2.9985007496251876vh; */
+  right: 4.2985007496251876vh;
   background: none;
   border: none;
   outline: none;
@@ -188,12 +189,16 @@ table {
   /* width: 56.22188905547227vh; */
   width: 100vw;
   min-width: 375px;
-  height: calc(100vh - 9.745127436281859vh);
+  /* height: calc(100vh - 9.745127436281859vh); */
   margin: 0 auto;
   position: relative;
   text-align: left;
   box-sizing: border-box;
   padding: 2.9985007496251876vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 #ResultPage #Content #ContentHeader h4 {
