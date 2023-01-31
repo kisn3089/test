@@ -544,7 +544,10 @@ async function drawFaces() {
               sessionStorage.setItem("msi", response.message.mentalStress);
               sessionStorage.setItem("psi", response.message.physicalStress);
               sessionStorage.setItem("hr", response.message.hr);
-              sessionStorage.setItem("resp", Math.trunc(resp));
+              sessionStorage.setItem(
+                "resp",
+                Math.trunc(resp) > 26 ? 26 : Math.trunc(resp)
+              );
               // sessionStorage.setItem("resp", 0);
               location.href = "./result.html";
             } else {
@@ -559,6 +562,7 @@ async function drawFaces() {
       }
     } else {
       if (video.srcObject.active !== false) {
+        stop();
         Modal.classList.add("alert");
         detectedModal.classList.add("on");
       }

@@ -145,7 +145,7 @@ table {
 }
 
 #ResultPage #Header {
-  width: 100%;
+  width: 100vw;
   height: 6.5967016491754125vh;
   min-height: 44px;
   text-align: center;
@@ -160,12 +160,12 @@ table {
 
 #ResultPage #Header .ok-btn {
   display: inline-block;
-  width: 2.9985007496251876vh;
-  height: 2.9985007496251876vh;
+  width: 5.9985007496251876vh;
+  height: 3.9985007496251876vh;
   min-width: 20px;
   min-height: 20px;
   position: absolute;
-  right: 2.9985007496251876vh;
+  right: 3.9985007496251876vh;
   background: none;
   border: none;
   outline: none;
@@ -174,6 +174,7 @@ table {
   font-family: "notoSansbold";
   letter-spacing: -0.408px;
   cursor: pointer;
+  color: #000;
 }
 
 #ResultPage #Header h1 {
@@ -184,7 +185,8 @@ table {
 }
 
 #ResultPage #Content {
-  width: 56.22188905547227vh;
+  /* width: 56.22188905547227vh; */
+  width: 100vw;
   min-width: 375px;
   height: calc(100vh - 9.745127436281859vh);
   margin: 0 auto;

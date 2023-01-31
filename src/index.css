@@ -145,7 +145,8 @@ table {
 }
 
 #GenderPage #Header {
-  width: 100%;
+  /* width: 100%; */
+  width: 100vw;
   height: 6.5967016491754125vh;
   min-height: 44px;
   text-align: center;
@@ -162,6 +163,7 @@ table {
 }
 
 #GenderPage #Content {
+  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: center;

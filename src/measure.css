@@ -145,7 +145,7 @@ table {
 }
 
 #MeasurePage #Header {
-  width: 100%;
+  width: 100vw;
   height: 6.5967016491754125vh;
   min-height: 44px;
   text-align: center;
@@ -177,11 +177,14 @@ table {
 }
 
 #MeasurePage #Content {
-  width: 56.22188905547227vh;
+  width: 100vw;
   min-width: 375px;
   height: calc(100vh - 9.745127436281859vh);
   margin: 0 auto;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #MeasurePage #Content video {
