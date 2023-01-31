@@ -144,6 +144,12 @@ table {
   src: url("./util/fonts/NotoSansCJKkr-Light.otf");
 }
 
+#MeasurePage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 #MeasurePage #Header {
   width: 100vw;
   height: 6.5967016491754125vh;
@@ -156,6 +162,7 @@ table {
   align-items: center;
   justify-content: center;
   position: relative;
+  margin: 0 auto;
 }
 
 #MeasurePage #Header .prev {

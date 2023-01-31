@@ -1,16 +1,16 @@
 // import libraries
 import "./measure.css";
 import "./util/css/reset.css";
-import "./util/js/format.js";
-import "./util/js/grid.js";
-import "./util/js/intersect.js";
-import "./util/js/math.js";
-import "./util/js/opencv.js";
-import ProgressBar from "./util/js/progressbar.js";
-import "./util/js/bci.min.js";
-import "./util/js/fili.min.js";
-import "./util/js/numjs.min.js";
-import "./util/js/dygraph.min.js";
+// import "./util/js/format.js";
+// import "./util/js/grid.js";
+// import "./util/js/intersect.js";
+// import "./util/js/math.js";
+// import "./util/js/opencv.js";
+// import ProgressBar from "./util/js/progressbar.js";
+// import "./util/js/bci.min.js";
+// import "./util/js/fili.min.js";
+// import "./util/js/numjs.min.js";
+// import "./util/js/dygraph.min.js";
 import "./util/js/lottie-player.js";
 import "./util/js/rollups/hmac-md5.js";
 import "./util/js/rollups/aes.js";
@@ -44,7 +44,7 @@ import CryptoJS from "crypto-js";
 import lottie from "lottie-web";
 import animationData from "./util/animation/ani_heartrate.json";
 import loadingData from "./util/animation/loading.json";
-import { math } from "./util/js/math.js";
+// import { math } from "./util/js/math.js";
 import CircleProgress from "js-circle-progress";
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-wasm";
@@ -271,7 +271,6 @@ async function setupCamera() {
 }
 
 function stop() {
-  // alert("여기가 문제입니다. stop()");
   const stream = video.srcObject;
   const tracks = stream.getTracks();
   tracks.forEach((track) => {
@@ -296,6 +295,9 @@ async function main() {
   // Create canvas and drawing context
   canvasElement.width = videoWidth / 2;
   canvasElement.height = videoHeight / 2;
+
+  Loading.classList.add("Loaded");
+  LoadingWrapper.classList.add("remove");
 
   // start prediction loop
   renderPrediction();
@@ -328,9 +330,6 @@ let fpos = [];
 
 // Draws the current eyes onto the canvas, directly from video streams
 async function drawFaces() {
-  Loading.classList.add("Loaded");
-  LoadingWrapper.classList.add("remove");
-
   lottie.src = "";
 
   ctx.strokeStyle = "cyan";
@@ -412,35 +411,53 @@ async function drawFaces() {
 
       // Get the image data from that region
       let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
-      const data = faceRegion.data;
-      for (var i = 0; i < data.length; i += 4) {
-        if (
-          data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
-          data[i + 1] + data[i + 2] + data[i + 3] != 0
-        ) {
-          rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
-        }
-      }
+      let faceSrc = cv.matFromImageData(faceRegion);
+      let faceScaled = new cv.Mat();
+      cv.resize(
+        faceSrc,
+        faceScaled,
+        new cv.Size(32, 32),
+        0,
+        0,
+        cv.INTER_NEAREST
+      );
+      // console.log(cv.mean(faceScaled));
+      // const data = faceRegion.data;
+      // const data = faceScaled.data;
+      let rgbData = cv.mean(faceScaled);
+
+      // for (var i = 0; i < data.length; i += 4) {
+      //   if (
+      //     data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
+      //     data[i + 1] + data[i + 2] + data[i + 3] != 0
+      //   ) {
+      //     rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
+      //   }
+      // }
 
       // Get the area into Tensorflow, then split it and average the green channel
-      for (var i = 0; i < rgbArray.length; i++) {
-        sum_red = sum_red + rgbArray[i][0];
-        sum_green = sum_green + rgbArray[i][1];
-        sum_blue = sum_blue + rgbArray[i][2];
-      }
+      // for (var i = 0; i < rgbArray.length; i++) {
+      //   sum_red = sum_red + rgbArray[i][0];
+      //   sum_green = sum_green + rgbArray[i][1];
+      //   sum_blue = sum_blue + rgbArray[i][2];
+      // }
 
       // Get FPS of this loop as well
       timingHist.push(String(Date.now() * 1000));
       last = performance.now();
 
-      mean_red.push(sum_red / (boxWidth * boxHeight));
-      mean_green.push(sum_green / (boxWidth * boxHeight));
-      mean_blue.push(sum_blue / (boxWidth * boxHeight));
+      // mean_red.push(sum_red / (boxWidth * boxHeight));
+      // mean_green.push(sum_green / (boxWidth * boxHeight));
+      // mean_blue.push(sum_blue / (boxWidth * boxHeight));
 
-      rgbArray = [];
-      sum_red = 0;
-      sum_green = 0;
-      sum_blue = 0;
+      mean_red.push(rgbData[0]);
+      mean_green.push(rgbData[1]);
+      mean_blue.push(rgbData[2]);
+
+      // rgbArray = [];
+      // sum_red = 0;
+      // sum_green = 0;
+      // sum_blue = 0;
 
       cp.value = mean_red.length;
 
@@ -536,6 +553,10 @@ async function drawFaces() {
         let count = 60 / second;
 
         resp = res.peaks.length * count;
+
+        Modal.classList.add("alert");
+        detectedModal.classList.remove("on");
+
         fetch(url, options)
           .then((response) => response.json())
           .then((response) => {
@@ -552,6 +573,7 @@ async function drawFaces() {
               location.href = "./result.html";
             } else {
               Modal.classList.add("alert");
+              detectedModal.classList.remove("on");
               networkModal.classList.add("on");
             }
           })
@@ -568,6 +590,7 @@ async function drawFaces() {
       }
     }
   }
+  ctx.restore();
 }
 
 var heartrate = 0;

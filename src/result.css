@@ -144,6 +144,12 @@ table {
   src: url("./util/fonts/NotoSansCJKkr-Light.otf");
 }
 
+#ResultPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 #ResultPage #Header {
   width: 100vw;
   height: 6.5967016491754125vh;
@@ -156,6 +162,7 @@ table {
   align-items: center;
   justify-content: center;
   position: relative;
+  margin: 0 auto;
 }
 
 #ResultPage #Header .ok-btn {
@@ -167,12 +174,8 @@ table {
   position: absolute;
   /* right: 2.9985007496251876vh; */
   right: 4.2985007496251876vh;
-  background: none;
   border: none;
   outline: none;
-  font-style: normal;
-  font-size: 2.5487256371814095vh;
-  font-family: "notoSansbold";
   letter-spacing: -0.408px;
   cursor: pointer;
   color: #000;
