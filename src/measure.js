@@ -50,13 +50,12 @@ import CircleProgress from "js-circle-progress";
 import DeviceDetector from "device-detector-js";
 
 var cv = require("opencv.js");
-var Fili = require("fili");
 
 const videoElement = document.getElementsByClassName("input_video")[0];
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
 const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
 const canvasId = document.getElementById("canvas");
-const respBpm = document.getElementsByClassName("bpm")[0];
+// const respBpm = document.getElementsByClassName("bpm")[0];
 
 const container = document.getElementsByClassName("progress-bar")[0];
 
@@ -507,7 +506,7 @@ function onResults(results) {
         .then((response) => response.json())
         .then((response) => {
           if (response.result === 200) {
-            respBpm.textContent = `${response.message.hr} bpm`;
+            // respBpm.textContent = `${response.message.hr} bpm`;
             sessionStorage.setItem("msi", response.message.mentalStress);
             sessionStorage.setItem("psi", response.message.physicalStress);
             sessionStorage.setItem("hr", response.message.hr);

@@ -229,6 +229,10 @@ table {
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .circle-progress {
@@ -304,10 +308,12 @@ table {
 #MeasurePage #Comment.Measuring {
   width: 50.22488755622189vh;
   /* height: 35.98200899550225vh; */
-  height: 29.985007496251875vh;
+  /* height: 29.985007496251875vh; */
+  height: 26.38680659670165vh;
   min-width: 335px;
   /* min-height: 240px; */
-  min-height: 200px;
+  /* min-height: 200px; */
+  min-height: 176px;
   background-color: #fff;
   border-radius: 20px;
   display: flex;
@@ -351,7 +357,7 @@ table {
   font-size: 2.39880059970015vh;
 }
 
-#MeasurePage #Comment.Measuring span.bpm {
+/* #MeasurePage #Comment.Measuring span.bpm {
   width: 10.794602698650674vh;
   height: 4.497751124437781vh;
   min-width: 72px;
@@ -361,7 +367,7 @@ table {
   margin-bottom: 1.7991004497751124vh;
   color: #006fad;
   display: flex;
-}
+} */
 
 .lottie-container {
   width: 14.3928035982009vh;
