@@ -234,8 +234,8 @@ table {
   /* height: 35.98200899550225vh; */
   width: 80vw;
   height: 80vw;
-  max-width: 480px;
-  max-height: 480px;
+  max-width: 240px;
+  max-height: 240px;
   border-radius: 50%;
   /* border: solid 10px #ffffff; */
   position: absolute;
@@ -254,8 +254,8 @@ table {
   width: 80vw !important;
   /* height: 35.98200899550225vh !important; */
   height: 80vw !important;
-  max-width: 480px !important;
-  max-height: 480px !important;
+  max-width: 240px !important;
+  max-height: 240px !important;
 }
 
 .circle-progress-circle {
@@ -263,8 +263,8 @@ table {
   /* height: 35.98200899550225vh; */
   width: 80vw;
   height: 80vw;
-  max-width: 480px;
-  max-height: 480px;
+  max-width: 240px;
+  max-height: 240px;
   stroke-width: 3 !important;
   stroke: #fff !important;
 }
@@ -533,16 +533,22 @@ table {
   #MeasurePage #Content .progress-bar {
     width: 35.98200899550225vh;
     height: 35.98200899550225vh;
+    max-width: none;
+    max-height: none;
   }
 
   .circle-progress {
     width: 35.98200899550225vh !important;
     height: 35.98200899550225vh !important;
+    max-width: none !important;
+    max-height: none !important;
   }
 
   .circle-progress-circle {
     width: 35.98200899550225vh;
     height: 35.98200899550225vh;
+    max-width: none !important;
+    max-height: none !important;
   }
 
   #MeasurePage #Comment.Preparation {
