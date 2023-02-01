@@ -148,7 +148,7 @@ table {
   /* width: 100%; */
   width: 100vw;
   height: 6.5967016491754125vh;
-  min-height: 44px;
+  /* min-height: 44px; */
   text-align: center;
   line-height: 6.5967016491754125vh;
   border-bottom: 1px solid #e6e6e6;
@@ -160,6 +160,7 @@ table {
   color: #000000;
   font-size: 2.5487256371814095vh;
   font-weight: 700;
+  font-family: "notoSansBold";
 }
 
 #GenderPage #Content {
@@ -178,6 +179,7 @@ table {
   margin-top: 14.24287856071964vh;
   margin-bottom: 5.997001499250375vh;
   height: 4.497751124437781vh;
+  font-family: "notoSansBold";
 }
 
 #GenderPage #Content .button-wrapper {
@@ -197,10 +199,11 @@ table {
   border: none;
   background-color: #ffffff;
   color: #000000;
-  width: 49.17541229385307vh;
+  /* width: 49.17541229385307vh; */
+  width: 87.467vw;
   height: 11.99400299850075vh;
-  min-width: 328px;
-  min-height: 80px;
+  /* min-width: 328px; */
+  /* min-height: 80px; */
   font-size: 2.39880059970015vh;
   font-weight: 700;
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
@@ -217,8 +220,8 @@ table {
 #GenderPage #Content .button-wrapper button .male-icon {
   width: 4.497751124437781vh;
   height: 4.497751124437781vh;
-  min-width: 30px;
-  min-height: 30px;
+  /* min-width: 30px; */
+  /* min-height: 30px; */
   background: url(./util/icons/ic_male.svg) no-repeat center;
   background-size: cover;
 }
@@ -231,8 +234,8 @@ table {
 #GenderPage #Content .button-wrapper button .female-icon {
   width: 4.497751124437781vh;
   height: 4.497751124437781vh;
-  min-width: 30px;
-  min-height: 30px;
+  /* min-width: 30px; */
+  /* min-height: 30px; */
   background: url(./util/icons/ic_female.svg) no-repeat center;
   background-size: cover;
 }
@@ -258,15 +261,120 @@ table {
   background-color: #d9d9d9;
   color: #ffffff;
   font-size: 2.9985007496251876vh;
-  width: 50.37481259370315vh;
+  /* width: 50.37481259370315vh; */
+  width: 89.6vw;
   height: 8.995502248875562vh;
-  min-width: 336px;
-  min-height: 60px;
+  /* min-width: 336px; */
+  /* min-height: 60px; */
   border-radius: 10.494752623688155vh;
   box-shadow: none;
+  font-family: "notoSansLight";
 }
 
 #GenderPage #Footer button.clicked {
   background-color: #006fad;
   color: #fff;
+}
+
+#GenderPage #Modal {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+}
+
+#GenderPage #Modal .wrong {
+  /* width: 50.22488755622189vh; */
+  width: 89.333vw;
+  height: 34.48275862068966vh;
+  /* min-width: 335px; */
+  /* min-height: 230px; */
+  border-radius: 2.9985007496251876vh;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+#GenderPage #Modal .wrong .message {
+  width: 100%;
+  height: 25.337331334332834vh;
+  /* min-height: 169px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #e6e6e6;
+  font-size: 2.9985007496251876vh;
+  font-family: "notoSansBold";
+}
+
+#GenderPage #Modal .wrong .wrong-btn {
+  width: 100%;
+  height: 8.995502248875562vh;
+  /* min-height: 60px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 2.9985007496251876vh;
+  color: #006fad;
+  font-family: "notoSansLight";
+}
+
+#GenderPage #Modal.on {
+  visibility: visible;
+}
+
+/* 반응형(태블릿 - 웹) */
+@media all and (min-width: 768px) {
+  #GenderPage #Header {
+    width: 100%;
+  }
+
+  #GenderPage #Content {
+    width: 100%;
+  }
+
+  #GenderPage #Content .button-wrapper button {
+    width: 49.17541229385307vh;
+    min-width: 328px;
+    min-height: 80px;
+  }
+
+  #GenderPage #Content .button-wrapper button .male-icon {
+    min-width: 30px;
+    min-height: 30px;
+  }
+
+  #GenderPage #Content .button-wrapper button .female-icon {
+    min-width: 30px;
+    min-height: 30px;
+  }
+
+  #GenderPage #Footer button {
+    width: 50.37481259370315vh;
+    min-width: 336px;
+    min-height: 60px;
+  }
+
+  #GenderPage #Modal .wrong {
+    width: 50.22488755622189vh;
+    min-width: 335px;
+    min-height: 230px;
+  }
+
+  #GenderPage #Modal .wrong .message {
+    min-height: 169px;
+  }
+
+  #GenderPage #Modal .wrong .wrong-btn {
+    min-height: 60px;
+  }
 }
