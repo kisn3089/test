@@ -182,6 +182,7 @@ table {
   color: #000000;
   font-size: 2.5487256371814095vh;
   font-weight: 700;
+  font-family: "notoSansBold";
 }
 
 #MeasurePage #Content {
@@ -401,7 +402,10 @@ table {
   /* min-width: 96px; */
   /* min-height: 54px; */
   /* margin-top: 2.9985007496251876vh; */
-  margin-top: 1.4992503748125938vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.4992503748125938vh auto 0;
 }
 
 .lottie-container .container.off {
@@ -489,6 +493,7 @@ table {
 #MeasurePage #Modal .network .message span {
   font-size: 2.9985007496251876vh;
   line-height: 4.497751124437781vh;
+  font-family: "notoSansLight";
 }
 
 #MeasurePage #Modal .detected button,
@@ -505,6 +510,7 @@ table {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "notoSansLight";
 }
 
 /* 반응형(태블릿 - 웹) */
@@ -579,13 +585,14 @@ table {
     font-size: 2.39880059970015vh;
   }
 
-  .lottie-container {
+  /* .lottie-container {
     width: 14.3928035982009vh;
     height: 8.095952023988007vh;
     min-width: 96px;
     min-height: 54px;
     margin-top: 1.4992503748125938vh;
-  }
+    display: flex;
+  } */
 
   .loading-wrapper {
     width: 56.22188905547227vh;
