@@ -128,11 +128,17 @@ table {
   border-spacing: 0;
 }
 
+#AgePage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 #AgePage #Header {
   /* width: 100%; */
   width: 100vw;
   height: 6.5967016491754125vh;
-  min-height: 44px;
+  /* min-height: 44px; */
   text-align: center;
   line-height: 6.5967016491754125vh;
   border-bottom: 1px solid #e6e6e6;
@@ -141,6 +147,7 @@ table {
   align-items: center;
   justify-content: center;
   position: relative;
+  margin: 0 auto;
 }
 
 /* font 정의 */
@@ -163,11 +170,12 @@ table {
   display: inline-block;
   width: 2.9985007496251876vh;
   height: 2.9985007496251876vh;
-  min-width: 20px;
-  min-height: 20px;
+  /* min-width: 20px; */
+  /* min-height: 20px; */
   background: url(./util/icons/ic_arrowback_20x20.svg) no-repeat center;
   position: absolute;
-  left: 2.9985007496251876vh;
+  /* left: 2.9985007496251876vh; */
+  left: 5.333vw;
 }
 
 #AgePage #Header h1 {
@@ -175,6 +183,7 @@ table {
   color: #000000;
   font-size: 2.5487256371814095vh;
   font-weight: 700;
+  font-family: "notoSansBold";
 }
 
 #AgePage #Content {
@@ -194,17 +203,27 @@ table {
   margin-top: 14.24287856071964vh;
   margin-bottom: 5.997001499250375vh;
   height: 4.497751124437781vh;
+  font-family: "notoSansBold";
+}
+
+#AgePage #Content .input-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 #AgePage #Content .input-wrapper input {
   margin-top: 5.997001499250375vh;
   border-radius: 10px;
   background-color: #ffffff;
-  width: 29.985007496251875vh;
+  /* width: 29.985007496251875vh; */
+  width: 53.333vw;
   height: 10.494752623688155vh;
-  min-width: 200px;
-  min-height: 70px;
-  padding: 0 5.997001499250375vh 0 11.99400299850075vh;
+  /* min-width: 200px; */
+  /* min-height: 70px; */
+  /* padding: 0 5.997001499250375vh 0 11.99400299850075vh; */
+  padding: 0 10.667vw 0 21.333vw;
   font-size: 4.7976011994003vh;
   color: #006fad;
   box-sizing: border-box;
@@ -249,15 +268,54 @@ table {
   background-color: #d9d9d9;
   color: #ffffff;
   font-size: 2.9985007496251876vh;
-  width: 50.37481259370315vh;
+  /* width: 50.37481259370315vh; */
+  width: 89.6vw;
   height: 8.995502248875562vh;
-  min-width: 336px;
-  min-height: 60px;
+  /* min-width: 336px; */
+  /* min-height: 60px; */
   border-radius: 10.494752623688155vh;
   box-shadow: none;
+  font-family: "notoSansLight";
 }
 
 #AgePage #Footer button.clicked {
   background-color: #006fad;
   color: #fff;
+}
+
+/* 반응형(태블릿 - 웹) */
+@media all and (min-width: 768px) {
+  #AgePage #Header {
+    width: 100%;
+    height: 6.5967016491754125vh;
+    min-height: 44px;
+  }
+
+  #AgePage #Header .prev {
+    width: 2.9985007496251876vh;
+    height: 2.9985007496251876vh;
+    min-width: 20px;
+    min-height: 20px;
+    left: 2.9985007496251876vh;
+  }
+
+  #AgePage #Content {
+    width: 100%;
+  }
+
+  #AgePage #Content .input-wrapper input {
+    width: 29.985007496251875vh;
+    height: 10.494752623688155vh;
+    min-width: 200px;
+    min-height: 70px;
+    padding: 0 5.997001499250375vh 0 11.99400299850075vh;
+  }
+
+  #AgePage #Footer button {
+    font-size: 2.9985007496251876vh;
+    width: 50.37481259370315vh;
+    height: 8.995502248875562vh;
+    min-width: 336px;
+    min-height: 60px;
+  }
 }
