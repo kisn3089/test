@@ -133,6 +133,7 @@ measuring.classList.remove("on");
 Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
+preparation.classList.add("off");
 
 // setTimeout(() => {
 //   Loading.classList.add("Loaded");
@@ -298,6 +299,7 @@ async function main() {
 
   Loading.classList.add("Loaded");
   LoadingWrapper.classList.add("remove");
+  preparation.classList.remove("off");
 
   // start prediction loop
   renderPrediction();
