@@ -182,6 +182,7 @@ table {
   color: #000000;
   font-size: 2.5487256371814095vh;
   font-weight: 700;
+  font-family: "notoSansBold";
 }
 
 #MeasurePage #Content {
@@ -233,8 +234,8 @@ table {
   /* height: 35.98200899550225vh; */
   width: 80vw;
   height: 80vw;
-  max-width: 480px;
-  max-height: 480px;
+  max-width: 240px;
+  max-height: 240px;
   border-radius: 50%;
   /* border: solid 10px #ffffff; */
   position: absolute;
@@ -253,8 +254,8 @@ table {
   width: 80vw !important;
   /* height: 35.98200899550225vh !important; */
   height: 80vw !important;
-  max-width: 480px !important;
-  max-height: 480px !important;
+  max-width: 240px !important;
+  max-height: 240px !important;
 }
 
 .circle-progress-circle {
@@ -262,8 +263,8 @@ table {
   /* height: 35.98200899550225vh; */
   width: 80vw;
   height: 80vw;
-  max-width: 480px;
-  max-height: 480px;
+  max-width: 240px;
+  max-height: 240px;
   stroke-width: 3 !important;
   stroke: #fff !important;
 }
@@ -401,7 +402,10 @@ table {
   /* min-width: 96px; */
   /* min-height: 54px; */
   /* margin-top: 2.9985007496251876vh; */
-  margin-top: 1.4992503748125938vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.4992503748125938vh auto 0;
 }
 
 .lottie-container .container.off {
@@ -489,6 +493,7 @@ table {
 #MeasurePage #Modal .network .message span {
   font-size: 2.9985007496251876vh;
   line-height: 4.497751124437781vh;
+  font-family: "notoSansLight";
 }
 
 #MeasurePage #Modal .detected button,
@@ -505,6 +510,7 @@ table {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "notoSansLight";
 }
 
 /* 반응형(태블릿 - 웹) */
@@ -527,16 +533,22 @@ table {
   #MeasurePage #Content .progress-bar {
     width: 35.98200899550225vh;
     height: 35.98200899550225vh;
+    max-width: none;
+    max-height: none;
   }
 
   .circle-progress {
     width: 35.98200899550225vh !important;
     height: 35.98200899550225vh !important;
+    max-width: none !important;
+    max-height: none !important;
   }
 
   .circle-progress-circle {
     width: 35.98200899550225vh;
     height: 35.98200899550225vh;
+    max-width: none !important;
+    max-height: none !important;
   }
 
   #MeasurePage #Comment.Preparation {
@@ -579,13 +591,14 @@ table {
     font-size: 2.39880059970015vh;
   }
 
-  .lottie-container {
+  /* .lottie-container {
     width: 14.3928035982009vh;
     height: 8.095952023988007vh;
     min-width: 96px;
     min-height: 54px;
     margin-top: 1.4992503748125938vh;
-  }
+    display: flex;
+  } */
 
   .loading-wrapper {
     width: 56.22188905547227vh;

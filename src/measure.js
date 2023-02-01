@@ -116,12 +116,10 @@ sessionStorage.setItem("resp", "");
 sessionStorage.setItem("hr", "");
 sessionStorage.setItem("psi", "");
 sessionStorage.setItem("msi", "");
-preparation.classList.add("off");
 
 setTimeout(() => {
   Loading.classList.add("Loaded");
   LoadingWrapper.classList.add("remove");
-  preparation.classList.remove("off");
 }, 2000);
 
 const ctx = canvasElement.getContext("2d");

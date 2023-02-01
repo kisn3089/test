@@ -160,6 +160,7 @@ table {
   color: #000000;
   font-size: 2.5487256371814095vh;
   font-weight: 700;
+  font-family: "notoSansBold";
 }
 
 #GenderPage #Content {
@@ -178,6 +179,7 @@ table {
   margin-top: 14.24287856071964vh;
   margin-bottom: 5.997001499250375vh;
   height: 4.497751124437781vh;
+  font-family: "notoSansBold";
 }
 
 #GenderPage #Content .button-wrapper {
@@ -266,6 +268,7 @@ table {
   /* min-height: 60px; */
   border-radius: 10.494752623688155vh;
   box-shadow: none;
+  font-family: "notoSansLight";
 }
 
 #GenderPage #Footer button.clicked {
@@ -322,6 +325,7 @@ table {
   cursor: pointer;
   font-size: 2.9985007496251876vh;
   color: #006fad;
+  font-family: "notoSansLight";
 }
 
 #GenderPage #Modal.on {
