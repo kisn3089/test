@@ -585,7 +585,7 @@ async function drawFaces() {
         frame = frame + 1;
       }
     } else {
-      if (video.srcObject.active !== false) {
+      if (video.srcObject.active !== false && mean_red.length > 1) {
         stop();
         Modal.classList.add("alert");
         detectedModal.classList.add("on");

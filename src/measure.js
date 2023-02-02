@@ -590,14 +590,14 @@ detectedBtn.addEventListener("click", function () {
   sessionStorage.setItem("hr", "");
   sessionStorage.setItem("psi", "");
   sessionStorage.setItem("msi", "");
-  location.href = "./measure.html";
+  location.href = "./mediapipe.html";
 });
 networkBtn.addEventListener("click", function () {
   sessionStorage.setItem("resp", "");
   sessionStorage.setItem("hr", "");
   sessionStorage.setItem("psi", "");
   sessionStorage.setItem("msi", "");
-  location.href = "./measure.html";
+  location.href = "./mediapipe.html";
 });
 
 function saveToFile_Chrome(fileName, content) {
