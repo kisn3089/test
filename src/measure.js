@@ -1,15 +1,7 @@
 import "./measure.css";
 import "./util/css/reset.css";
-import "./util/js/format.js";
-import "./util/js/grid.js";
-import "./util/js/intersect.js";
-import "./util/js/math.js";
-import "./util/js/opencv.js";
-import ProgressBar from "./util/js/progressbar.js";
-import "./util/js/bci.min.js";
-import "./util/js/fili.min.js";
-import "./util/js/numjs.min.js";
-import "./util/js/dygraph.min.js";
+// import "./util/js/math.js";
+// import "./util/js/opencv.js";
 import "./util/js/lottie-player.js";
 import "./util/js/rollups/hmac-md5.js";
 import "./util/js/rollups/aes.js";
@@ -45,9 +37,7 @@ import CryptoJS from "crypto-js";
 import lottie from "lottie-web";
 import animationData from "./util/animation/ani_heartrate.json";
 import loadingData from "./util/animation/loading.json";
-import { math } from "./util/js/math.js";
 import CircleProgress from "js-circle-progress";
-import DeviceDetector from "device-detector-js";
 
 var cv = require("opencv.js");
 
@@ -380,32 +370,42 @@ function onResults(results) {
     ctx2.stroke();
 
     let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
-    const data = faceRegion.data;
-    for (var i = 0; i < data.length; i += 4) {
-      if (
-        data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
-        data[i + 1] + data[i + 2] + data[i + 3] != 0
-      )
-        rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
-    }
+    let faceSrc = cv.matFromImageData(faceRegion);
+    let faceScaled = new cv.Mat();
+    cv.resize(faceSrc, faceScaled, new cv.Size(32, 32), 0, 0, cv.INTER_NEAREST);
 
-    for (var i = 0; i < rgbArray.length; i++) {
-      sum_red = sum_red + rgbArray[i][0];
-      sum_green = sum_green + rgbArray[i][1];
-      sum_blue = sum_blue + rgbArray[i][2];
-    }
+    let rgbData = cv.mean(faceScaled);
+
+    // const data = faceRegion.data;
+    // for (var i = 0; i < data.length; i += 4) {
+    //   if (
+    //     data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
+    //     data[i + 1] + data[i + 2] + data[i + 3] != 0
+    //   )
+    //     rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
+    // }
+
+    // for (var i = 0; i < rgbArray.length; i++) {
+    //   sum_red = sum_red + rgbArray[i][0];
+    //   sum_green = sum_green + rgbArray[i][1];
+    //   sum_blue = sum_blue + rgbArray[i][2];
+    // }
 
     timingHist.push(String(Date.now() * 1000));
     last = performance.now();
 
-    mean_red.push(sum_red / rgbArray.length);
-    mean_green.push(sum_green / rgbArray.length);
-    mean_blue.push(sum_blue / rgbArray.length);
+    // mean_red.push(sum_red / rgbArray.length);
+    // mean_green.push(sum_green / rgbArray.length);
+    // mean_blue.push(sum_blue / rgbArray.length);
 
-    rgbArray = [];
-    sum_red = 0;
-    sum_green = 0;
-    sum_blue = 0;
+    mean_red.push(rgbData[0]);
+    mean_green.push(rgbData[1]);
+    mean_blue.push(rgbData[2]);
+
+    // rgbArray = [];
+    // sum_red = 0;
+    // sum_green = 0;
+    // sum_blue = 0;
 
     cp.value = timingHist.length;
 
@@ -458,7 +458,7 @@ function onResults(results) {
       }
 
       textArr = textArr.join("\n");
-      saveToFile_Chrome("this", textArr);
+      // saveToFile_Chrome("this", textArr);
       camera.stop();
       // stop();
 
@@ -505,6 +505,8 @@ function onResults(results) {
       fetch(url, options)
         .then((response) => response.json())
         .then((response) => {
+          Modal.classList.remove("alert");
+          detectedModal.classList.remove("on");
           if (response.result === 200) {
             // respBpm.textContent = `${response.message.hr} bpm`;
             sessionStorage.setItem("msi", response.message.mentalStress);
@@ -513,19 +515,21 @@ function onResults(results) {
             sessionStorage.setItem("resp", Math.trunc(resp));
             // sessionStorage.setItem("resp", 0);
 
-            location.href = "./result.html";
+            document.location.href = "./result.html";
           }
         })
         .catch((err) => {
           Modal.classList.add("alert");
+          detectedModal.classList.remove("on");
           networkModal.classList.add("on");
           console.error(err);
         });
       frame = frame + 1;
     }
   } else {
-    // Modal.classList.add("alert");
-    // detectedModal.classList.add("on");
+    Modal.classList.add("alert");
+    detectedModal.classList.add("on");
+    camera.stop();
     ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     ctx2.clearRect(0, 0, canvasElement2.width, canvasElement2.height);
   }
@@ -654,7 +658,7 @@ function fix_resp(lastFrameGray) {
   frame0 = new cv.Mat();
   frame0 = lastFrameGray.roi(rect);
 
-  cv.imshow(canvasId, frame0);
+  // cv.imshow(canvasId, frame0);
 
   let none = new cv.Mat();
 
@@ -694,7 +698,7 @@ function resp_call(frameGray, lastFrameGray) {
   frame0 = lastFrameGray.roi(rect);
   frame1 = new cv.Mat();
   frame1 = frameGray.roi(rect);
-  cv.imshow("canvas", frame1);
+  // cv.imshow("canvas", frame1);
 
   p1 = new cv.Mat();
   st = new cv.Mat();

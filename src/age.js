@@ -63,9 +63,6 @@ export function getAgentSystem() {
   //   return "unknown";
   // }
 
-  // // Use the modern 'web hints' provied by
-  // // 'userAgentData' if available, else use
-  // // the deprecated 'platform' as fallback.
   // const platform = (
   //   navigator.userAgentData?.platform || navigator.platform
   // )?.toLowerCase();
