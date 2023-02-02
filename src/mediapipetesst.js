@@ -562,9 +562,11 @@ async function drawFaces() {
       }
     } else {
       if (video.srcObject.active !== false) {
-        stop();
-        Modal.classList.add("alert");
-        detectedModal.classList.add("on");
+        if (mean_red.length > 30) {
+          stop();
+          Modal.classList.add("alert");
+          detectedModal.classList.add("on");
+        }
       }
     }
   }
