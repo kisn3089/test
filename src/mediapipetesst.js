@@ -412,35 +412,53 @@ async function drawFaces() {
 
       // Get the image data from that region
       let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
-      const data = faceRegion.data;
-      for (var i = 0; i < data.length; i += 4) {
-        if (
-          data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
-          data[i + 1] + data[i + 2] + data[i + 3] != 0
-        ) {
-          rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
-        }
-      }
+      let faceSrc = cv.matFromImageData(faceRegion);
+      let faceScaled = new cv.Mat();
+      cv.resize(
+        faceSrc,
+        faceScaled,
+        new cv.Size(32, 32),
+        0,
+        0,
+        cv.INTER_NEAREST
+      );
+      // console.log(cv.mean(faceScaled));
+      // const data = faceRegion.data;
+      // const data = faceScaled.data;
+      let rgbData = cv.mean(faceScaled);
+
+      // for (var i = 0; i < data.length; i += 4) {
+      //   if (
+      //     data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
+      //     data[i + 1] + data[i + 2] + data[i + 3] != 0
+      //   ) {
+      //     rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
+      //   }
+      // }
 
       // Get the area into Tensorflow, then split it and average the green channel
-      for (var i = 0; i < rgbArray.length; i++) {
-        sum_red = sum_red + rgbArray[i][0];
-        sum_green = sum_green + rgbArray[i][1];
-        sum_blue = sum_blue + rgbArray[i][2];
-      }
+      // for (var i = 0; i < rgbArray.length; i++) {
+      //   sum_red = sum_red + rgbArray[i][0];
+      //   sum_green = sum_green + rgbArray[i][1];
+      //   sum_blue = sum_blue + rgbArray[i][2];
+      // }
 
       // Get FPS of this loop as well
       timingHist.push(String(Date.now() * 1000));
       last = performance.now();
 
-      mean_red.push(sum_red / (boxWidth * boxHeight));
-      mean_green.push(sum_green / (boxWidth * boxHeight));
-      mean_blue.push(sum_blue / (boxWidth * boxHeight));
+      // mean_red.push(sum_red / (boxWidth * boxHeight));
+      // mean_green.push(sum_green / (boxWidth * boxHeight));
+      // mean_blue.push(sum_blue / (boxWidth * boxHeight));
 
-      rgbArray = [];
-      sum_red = 0;
-      sum_green = 0;
-      sum_blue = 0;
+      mean_red.push(rgbData[0]);
+      mean_green.push(rgbData[1]);
+      mean_blue.push(rgbData[2]);
+
+      // rgbArray = [];
+      // sum_red = 0;
+      // sum_green = 0;
+      // sum_blue = 0;
 
       cp.value = mean_red.length;
 
