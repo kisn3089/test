@@ -7,9 +7,9 @@ module.exports = {
   entry: {
     index: "./src/index.js",
     age: "./src/age.js",
-    winmeasure: "./src/mediapipetesst.js",
-    iosmeasure: "./src/measure.js",
-    result: "./src/result.js",
+    winmeasure: "./src/andnoresp.js",
+    iosmeasure: "./src/iosnoresp.js",
+    result: "./src/norespresult.js",
   },
   output: {
     filename: "[name].bundle.js",
