@@ -140,7 +140,7 @@ var mean_red = [];
 var mean_green = [];
 var mean_blue = [];
 // second * 60
-const maxHistLen = 1800;
+const maxHistLen = 900;
 var timingHist = [];
 let frame = 0;
 
