@@ -139,8 +139,8 @@ let sum_blue = 0;
 var mean_red = [];
 var mean_green = [];
 var mean_blue = [];
-// second * 30
-const maxHistLen = 900;
+// second * 60
+const maxHistLen = 1800;
 var timingHist = [];
 let frame = 0;
 
