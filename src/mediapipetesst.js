@@ -128,16 +128,11 @@ networkBtn.addEventListener("click", () => {
 
 Loading.classList.remove("Loaded");
 LoadingWrapper.classList.remove("remove");
-preparation.classList.remove("off");
+preparation.classList.add("off");
 measuring.classList.remove("on");
 Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
-
-// setTimeout(() => {
-//   Loading.classList.add("Loaded");
-//   LoadingWrapper.classList.add("remove");
-// }, 2000);
 
 const ctx = canvasElement.getContext("2d");
 // const ctx2 = canvasElement2.getContext("2d");
@@ -271,7 +266,6 @@ async function setupCamera() {
 }
 
 function stop() {
-  // alert("여기가 문제입니다. stop()");
   const stream = video.srcObject;
   const tracks = stream.getTracks();
   tracks.forEach((track) => {
@@ -328,6 +322,7 @@ let fpos = [];
 
 // Draws the current eyes onto the canvas, directly from video streams
 async function drawFaces() {
+  preparation.classList.remove("off");
   Loading.classList.add("Loaded");
   LoadingWrapper.classList.add("remove");
 

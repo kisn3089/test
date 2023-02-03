@@ -1,3 +1,4 @@
+// import libraries
 import "./measure.css";
 import "./util/css/reset.css";
 import "./util/js/format.js";
@@ -33,9 +34,7 @@ import "./util/js/rollups/sha3.js";
 import "./util/js/rollups/sha384.js";
 import "./util/js/rollups/sha512.js";
 import "./util/js/rollups/tripledes.js";
-import { Camera } from "@mediapipe/camera_utils";
 import {
-  FaceMesh,
   FACEMESH_RIGHT_EYE,
   FACEMESH_LEFT_EYE,
   FACEMESH_FACE_OVAL,
@@ -47,14 +46,21 @@ import animationData from "./util/animation/ani_heartrate.json";
 import loadingData from "./util/animation/loading.json";
 import { math } from "./util/js/math.js";
 import CircleProgress from "js-circle-progress";
-import DeviceDetector from "device-detector-js";
+import * as tf from "@tensorflow/tfjs";
+import "@tensorflow/tfjs-backend-wasm";
+
+const facemesh = require("@tensorflow-models/facemesh");
 
 var cv = require("opencv.js");
 
-const videoElement = document.getElementsByClassName("input_video")[0];
+require("@tensorflow/tfjs-backend-wasm");
+tf.setBackend("wasm").then(() => main());
+
+// html tag
+const video = document.getElementsByClassName("input_video")[0];
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
-const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
-const canvasId = document.getElementById("canvas");
+// const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
+// const canvasId = document.getElementById("canvas");
 // const respBpm = document.getElementsByClassName("bpm")[0];
 
 const container = document.getElementsByClassName("progress-bar")[0];
@@ -68,9 +74,12 @@ const networkModal = document.getElementsByClassName("network")[0];
 const detectedBtn = document.getElementsByClassName("detected-btn")[0];
 const networkBtn = document.getElementsByClassName("network-btn")[0];
 
+let facepred;
+
 // const lottie = document.getElementsByClassName("lottie-player")[0];
 // lottie.src = "./util/animation/ani_heartrate.json";
 
+// Animation
 const AniWrapper = document.getElementsByClassName("lottie-container")[0];
 const LoadingWrapper = document.getElementsByClassName("loading-wrapper")[0];
 
@@ -107,33 +116,31 @@ lottie.loadAnimation({
 AniWrapper.appendChild(Ani);
 LoadingWrapper.appendChild(Loading);
 
+main();
+
 detectedBtn.addEventListener("click", () => {
-  location.href = "./mediapipe.html";
+  location.href = "./measure.html";
 });
 
 networkBtn.addEventListener("click", () => {
-  location.href = "./mediapipe.html";
+  location.href = "./measure.html";
 });
 
 Loading.classList.remove("Loaded");
 LoadingWrapper.classList.remove("remove");
-preparation.classList.remove("off");
+preparation.classList.add("off");
 measuring.classList.remove("on");
 Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
-sessionStorage.setItem("resp", "");
-sessionStorage.setItem("hr", "");
-sessionStorage.setItem("psi", "");
-sessionStorage.setItem("msi", "");
 
-setTimeout(() => {
-  Loading.classList.add("Loaded");
-  LoadingWrapper.classList.add("remove");
-}, 2000);
+// setTimeout(() => {
+//   Loading.classList.add("Loaded");
+//   LoadingWrapper.classList.add("remove");
+// }, 2000);
 
 const ctx = canvasElement.getContext("2d");
-const ctx2 = canvasElement2.getContext("2d");
+// const ctx2 = canvasElement2.getContext("2d");
 
 var last = performance.now();
 let url =
@@ -154,7 +161,7 @@ var mean_red = [];
 var mean_green = [];
 var mean_blue = [];
 // second * 30
-var maxHistLen = 900;
+const maxHistLen = 900;
 var timingHist = [];
 let frame = 0;
 let H = [];
@@ -208,27 +215,16 @@ let respHeight;
 
 let timestamp = 0;
 
-// videoElement.width = 640;
-// videoElement.height = 480;
-
-canvasElement.width = videoElement.width;
-canvasElement.height = videoElement.height;
-canvasElement2.width = videoElement.width;
-canvasElement2.height = videoElement.height;
-
+// init
 lastFrameGray = new cv.Mat(
-  canvasElement2.height,
-  canvasElement2.width,
+  canvasElement.height,
+  canvasElement.width,
   cv.CV_8UC1
 );
-frameGray = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC1);
-overlayMask = new cv.Mat(
-  canvasElement2.height,
-  canvasElement2.width,
-  cv.CV_8UC1
-);
-frame0 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
-frame1 = new cv.Mat(canvasElement2.height, canvasElement2.width, cv.CV_8UC4);
+frameGray = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC1);
+overlayMask = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC1);
+frame0 = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC4);
+frame1 = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC4);
 
 VIEW_WIDTH = canvasElement.width;
 VIEW_HEIGHT = canvasElement.height;
@@ -255,361 +251,341 @@ let cp = new CircleProgress(container, {
 
 cp;
 
-// const mpFaceMesh = window;
+// camera handler
+async function setupCamera() {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: {
+      facingMode: "user",
+      aspectRatio: 1.333,
+      width: { ideal: 1280 },
+    },
+  });
+  video.srcObject = stream;
 
-// const config = {
-//   locateFile: (file) => {
-//     return (
-//       `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@` +
-//       `${mpFaceMesh.VERSION}/${file}`
-//     );
-//   },
-// };
+  return new Promise((resolve) => {
+    video.onloadedmetadata = () => {
+      resolve(video);
+    };
+  });
+}
 
-function onResults(results) {
-  // lottieAnim.play();
-  preparation.classList.add("off");
-  measuring.classList.add("on");
+function stop() {
+  // alert("여기가 문제입니다. stop()");
+  const stream = video.srcObject;
+  const tracks = stream.getTracks();
+  tracks.forEach((track) => {
+    track.stop();
+  });
+}
+
+let curFaces;
+let fmesh;
+
+// main function
+async function main() {
+  fmesh = await facemesh.load({ maxFaces: 1 });
+  // Set up front-facing camera
+  await setupCamera();
+
+  const videoWidth = video.videoWidth;
+  const videoHeight = video.videoHeight;
+
+  video.play();
+
+  // Create canvas and drawing context
+  canvasElement.width = videoWidth / 2;
+  canvasElement.height = videoHeight / 2;
+
+  // start prediction loop
+  renderPrediction();
+}
+
+// Calls face mesh on the video and outputs the eyes and face bounding boxes to global vars
+async function renderPrediction() {
+  facepred = await fmesh.estimateFaces(canvasElement);
+  ctx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+  if (facepred.length > 0) {
+    // If we find a face, process it
+    curFaces = facepred;
+    await drawFaces();
+  }
+
+  requestAnimationFrame(renderPrediction);
+}
+
+// At around 10 Hz for the camera, we want like 5 seconds of history
+var bloodHist = Array(maxHistLen).fill(0);
+var timingHist = [];
+var last = performance.now();
+var average = (array) => array.reduce((a, b) => a + b) / array.length;
+var argMax = (array) =>
+  array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
+var mean_red = [];
+var mean_green = [];
+var mean_blue = [];
+let fpos = [];
+
+// Draws the current eyes onto the canvas, directly from video streams
+async function drawFaces() {
+  Loading.classList.add("Loaded");
+  LoadingWrapper.classList.add("remove");
+  preparation.classList.remove("off");
+
   lottie.src = "";
-  ctx.save();
-  ctx2.save();
-  ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  ctx2.clearRect(0, 0, canvasElement2.width, canvasElement2.height);
-  ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-  ctx2.drawImage(
-    results.image,
-    0,
-    0,
-    canvasElement2.width,
-    canvasElement2.height
-  );
 
+  ctx.strokeStyle = "cyan";
+  ctx.lineWidth = 2;
+  // ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+  // curFaces = facepred;
   let face_oval = [];
   let left_eye = [];
   let right_eye = [];
   let lips = [];
-  let multiface = results.multiFaceLandmarks[0];
 
-  if (results.multiFaceLandmarks[0]) {
-    boxLeft = multiface[234].x * VIEW_WIDTH;
-    boxTop = multiface[10].y * VIEW_HEIGHT;
-    boxWidth = multiface[454].x * VIEW_WIDTH - boxLeft;
-    boxHeight = multiface[152].y * VIEW_HEIGHT - boxTop;
+  for (let face of curFaces) {
+    if (face.faceInViewConfidence > 0.5) {
+      preparation.classList.add("off");
+      measuring.classList.add("on");
 
-    respLeft = multiface[234].x * VIEW_WIDTH;
-    respTop = multiface[152].y * VIEW_HEIGHT + 20;
-    respHeight = 50;
+      let mesh = face.scaledMesh;
 
-    // face line, eye, mouse defined
-    for (let i = 0; i < FACEMESH_FACE_OVAL.length; i++) {
-      face_oval.push(FACEMESH_FACE_OVAL[i][0], FACEMESH_FACE_OVAL[i][1]);
-    }
-    for (let i = 0; i < FACEMESH_RIGHT_EYE.length; i++) {
-      right_eye.push(FACEMESH_RIGHT_EYE[i][0], FACEMESH_RIGHT_EYE[i][1]);
-    }
-    for (let i = 0; i < FACEMESH_LEFT_EYE.length; i++) {
-      left_eye.push(FACEMESH_LEFT_EYE[i][0], FACEMESH_LEFT_EYE[i][1]);
-    }
-    for (let i = 0; i < FACEMESH_LIPS.length; i++) {
-      lips.push(FACEMESH_LIPS[i][0], FACEMESH_LIPS[i][1]);
-    }
-    ctx.globalCompositeOperation = "destination-in";
-    ctx.beginPath();
-    ctx.moveTo(
-      multiface[face_oval[0]].x * VIEW_WIDTH,
-      multiface[face_oval[0]].y * VIEW_HEIGHT
-    );
-    for (let i = 0; i < face_oval.length; i++) {
-      ctx.lineTo(
-        multiface[face_oval[i]].x * VIEW_WIDTH,
-        multiface[face_oval[i]].y * VIEW_HEIGHT
-      );
-    }
-    ctx.fill();
-    ctx.fillStyle = "white";
-    ctx.globalCompositeOperation = "source-over";
-    ctx.beginPath();
-    ctx.moveTo(
-      multiface[left_eye[0]].x * VIEW_WIDTH,
-      multiface[left_eye[0]].y * VIEW_HEIGHT
-    );
-    for (let i = 0; i < left_eye.length; i++) {
-      ctx.lineTo(
-        multiface[left_eye[i]].x * VIEW_WIDTH,
-        multiface[left_eye[i]].y * VIEW_HEIGHT
-      );
-    }
+      // Get the facial region of interest's bounds
+      boxLeft = mesh[234][0];
+      boxTop = mesh[10][1];
+      boxWidth = mesh[454][0] - boxLeft;
+      boxHeight = mesh[152][1] - boxTop;
 
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(
-      multiface[right_eye[0]].x * VIEW_WIDTH,
-      multiface[right_eye[0]].y * VIEW_HEIGHT
-    );
-    for (let i = 0; i < right_eye.length; i++) {
-      ctx.lineTo(
-        multiface[right_eye[i]].x * VIEW_WIDTH,
-        multiface[right_eye[i]].y * VIEW_HEIGHT
-      );
-    }
+      respLeft = mesh[234][0];
+      respTop = mesh[152][1] + 50;
+      respHeight = 50;
 
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(
-      multiface[lips[0]].x * VIEW_WIDTH,
-      multiface[lips[0]].y * VIEW_HEIGHT
-    );
-    for (let i = 0; i < lips.length; i++) {
-      ctx.lineTo(
-        multiface[lips[i]].x * VIEW_WIDTH,
-        multiface[lips[i]].y * VIEW_HEIGHT
-      );
-    }
-    ctx.fill();
-
-    // rgb
-    ctx.strokeStyle = "cyan";
-    ctx2.strokeStyle = "cyan";
-    ctx.lineWidth = 2;
-    ctx2.lineWidth = 2;
-    ctx.beginPath();
-    ctx2.beginPath();
-    ctx.rect(boxLeft, boxTop, boxWidth, boxHeight);
-    ctx2.rect(boxLeft, boxTop, boxWidth, boxHeight);
-    ctx.stroke();
-    ctx2.stroke();
-
-    let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
-    const data = faceRegion.data;
-    for (var i = 0; i < data.length; i += 4) {
-      if (
-        data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
-        data[i + 1] + data[i + 2] + data[i + 3] != 0
-      )
-        rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
-    }
-
-    for (var i = 0; i < rgbArray.length; i++) {
-      sum_red = sum_red + rgbArray[i][0];
-      sum_green = sum_green + rgbArray[i][1];
-      sum_blue = sum_blue + rgbArray[i][2];
-    }
-
-    timingHist.push(String(Date.now() * 1000));
-    last = performance.now();
-
-    mean_red.push(sum_red / rgbArray.length);
-    mean_green.push(sum_green / rgbArray.length);
-    mean_blue.push(sum_blue / rgbArray.length);
-
-    rgbArray = [];
-    sum_red = 0;
-    sum_green = 0;
-    sum_blue = 0;
-
-    cp.value = timingHist.length;
-
-    // resp
-    try {
-      if (!frameGray.empty()) {
-        frameGray.copyTo(lastFrameGray); // Save last frame
+      // face line, eye, mouse defined
+      for (let i = 0; i < FACEMESH_FACE_OVAL.length; i++) {
+        face_oval.push(FACEMESH_FACE_OVAL[i][0], FACEMESH_FACE_OVAL[i][1]);
+      }
+      for (let i = 0; i < FACEMESH_RIGHT_EYE.length; i++) {
+        right_eye.push(FACEMESH_RIGHT_EYE[i][0], FACEMESH_RIGHT_EYE[i][1]);
+      }
+      for (let i = 0; i < FACEMESH_LEFT_EYE.length; i++) {
+        left_eye.push(FACEMESH_LEFT_EYE[i][0], FACEMESH_LEFT_EYE[i][1]);
+      }
+      for (let i = 0; i < FACEMESH_LIPS.length; i++) {
+        lips.push(FACEMESH_LIPS[i][0], FACEMESH_LIPS[i][1]);
       }
 
-      let imgData = ctx2.getImageData(
-        0,
-        0,
-        canvasElement2.width,
-        canvasElement2.height
-      );
+      // ctx.globalCompositeOperation = "destination-in";
+      // ctx.beginPath();
+      // ctx.moveTo(mesh[face_oval[0]][0], mesh[face_oval[0]][1]);
+      // for (let i = 0; i < face_oval.length; i++) {
+      //   ctx.lineTo(mesh[face_oval[i]][0], mesh[face_oval[i]][1]);
+      // }
+      // ctx.rect(boxLeft, boxTop, boxWidth, boxHeight);
+      // ctx.fill();
+      ctx.fillStyle = "white";
+      ctx.globalCompositeOperation = "source-over";
+      ctx.beginPath();
+      ctx.moveTo(mesh[left_eye[0]][0], mesh[left_eye[0]][1]);
+      for (let i = 0; i < left_eye.length; i++) {
+        ctx.lineTo(mesh[left_eye[i]][0], mesh[left_eye[i]][1]);
+      }
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(mesh[right_eye[0]][0], mesh[right_eye[0]][1]);
+      for (let i = 0; i < right_eye.length; i++) {
+        ctx.lineTo(mesh[right_eye[i]][0], mesh[right_eye[i]][1]);
+      }
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(mesh[lips[0]][0], mesh[lips[0]][1]);
+      for (let i = 0; i < lips.length; i++) {
+        ctx.lineTo(mesh[lips[i]][0], mesh[lips[i]][1]);
+      }
+      ctx.fill();
 
-      let src = cv.matFromImageData(imgData);
-      cv.cvtColor(src, frameGray, cv.COLOR_RGBA2GRAY);
+      // Draw the box a bit larger for debugging purposes
+      ctx.beginPath();
+      const boxsize = 6;
+      ctx.rect(boxLeft, boxTop, boxWidth, boxHeight);
+      // ctx.fill();
+      ctx.stroke();
 
-      if (mean_red.length < 2) {
-        fix_resp(frameGray);
-      } else {
-        resp_y = resp_call(frameGray, lastFrameGray);
+      // Get the image data from that region
+      let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
+      const data = faceRegion.data;
+      for (var i = 0; i < data.length; i += 4) {
+        if (
+          data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
+          data[i + 1] + data[i + 2] + data[i + 3] != 0
+        ) {
+          rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
+        }
       }
 
-      // Update the signal
-      resp_sig.push(resp_y);
-    } catch (e) {
-      // Modal.classList.add("alert");
-      // detectedModal.classList.add("on");
-      console.log("Error capturing frame:");
-      console.log(e);
-    }
-    // resp-end
-    if (mean_red.length > maxHistLen) {
-      mean_red.shift();
-      mean_green.shift();
-      mean_blue.shift();
-      timingHist.shift();
-      let textArr = [];
+      // Get the area into Tensorflow, then split it and average the green channel
+      for (var i = 0; i < rgbArray.length; i++) {
+        sum_red = sum_red + rgbArray[i][0];
+        sum_green = sum_green + rgbArray[i][1];
+        sum_blue = sum_blue + rgbArray[i][2];
+      }
 
-      Loading.classList.remove("Loaded");
-      LoadingWrapper.classList.remove("remove");
-      Ani.classList.add("off");
+      // Get FPS of this loop as well
+      timingHist.push(String(Date.now() * 1000));
+      last = performance.now();
 
-      for (let i = 0; i < maxHistLen; i++) {
-        textArr.push(
-          `${timingHist[i]}	${mean_red[i]}	${mean_green[i]}	${mean_blue[i]}`
+      mean_red.push(sum_red / (boxWidth * boxHeight));
+      mean_green.push(sum_green / (boxWidth * boxHeight));
+      mean_blue.push(sum_blue / (boxWidth * boxHeight));
+
+      rgbArray = [];
+      sum_red = 0;
+      sum_green = 0;
+      sum_blue = 0;
+
+      cp.value = mean_red.length;
+
+      // resp
+      try {
+        if (!frameGray.empty()) {
+          frameGray.copyTo(lastFrameGray); // Save last frame
+        }
+
+        let imgData = ctx.getImageData(
+          0,
+          0,
+          canvasElement.width,
+          canvasElement.height
         );
+
+        let src = cv.matFromImageData(imgData);
+        cv.cvtColor(src, frameGray, cv.COLOR_RGBA2GRAY);
+
+        if (mean_red.length < 2) {
+          fix_resp(frameGray);
+        } else {
+          resp_y = resp_call(frameGray, lastFrameGray);
+        }
+
+        // Update the signal
+        resp_sig.push(resp_y);
+      } catch (e) {
+        // Modal.classList.add("alert");
+        // detectedModal.classList.add("on");
+        console.log("Error capturing frame:");
+        console.log(e);
       }
+      // resp-end
 
-      textArr = textArr.join("\n");
-      saveToFile_Chrome("this", textArr);
-      camera.stop();
-      // stop();
+      if (mean_red.length > maxHistLen) {
+        mean_red.shift();
+        mean_green.shift();
+        mean_blue.shift();
+        timingHist.shift();
+        let textArr = [];
 
-      var blob = new Blob([textArr], { type: "text/plain" });
+        Loading.classList.remove("Loaded");
+        LoadingWrapper.classList.remove("remove");
+        Ani.classList.add("off");
 
-      var form = new FormData();
-      form.append("rgb", blob);
-      form.append("age", sessionStorage.getItem("age"));
-      form.append("gender", sessionStorage.getItem("gender"));
+        for (let i = 0; i < maxHistLen; i++) {
+          textArr.push(
+            `${timingHist[i]}	${mean_red[i]}	${mean_green[i]}	${mean_blue[i]}`
+          );
+        }
 
-      let signature = makeSignature();
+        textArr = textArr.join("\n");
+        // saveToFile_Chrome("this", textArr);
+        stop();
 
-      const options = {
-        method: "POST",
-        headers: {
-          "x-ncp-apigw-timestamp": timestamp,
-          "x-ncp-iam-access-key": "PbDvaXxkTaHf19QGViU1",
-          "x-ncp-apigw-signature-v2": signature,
-          "x-ncp-apigw-api-key": "vkqvcuTCcBtjnErVIgyDtWzdBZPhYJo1VRtUqnx4",
-        },
-      };
+        var blob = new Blob([textArr], { type: "text/plain" });
 
-      options.body = form;
+        var form = new FormData();
+        form.append("rgb", blob);
+        form.append("age", sessionStorage.getItem("age"));
+        form.append("gender", sessionStorage.getItem("gender"));
 
-      // let resp_signals = cv.matFromArray(
-      //   resp_sig.length,
-      //   1,
-      //   cv.CV_32FC1,
-      //   resp_sig
-      // );
+        let signature = makeSignature();
 
-      // var fps = Math.round(curPollFreq);
-      // movingAverage(resp_signals, 3, Math.max(Math.floor(fps / 6), 2));
+        const options = {
+          method: "POST",
+          headers: {
+            "x-ncp-apigw-timestamp": timestamp,
+            "x-ncp-iam-access-key": "PbDvaXxkTaHf19QGViU1",
+            "x-ncp-apigw-signature-v2": signature,
+            "x-ncp-apigw-api-key": "vkqvcuTCcBtjnErVIgyDtWzdBZPhYJo1VRtUqnx4",
+          },
+        };
 
-      let res = peakdet(resp_sig, 0.5);
+        options.body = form;
 
-      let timeInterval =
-        (timingHist[resp_sig.length - 1] - timingHist[0]) / 1000000;
-      let second = Math.trunc(timeInterval);
-      let count = 60 / second;
+        // let resp_signals = cv.matFromArray(
+        //   resp_sig.length,
+        //   1,
+        //   cv.CV_32FC1,
+        //   resp_sig
+        // );
 
-      resp = res.peaks.length * count;
+        // var fps = Math.round(curPollFreq);
+        // movingAverage(resp_signals, 3, Math.max(Math.floor(fps / 6), 2));
 
-      fetch(url, options)
-        .then((response) => response.json())
-        .then((response) => {
-          if (response.result === 200) {
-            // respBpm.textContent = `${response.message.hr} bpm`;
-            sessionStorage.setItem("msi", response.message.mentalStress);
-            sessionStorage.setItem("psi", response.message.physicalStress);
-            sessionStorage.setItem("hr", response.message.hr);
-            sessionStorage.setItem("resp", Math.trunc(resp));
-            // sessionStorage.setItem("resp", 0);
+        let res = peakdet(resp_sig, 0.5);
 
-            location.href = "./result.html";
-          }
-        })
-        .catch((err) => {
+        let timeInterval =
+          (timingHist[timingHist.length - 1] - timingHist[0]) / 1000000;
+        let second = Math.trunc(timeInterval);
+        let count = 60 / second;
+
+        resp = res.peaks.length * count;
+        fetch(url, options)
+          .then((response) => response.json())
+          .then((response) => {
+            if (response.result === 200) {
+              // respBpm.textContent = `${response.message.hr} bpm`;
+              sessionStorage.setItem("msi", response.message.mentalStress);
+              sessionStorage.setItem("psi", response.message.physicalStress);
+              sessionStorage.setItem("hr", response.message.hr);
+              sessionStorage.setItem(
+                "resp",
+                Math.trunc(resp) > 26 ? 26 : Math.trunc(resp)
+              );
+              // sessionStorage.setItem("resp", 0);
+              location.href = "./result.html";
+            } else {
+              Modal.classList.add("alert");
+              networkModal.classList.add("on");
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+        frame = frame + 1;
+      }
+    } else {
+      if (video.srcObject.active !== false) {
+        if (mean_red.length > 30) {
+          stop();
           Modal.classList.add("alert");
-          networkModal.classList.add("on");
-          console.error(err);
-        });
-      frame = frame + 1;
+          detectedModal.classList.add("on");
+        }
+      }
     }
-  } else {
-    // Modal.classList.add("alert");
-    // detectedModal.classList.add("on");
-    ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    ctx2.clearRect(0, 0, canvasElement2.width, canvasElement2.height);
   }
-  ctx.restore();
-  ctx2.restore();
 }
 
-const faceMesh = new FaceMesh({
-  locateFile: (file) => {
-    return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
-  },
-});
+var heartrate = 0;
 
-faceMesh.setOptions({
-  maxNumFaces: 1,
-  refineLandmarks: true,
-  minDetectionConfidence: 0.5,
-  minTrackingConfidence: 0.5,
-});
-
-faceMesh.onResults(onResults);
-
-// const solutionOptions = {
-//   enableFaceGeometry: false,
-//   maxNumFaces: 1,
-//   refineLandmarks: true,
-//   minDetectionConfidence: 0.5,
-//   minTrackingConfidence: 0.5,
-// };
-
-// const faceMesh = new mpFaceMesh.FaceMesh(config);
-// faceMesh.setOptions(solutionOptions);
-// faceMesh.onResults(onResults);
-
-// Camera Handler
-navigator.mediaDevices.getUserMedia({
-  audio: false,
-  video: {
-    facingMode: "user",
-    width: 640,
-    height: 480,
-  },
-});
-
-const camera = new Camera(videoElement, {
-  onFrame: async () => {
-    await faceMesh.send({ image: videoElement });
-  },
-  width: 640,
-  height: 480,
-});
-
-camera.start();
+let win_red = [];
+let win_green = [];
+let win_blue = [];
 
 // Button Handler
 detectedBtn.addEventListener("click", function () {
-  sessionStorage.setItem("resp", "");
-  sessionStorage.setItem("hr", "");
-  sessionStorage.setItem("psi", "");
-  sessionStorage.setItem("msi", "");
-  location.href = "./measure.html";
+  location.href = "./mediapipe.html";
 });
 networkBtn.addEventListener("click", function () {
-  sessionStorage.setItem("resp", "");
-  sessionStorage.setItem("hr", "");
-  sessionStorage.setItem("psi", "");
-  sessionStorage.setItem("msi", "");
-  location.href = "./measure.html";
+  location.href = "./mediapipe.html";
 });
-
-function saveToFile_Chrome(fileName, content) {
-  var blob = new Blob([content], { type: "text/plain" });
-  let objURL = window.URL.createObjectURL(blob);
-
-  // 이전에 생성된 메모리 해제
-  if (window.__Xr_objURL_forCreatingFile__) {
-    window.URL.revokeObjectURL(window.__Xr_objURL_forCreatingFile__);
-  }
-  window.__Xr_objURL_forCreatingFile__ = objURL;
-  var a = document.createElement("a");
-  a.download = fileName;
-  a.href = objURL;
-  a.click();
-}
 
 function makeSignature() {
   var space = " "; // one space
@@ -635,26 +611,26 @@ function makeSignature() {
 }
 
 function fix_resp(lastFrameGray) {
-  if (respTop + 20 < lastFrameGray.rows) {
+  if (respTop + 50 < lastFrameGray.rows) {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      20
+      50
     );
   } else {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      respTop + 20 - lastFrameGray.rows
+      respTop + 50 - lastFrameGray.rows
     );
   }
 
   frame0 = new cv.Mat();
   frame0 = lastFrameGray.roi(rect);
 
-  cv.imshow(canvasId, frame0);
+  // cv.imshow(canvasId, frame0);
 
   let none = new cv.Mat();
 
@@ -674,19 +650,19 @@ function fix_resp(lastFrameGray) {
 }
 
 function resp_call(frameGray, lastFrameGray) {
-  if (respTop + 20 < lastFrameGray.rows) {
+  if (respTop + 50 < lastFrameGray.rows) {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      20
+      50
     );
   } else {
     rect = new cv.Rect(
       Math.round(respLeft),
       Math.round(respTop),
       Math.round(boxWidth),
-      respTop + 20 - lastFrameGray.rows
+      respTop + 50 - lastFrameGray.rows
     );
   }
 
@@ -694,7 +670,7 @@ function resp_call(frameGray, lastFrameGray) {
   frame0 = lastFrameGray.roi(rect);
   frame1 = new cv.Mat();
   frame1 = frameGray.roi(rect);
-  cv.imshow("canvas", frame1);
+  // cv.imshow("canvas", frame1);
 
   p1 = new cv.Mat();
   st = new cv.Mat();
