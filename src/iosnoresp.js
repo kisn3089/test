@@ -108,7 +108,7 @@ lottie.loadAnimation({
 AniWrapper.appendChild(Ani);
 LoadingWrapper.appendChild(Loading);
 
-main();
+// main();
 
 detectedBtn.addEventListener("click", () => {
   location.href = "./measure.html";
