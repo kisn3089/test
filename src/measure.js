@@ -1,16 +1,8 @@
 // import libraries
 import "./measure.css";
 import "./util/css/reset.css";
-import "./util/js/format.js";
-import "./util/js/grid.js";
-import "./util/js/intersect.js";
-import "./util/js/math.js";
-import "./util/js/opencv.js";
-import ProgressBar from "./util/js/progressbar.js";
-import "./util/js/bci.min.js";
-import "./util/js/fili.min.js";
-import "./util/js/numjs.min.js";
-import "./util/js/dygraph.min.js";
+// import "./util/js/math.js";
+// import "./util/js/opencv.js";
 import "./util/js/lottie-player.js";
 import "./util/js/rollups/hmac-md5.js";
 import "./util/js/rollups/aes.js";
@@ -44,7 +36,6 @@ import CryptoJS from "crypto-js";
 import lottie from "lottie-web";
 import animationData from "./util/animation/ani_heartrate.json";
 import loadingData from "./util/animation/loading.json";
-import { math } from "./util/js/math.js";
 import CircleProgress from "js-circle-progress";
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-wasm";

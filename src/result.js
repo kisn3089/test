@@ -298,7 +298,7 @@ if (totalScore > 90) {
   gradeDes3.textContent = "We recommend you consult a doctor.";
 }
 
-okBtn.addEventListener("click", function () {
+const handleClickOk = () => {
   sessionStorage.setItem("resp", "");
   sessionStorage.setItem("hr", "");
   sessionStorage.setItem("psi", "");
@@ -306,4 +306,7 @@ okBtn.addEventListener("click", function () {
   sessionStorage.setItem("gender", "");
   sessionStorage.setItem("age", "");
   location.href = "./index.html";
-});
+  // window.close();
+};
+
+okBtn.addEventListener("click", handleClickOk);

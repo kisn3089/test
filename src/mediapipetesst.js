@@ -1,16 +1,16 @@
 // import libraries
 import "./measure.css";
 import "./util/css/reset.css";
-import "./util/js/format.js";
-import "./util/js/grid.js";
-import "./util/js/intersect.js";
-import "./util/js/math.js";
-import "./util/js/opencv.js";
-import ProgressBar from "./util/js/progressbar.js";
-import "./util/js/bci.min.js";
-import "./util/js/fili.min.js";
-import "./util/js/numjs.min.js";
-import "./util/js/dygraph.min.js";
+// import "./util/js/format.js";
+// import "./util/js/grid.js";
+// import "./util/js/intersect.js";
+// import "./util/js/math.js";
+// import "./util/js/opencv.js";
+// import ProgressBar from "./util/js/progressbar.js";
+// import "./util/js/bci.min.js";
+// import "./util/js/fili.min.js";
+// import "./util/js/numjs.min.js";
+// import "./util/js/dygraph.min.js";
 import "./util/js/lottie-player.js";
 import "./util/js/rollups/hmac-md5.js";
 import "./util/js/rollups/aes.js";
@@ -44,7 +44,7 @@ import CryptoJS from "crypto-js";
 import lottie from "lottie-web";
 import animationData from "./util/animation/ani_heartrate.json";
 import loadingData from "./util/animation/loading.json";
-import { math } from "./util/js/math.js";
+// import { math } from "./util/js/math.js";
 import CircleProgress from "js-circle-progress";
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-wasm";
@@ -133,6 +133,7 @@ measuring.classList.remove("on");
 Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
+preparation.classList.add("off");
 
 const ctx = canvasElement.getContext("2d");
 // const ctx2 = canvasElement2.getContext("2d");
@@ -290,6 +291,10 @@ async function main() {
   // Create canvas and drawing context
   canvasElement.width = videoWidth / 2;
   canvasElement.height = videoHeight / 2;
+
+  Loading.classList.add("Loaded");
+  LoadingWrapper.classList.add("remove");
+  preparation.classList.remove("off");
 
   // start prediction loop
   renderPrediction();
@@ -549,6 +554,10 @@ async function drawFaces() {
         let count = 60 / second;
 
         resp = res.peaks.length * count;
+
+        Modal.classList.add("alert");
+        detectedModal.classList.remove("on");
+
         fetch(url, options)
           .then((response) => response.json())
           .then((response) => {
@@ -565,6 +574,7 @@ async function drawFaces() {
               location.href = "./result.html";
             } else {
               Modal.classList.add("alert");
+              detectedModal.classList.remove("on");
               networkModal.classList.add("on");
             }
           })
@@ -583,6 +593,7 @@ async function drawFaces() {
       }
     }
   }
+  ctx.restore();
 }
 
 var heartrate = 0;
