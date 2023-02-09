@@ -136,12 +136,12 @@ let rgbArray = [];
 let sum_red = 0;
 let sum_green = 0;
 let sum_blue = 0;
-var mean_red = [];
-var mean_green = [];
-var mean_blue = [];
+let mean_red = [];
+let mean_green = [];
+let mean_blue = [];
 // second * 60
 const maxHistLen = 900;
-var timingHist = [];
+let timingHist = [];
 let frame = 0;
 
 let boxLeft;
@@ -224,12 +224,6 @@ async function renderPrediction() {
 
   requestAnimationFrame(renderPrediction);
 }
-
-// At around 10 Hz for the camera, we want like 5 seconds of history
-var timingHist = [];
-var mean_red = [];
-var mean_green = [];
-var mean_blue = [];
 
 // Draws the current eyes onto the canvas, directly from video streams
 async function drawFaces() {

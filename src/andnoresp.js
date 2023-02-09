@@ -137,12 +137,12 @@ let url =
   "https://siigjmw19n.apigw.ntruss.com/face_health_estimate/v1/calculate_face_ppg_stress_cors";
 let uri = "/face_health_estimate/v1/calculate_face_ppg_stress_cors";
 
-var mean_red = [];
-var mean_green = [];
-var mean_blue = [];
+let mean_red = [];
+let mean_green = [];
+let mean_blue = [];
 // second * 30
 const maxHistLen = 900;
-var timingHist = [];
+let timingHist = [];
 let frame = 0;
 
 let boxLeft;
@@ -223,13 +223,6 @@ async function renderPrediction() {
 
   requestAnimationFrame(renderPrediction);
 }
-
-// At around 10 Hz for the camera, we want like 5 seconds of history
-var timingHist = [];
-
-var mean_red = [];
-var mean_green = [];
-var mean_blue = [];
 
 // Draws the current eyes onto the canvas, directly from video streams
 async function drawFaces() {
