@@ -151,6 +151,11 @@ let boxHeight;
 
 let timestamp = 0;
 
+let lastPosition;
+let lastYPosition;
+let positionErr = 0;
+let yPositionErr = 0;
+
 let cp = new CircleProgress(container, {
   value: 0,
   max: maxHistLen,
@@ -244,12 +249,22 @@ async function drawFaces() {
       measuring.classList.add("on");
 
       let mesh = face.scaledMesh;
+      lastPosition = boxLeft;
+      lastYPosition = boxTop;
 
       // Get the facial region of interest's bounds
       boxLeft = mesh[234][0];
       boxTop = mesh[10][1];
       boxWidth = mesh[454][0] - boxLeft;
       boxHeight = mesh[152][1] - boxTop;
+
+      if (Math.abs(boxLeft - lastPosition) > 10) {
+        positionErr++;
+      }
+
+      if (Math.abs(boxTop - lastYPosition) > 10) {
+        yPositionErr++;
+      }
 
       // face line, eye, mouse defined
       for (let i = 0; i < FACEMESH_FACE_OVAL.length; i++) {
@@ -365,6 +380,8 @@ async function drawFaces() {
         };
 
         options.body = form;
+
+        sessionStorage.setItem("face", positionErr + yPositionErr);
 
         fetch(url, options)
           .then((response) => response.json())

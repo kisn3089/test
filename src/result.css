@@ -216,7 +216,17 @@ table {
   height: 4.497751124437781vh;
   /* min-height: 30px; */
   margin-top: 1.4992503748125938vh;
-  margin-bottom: 2.9985007496251876vh;
+  /* margin-bottom: 2.9985007496251876vh; */
+}
+
+#ResultPage #Content #ContentHeader .face-err {
+  color: #ff0000;
+  font-size: 2.39880059970015vh;
+  display: none;
+}
+
+#ResultPage #Content #ContentHeader .face-err.on {
+  display: block;
 }
 
 #ResultPage #Content #ContentHeader .result-grade {
@@ -229,6 +239,7 @@ table {
   border-radius: 20px;
   box-sizing: border-box;
   padding: 2.9985007496251876vh 5.333vw;
+  margin-top: 2.9985007496251876vh;
 }
 
 #ResultPage #Content #ContentHeader .result-grade h6 {
@@ -414,6 +425,11 @@ table {
   #ResultPage #Content #ContentHeader h4 {
     font-size: 2.9985007496251876vh;
     min-height: 30px;
+  }
+
+  #ResultPage #Content #ContentHeader .face-err {
+    color: #ff0000;
+    font-size: 2.39880059970015vh;
   }
 
   #ResultPage #Content #ContentHeader .result-grade {

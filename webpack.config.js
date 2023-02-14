@@ -1,5 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const path = require("path");
 
 module.exports = {
@@ -17,14 +19,20 @@ module.exports = {
     clean: true,
   },
   devServer: {
-    static: "./dist",
-    historyApiFallback: true,
+    host: "localhost",
+    port: 8080,
+    open: true,
+    watchFiles: "index.html",
   },
   module: {
     rules: [
       {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+      },
+      {
+        test: /\.svg$/,
+        type: "asset/inline",
       },
     ],
   },
@@ -36,7 +44,7 @@ module.exports = {
     },
   },
   optimization: {
-    minimize: true,
+    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
   experiments: {
     topLevelAwait: true,
