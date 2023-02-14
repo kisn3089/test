@@ -257,11 +257,11 @@ function main() {
           videoWidth = video.videoWidth;
           videoHeight = video.videoHeight;
           video.play(); // Create canvas and drawing context
-          // canvasElement.width = videoWidth / 2;
-          // canvasElement.height = videoHeight / 2;
 
-          canvasElement.width = videoWidth / 20;
-          canvasElement.height = videoHeight / 20; // start prediction loop
+          canvasElement.width = videoWidth / 2;
+          canvasElement.height = videoHeight / 2; // canvasElement.width = videoWidth / 20;
+          // canvasElement.height = videoHeight / 20;
+          // start prediction loop
 
           renderPrediction();
 
