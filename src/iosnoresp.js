@@ -203,6 +203,10 @@ async function main() {
   const videoHeight = video.videoHeight;
 
   video.play();
+  if (timingHist < maxHistLen) {
+    Loading.classList.add("Loaded");
+    LoadingWrapper.classList.add("remove");
+  }
 
   // Create canvas and drawing context
   canvasElement.width = videoWidth / 2;
@@ -216,8 +220,6 @@ async function main() {
 
 // Calls face mesh on the video and outputs the eyes and face bounding boxes to global vars
 async function renderPrediction() {
-  Loading.classList.add("Loaded");
-  LoadingWrapper.classList.add("remove");
   preparation.classList.remove("off");
   facepred = await fmesh.estimateFaces(canvasElement);
   ctx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
@@ -347,10 +349,6 @@ async function drawFaces() {
         timingHist.shift();
         let textArr = [];
 
-        Loading.classList.remove("Loaded");
-        LoadingWrapper.classList.remove("remove");
-        Ani.classList.add("off");
-
         for (let i = 0; i < maxHistLen; i++) {
           textArr.push(
             `${timingHist[i]}	${mean_red[i]}	${mean_green[i]}	${mean_blue[i]}`
@@ -381,6 +379,11 @@ async function drawFaces() {
 
         options.body = form;
 
+        Loading.classList.remove("Loaded");
+        LoadingWrapper.classList.remove("remove");
+        Ani.classList.add("off");
+        measuring.classList.remove("on");
+        preparation.classList.add("off");
         sessionStorage.setItem("face", positionErr + yPositionErr);
 
         fetch(url, options)

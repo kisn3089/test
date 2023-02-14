@@ -32,8 +32,7 @@ sessionStorage.setItem("gender", "");
 err.classList.remove("on");
 console.log(face);
 
-if (face > 10) {
-  console.log(1);
+if (face > 20) {
   err.classList.add("on");
 } // HR Score
 
