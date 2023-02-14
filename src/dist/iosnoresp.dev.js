@@ -256,7 +256,13 @@ function main() {
         case 5:
           videoWidth = video.videoWidth;
           videoHeight = video.videoHeight;
-          video.play(); // Create canvas and drawing context
+          video.play();
+
+          if (timingHist < maxHistLen) {
+            Loading.classList.add("Loaded");
+            LoadingWrapper.classList.add("remove");
+          } // Create canvas and drawing context
+
 
           canvasElement.width = videoWidth / 2;
           canvasElement.height = videoHeight / 2; // canvasElement.width = videoWidth / 20;
@@ -265,7 +271,7 @@ function main() {
 
           renderPrediction();
 
-        case 11:
+        case 12:
         case "end":
           return _context2.stop();
       }
@@ -279,30 +285,28 @@ function renderPrediction() {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          Loading.classList.add("Loaded");
-          LoadingWrapper.classList.add("remove");
           preparation.classList.remove("off");
-          _context3.next = 5;
+          _context3.next = 3;
           return regeneratorRuntime.awrap(fmesh.estimateFaces(canvasElement));
 
-        case 5:
+        case 3:
           facepred = _context3.sent;
           ctx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
 
           if (!(facepred.length > 0)) {
-            _context3.next = 11;
+            _context3.next = 9;
             break;
           }
 
           // If we find a face, process it
           curFaces = facepred;
-          _context3.next = 11;
+          _context3.next = 9;
           return regeneratorRuntime.awrap(drawFaces());
 
-        case 11:
+        case 9:
           requestAnimationFrame(renderPrediction);
 
-        case 12:
+        case 10:
         case "end":
           return _context3.stop();
       }
@@ -436,9 +440,6 @@ function drawFaces() {
                 mean_blue.shift();
                 timingHist.shift();
                 textArr = [];
-                Loading.classList.remove("Loaded");
-                LoadingWrapper.classList.remove("remove");
-                Ani.classList.add("off");
 
                 for (_i8 = 0; _i8 < maxHistLen; _i8++) {
                   textArr.push("".concat(timingHist[_i8], "\t").concat(mean_red[_i8], "\t").concat(mean_green[_i8], "\t").concat(mean_blue[_i8]));
@@ -464,6 +465,11 @@ function drawFaces() {
                   }
                 };
                 options.body = form;
+                Loading.classList.remove("Loaded");
+                LoadingWrapper.classList.remove("remove");
+                Ani.classList.add("off");
+                measuring.classList.remove("on");
+                preparation.classList.add("off");
                 sessionStorage.setItem("face", positionErr + yPositionErr);
                 fetch(url, options).then(function (response) {
                   return response.json();

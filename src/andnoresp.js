@@ -204,6 +204,10 @@ async function main() {
   const videoHeight = video.videoHeight;
 
   video.play();
+  if (timingHist < maxHistLen) {
+    Loading.classList.add("Loaded");
+    LoadingWrapper.classList.add("remove");
+  }
 
   // Create canvas and drawing context
   canvasElement.width = videoWidth / 2;
@@ -216,8 +220,6 @@ async function main() {
 // Calls face mesh on the video and outputs the eyes and face bounding boxes to global vars
 async function renderPrediction() {
   preparation.classList.remove("off");
-  Loading.classList.add("Loaded");
-  LoadingWrapper.classList.add("remove");
   facepred = await fmesh.estimateFaces(canvasElement);
   ctx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
   if (facepred.length > 0) {
@@ -330,6 +332,7 @@ async function drawFaces() {
       cp.value = mean_red.length;
 
       if (mean_red.length > maxHistLen) {
+        stop();
         mean_red.shift();
         mean_green.shift();
         mean_blue.shift();
@@ -338,6 +341,8 @@ async function drawFaces() {
 
         Loading.classList.remove("Loaded");
         LoadingWrapper.classList.remove("remove");
+        measuring.classList.remove("on");
+        preparation.classList.add("off");
         Ani.classList.add("off");
 
         for (let i = 0; i < maxHistLen; i++) {
@@ -347,12 +352,8 @@ async function drawFaces() {
         }
 
         textArr = textArr.join("\n");
-        stop();
 
         var blob = new Blob([textArr], { type: "text/plain" });
-        Loading.classList.remove("Loaded");
-        LoadingWrapper.classList.remove("remove");
-        Ani.classList.add("off");
 
         var form = new FormData();
         form.append("rgb", blob);
@@ -372,9 +373,6 @@ async function drawFaces() {
         };
 
         options.body = form;
-        Loading.classList.remove("Loaded");
-        LoadingWrapper.classList.remove("remove");
-        Ani.classList.add("off");
 
         sessionStorage.setItem("face", positionErr + yPositionErr);
 
