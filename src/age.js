@@ -4,6 +4,7 @@ const input = document.getElementsByClassName("age-input");
 const next = document.getElementsByClassName("next-btn");
 const prev = document.getElementsByClassName("prev");
 const des = document.getElementsByClassName("des");
+const mobileType = navigator.userAgent.toLowerCase();
 
 function handleChage(event) {
   next[0].classList.remove("clicked");
@@ -30,10 +31,14 @@ function handleChage(event) {
 
 function handleClickNext() {
   if (sessionStorage.getItem("age") !== "") {
-    if (sessionStorage.getItem("os") === true) {
-      location.href = "./mediapipe.html";
+    if (
+      mobileType.indexOf("iphone") > -1 ||
+      mobileType.indexOf("ipad") > -1 ||
+      mobileType.indexOf("ipod") > -1
+    ) {
+      return (document.location.href = "./mediapipe.html");
     } else {
-      location.href = "./measure.html";
+      return (document.location.href = "./measure.html");
     }
   }
 }

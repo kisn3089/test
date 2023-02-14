@@ -1,8 +1,15 @@
 // import libraries
 import "./measure.css";
 import "./util/css/reset.css";
-// import "./util/js/math.js";
-// import "./util/js/opencv.js";
+import "./util/js/format.js";
+import "./util/js/grid.js";
+import "./util/js/intersect.js";
+import "./util/js/math.js";
+import "./util/js/opencv.js";
+import "./util/js/bci.min.js";
+import "./util/js/fili.min.js";
+import "./util/js/numjs.min.js";
+import "./util/js/dygraph.min.js";
 import "./util/js/lottie-player.js";
 import "./util/js/rollups/hmac-md5.js";
 import "./util/js/rollups/aes.js";
@@ -107,8 +114,6 @@ lottie.loadAnimation({
 AniWrapper.appendChild(Ani);
 LoadingWrapper.appendChild(Loading);
 
-main();
-
 detectedBtn.addEventListener("click", () => {
   location.href = "./measure.html";
 });
@@ -125,115 +130,32 @@ Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
 
-// setTimeout(() => {
-//   Loading.classList.add("Loaded");
-//   LoadingWrapper.classList.add("remove");
-// }, 2000);
-
 const ctx = canvasElement.getContext("2d");
 // const ctx2 = canvasElement2.getContext("2d");
 
-var last = performance.now();
 let url =
   "https://siigjmw19n.apigw.ntruss.com/face_health_estimate/v1/calculate_face_ppg_stress_cors";
 let uri = "/face_health_estimate/v1/calculate_face_ppg_stress_cors";
 
-const MAX_CORNERS = 30;
-const QUALITY_LEVEL = 0.01;
-const MIN_DISTANCE = 1;
-const useHarrisDetector = true;
-const block_size = 3;
-
-let rgbArray = [];
-let sum_red = 0;
-let sum_green = 0;
-let sum_blue = 0;
-var mean_red = [];
-var mean_green = [];
-var mean_blue = [];
+let mean_red = [];
+let mean_green = [];
+let mean_blue = [];
 // second * 30
 const maxHistLen = 900;
-var timingHist = [];
+let timingHist = [];
 let frame = 0;
-let H = [];
-let curPollFreq = 30;
-let graphData = [];
-
-let width;
-let height;
-var VIEW_WIDTH;
-var VIEW_HEIGHT;
-
-let init_frame;
-let lastFrameGray;
-let frameGray;
-let overlayMask;
-let cap;
-let signal = [];
-let resp_sig = [];
-let chart_sig1 = [];
-let chart_sig2 = [];
-
-let bpm = 0;
-let rpm = 0;
-let lastBPM = 0;
-let resp = 0;
-let nrom_q = 0;
-let rect;
-
-let p0;
-let p1;
-let frame0;
-let frame1;
-let st;
-let err;
-let resp_y = 0;
-let p1_y;
-
-let winSize;
-let maxLevel;
-let criteria;
 
 let boxLeft;
 let boxTop;
 let boxWidth;
 let boxHeight;
 
-let respLeft;
-let respTop;
-let respWidth;
-let respHeight;
-
 let timestamp = 0;
 
-// init
-lastFrameGray = new cv.Mat(
-  canvasElement.height,
-  canvasElement.width,
-  cv.CV_8UC1
-);
-frameGray = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC1);
-overlayMask = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC1);
-frame0 = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC4);
-frame1 = new cv.Mat(canvasElement.height, canvasElement.width, cv.CV_8UC4);
-
-VIEW_WIDTH = canvasElement.width;
-VIEW_HEIGHT = canvasElement.height;
-
-p0 = new cv.Mat();
-
-winSize = new cv.Size(75, 75);
-maxLevel = 3;
-criteria = new cv.TermCriteria(
-  cv.TERM_CRITERIA_EPS | cv.TERM_CRITERIA_COUNT,
-  30,
-  0.01
-);
-
-for (var i = 0; i < 150; i++) {
-  chart_sig1[i] = 0;
-  chart_sig2[i] = 0;
-}
+let lastPosition;
+let lastYPosition;
+let positionErr = 0;
+let yPositionErr = 0;
 
 let cp = new CircleProgress(container, {
   value: 0,
@@ -262,7 +184,6 @@ async function setupCamera() {
 }
 
 function stop() {
-  // alert("여기가 문제입니다. stop()");
   const stream = video.srcObject;
   const tracks = stream.getTracks();
   tracks.forEach((track) => {
@@ -294,6 +215,9 @@ async function main() {
 
 // Calls face mesh on the video and outputs the eyes and face bounding boxes to global vars
 async function renderPrediction() {
+  preparation.classList.remove("off");
+  Loading.classList.add("Loaded");
+  LoadingWrapper.classList.add("remove");
   facepred = await fmesh.estimateFaces(canvasElement);
   ctx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
   if (facepred.length > 0) {
@@ -305,29 +229,12 @@ async function renderPrediction() {
   requestAnimationFrame(renderPrediction);
 }
 
-// At around 10 Hz for the camera, we want like 5 seconds of history
-var bloodHist = Array(maxHistLen).fill(0);
-var timingHist = [];
-var last = performance.now();
-var average = (array) => array.reduce((a, b) => a + b) / array.length;
-var argMax = (array) =>
-  array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
-var mean_red = [];
-var mean_green = [];
-var mean_blue = [];
-let fpos = [];
-
 // Draws the current eyes onto the canvas, directly from video streams
 async function drawFaces() {
-  Loading.classList.add("Loaded");
-  LoadingWrapper.classList.add("remove");
-  preparation.classList.remove("off");
-
   lottie.src = "";
 
   ctx.strokeStyle = "cyan";
   ctx.lineWidth = 2;
-  // ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
   // curFaces = facepred;
   let face_oval = [];
@@ -341,6 +248,8 @@ async function drawFaces() {
       measuring.classList.add("on");
 
       let mesh = face.scaledMesh;
+      lastPosition = boxLeft;
+      lastYPosition = boxTop;
 
       // Get the facial region of interest's bounds
       boxLeft = mesh[234][0];
@@ -348,9 +257,13 @@ async function drawFaces() {
       boxWidth = mesh[454][0] - boxLeft;
       boxHeight = mesh[152][1] - boxTop;
 
-      respLeft = mesh[234][0];
-      respTop = mesh[152][1] + 50;
-      respHeight = 50;
+      if (Math.abs(boxLeft - lastPosition) > 10) {
+        positionErr++;
+      }
+
+      if (Math.abs(boxTop - lastYPosition) > 10) {
+        yPositionErr++;
+      }
 
       // face line, eye, mouse defined
       for (let i = 0; i < FACEMESH_FACE_OVAL.length; i++) {
@@ -366,14 +279,6 @@ async function drawFaces() {
         lips.push(FACEMESH_LIPS[i][0], FACEMESH_LIPS[i][1]);
       }
 
-      // ctx.globalCompositeOperation = "destination-in";
-      // ctx.beginPath();
-      // ctx.moveTo(mesh[face_oval[0]][0], mesh[face_oval[0]][1]);
-      // for (let i = 0; i < face_oval.length; i++) {
-      //   ctx.lineTo(mesh[face_oval[i]][0], mesh[face_oval[i]][1]);
-      // }
-      // ctx.rect(boxLeft, boxTop, boxWidth, boxHeight);
-      // ctx.fill();
       ctx.fillStyle = "white";
       ctx.globalCompositeOperation = "source-over";
       ctx.beginPath();
@@ -397,76 +302,32 @@ async function drawFaces() {
 
       // Draw the box a bit larger for debugging purposes
       ctx.beginPath();
-      const boxsize = 6;
       ctx.rect(boxLeft, boxTop, boxWidth, boxHeight);
       // ctx.fill();
       ctx.stroke();
 
       // Get the image data from that region
       let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
-      const data = faceRegion.data;
-      for (var i = 0; i < data.length; i += 4) {
-        if (
-          data[i + 1] + data[i + 2] + data[i + 3] != 765 ||
-          data[i + 1] + data[i + 2] + data[i + 3] != 0
-        ) {
-          rgbArray.push([data[i + 1], data[i + 2], data[i + 3]]);
-        }
-      }
-
-      // Get the area into Tensorflow, then split it and average the green channel
-      for (var i = 0; i < rgbArray.length; i++) {
-        sum_red = sum_red + rgbArray[i][0];
-        sum_green = sum_green + rgbArray[i][1];
-        sum_blue = sum_blue + rgbArray[i][2];
-      }
+      let faceSrc = cv.matFromImageData(faceRegion);
+      let faceScaled = new cv.Mat();
+      cv.resize(
+        faceSrc,
+        faceScaled,
+        new cv.Size(32, 32),
+        0,
+        0,
+        cv.INTER_NEAREST
+      );
+      let rgbData = cv.mean(faceScaled);
 
       // Get FPS of this loop as well
       timingHist.push(String(Date.now() * 1000));
-      last = performance.now();
 
-      mean_red.push(sum_red / (boxWidth * boxHeight));
-      mean_green.push(sum_green / (boxWidth * boxHeight));
-      mean_blue.push(sum_blue / (boxWidth * boxHeight));
-
-      rgbArray = [];
-      sum_red = 0;
-      sum_green = 0;
-      sum_blue = 0;
+      mean_red.push(rgbData[0]);
+      mean_green.push(rgbData[1]);
+      mean_blue.push(rgbData[2]);
 
       cp.value = mean_red.length;
-
-      // resp
-      try {
-        if (!frameGray.empty()) {
-          frameGray.copyTo(lastFrameGray); // Save last frame
-        }
-
-        let imgData = ctx.getImageData(
-          0,
-          0,
-          canvasElement.width,
-          canvasElement.height
-        );
-
-        let src = cv.matFromImageData(imgData);
-        cv.cvtColor(src, frameGray, cv.COLOR_RGBA2GRAY);
-
-        if (mean_red.length < 2) {
-          fix_resp(frameGray);
-        } else {
-          resp_y = resp_call(frameGray, lastFrameGray);
-        }
-
-        // Update the signal
-        resp_sig.push(resp_y);
-      } catch (e) {
-        // Modal.classList.add("alert");
-        // detectedModal.classList.add("on");
-        console.log("Error capturing frame:");
-        console.log(e);
-      }
-      // resp-end
 
       if (mean_red.length > maxHistLen) {
         mean_red.shift();
@@ -486,10 +347,12 @@ async function drawFaces() {
         }
 
         textArr = textArr.join("\n");
-        // saveToFile_Chrome("this", textArr);
         stop();
 
         var blob = new Blob([textArr], { type: "text/plain" });
+        Loading.classList.remove("Loaded");
+        LoadingWrapper.classList.remove("remove");
+        Ani.classList.add("off");
 
         var form = new FormData();
         form.append("rgb", blob);
@@ -509,38 +372,19 @@ async function drawFaces() {
         };
 
         options.body = form;
+        Loading.classList.remove("Loaded");
+        LoadingWrapper.classList.remove("remove");
+        Ani.classList.add("off");
 
-        // let resp_signals = cv.matFromArray(
-        //   resp_sig.length,
-        //   1,
-        //   cv.CV_32FC1,
-        //   resp_sig
-        // );
+        sessionStorage.setItem("face", positionErr + yPositionErr);
 
-        // var fps = Math.round(curPollFreq);
-        // movingAverage(resp_signals, 3, Math.max(Math.floor(fps / 6), 2));
-
-        let res = peakdet(resp_sig, 0.5);
-
-        let timeInterval =
-          (timingHist[timingHist.length - 1] - timingHist[0]) / 1000000;
-        let second = Math.trunc(timeInterval);
-        let count = 60 / second;
-
-        resp = res.peaks.length * count;
         fetch(url, options)
           .then((response) => response.json())
           .then((response) => {
             if (response.result === 200) {
-              // respBpm.textContent = `${response.message.hr} bpm`;
               sessionStorage.setItem("msi", response.message.mentalStress);
               sessionStorage.setItem("psi", response.message.physicalStress);
               sessionStorage.setItem("hr", response.message.hr);
-              sessionStorage.setItem(
-                "resp",
-                Math.trunc(resp) > 26 ? 26 : Math.trunc(resp)
-              );
-              // sessionStorage.setItem("resp", 0);
               location.href = "./result.html";
             } else {
               Modal.classList.add("alert");
@@ -564,18 +408,12 @@ async function drawFaces() {
   }
 }
 
-var heartrate = 0;
-
-let win_red = [];
-let win_green = [];
-let win_blue = [];
-
 // Button Handler
 detectedBtn.addEventListener("click", function () {
-  location.href = "./mediapipe.html";
+  location.href = "./measure.html";
 });
 networkBtn.addEventListener("click", function () {
-  location.href = "./mediapipe.html";
+  location.href = "./measure.html";
 });
 
 function makeSignature() {
@@ -599,159 +437,4 @@ function makeSignature() {
   var hash = hmac.finalize();
 
   return hash.toString(CryptoJS.enc.Base64);
-}
-
-function fix_resp(lastFrameGray) {
-  if (respTop + 50 < lastFrameGray.rows) {
-    rect = new cv.Rect(
-      Math.round(respLeft),
-      Math.round(respTop),
-      Math.round(boxWidth),
-      50
-    );
-  } else {
-    rect = new cv.Rect(
-      Math.round(respLeft),
-      Math.round(respTop),
-      Math.round(boxWidth),
-      respTop + 50 - lastFrameGray.rows
-    );
-  }
-
-  frame0 = new cv.Mat();
-  frame0 = lastFrameGray.roi(rect);
-
-  // cv.imshow(canvasId, frame0);
-
-  let none = new cv.Mat();
-
-  p0 = new cv.Mat();
-
-  cv.goodFeaturesToTrack(
-    frame0,
-    p0,
-    MAX_CORNERS,
-    QUALITY_LEVEL,
-    MIN_DISTANCE,
-    none,
-    block_size,
-    useHarrisDetector,
-    0.05
-  );
-}
-
-function resp_call(frameGray, lastFrameGray) {
-  if (respTop + 50 < lastFrameGray.rows) {
-    rect = new cv.Rect(
-      Math.round(respLeft),
-      Math.round(respTop),
-      Math.round(boxWidth),
-      50
-    );
-  } else {
-    rect = new cv.Rect(
-      Math.round(respLeft),
-      Math.round(respTop),
-      Math.round(boxWidth),
-      respTop + 50 - lastFrameGray.rows
-    );
-  }
-
-  frame0 = new cv.Mat();
-  frame0 = lastFrameGray.roi(rect);
-  frame1 = new cv.Mat();
-  frame1 = frameGray.roi(rect);
-  // cv.imshow("canvas", frame1);
-
-  p1 = new cv.Mat();
-  st = new cv.Mat();
-  err = new cv.Mat();
-
-  cv.calcOpticalFlowPyrLK(
-    frame0,
-    frame1,
-    p0,
-    p1,
-    st,
-    err,
-    winSize,
-    maxLevel,
-    criteria
-  );
-
-  // select good points
-  let goodNew = [];
-  let goodOld = [];
-  for (let i = 0; i < st.rows; i++) {
-    if (st.data[i] === 1) {
-      goodNew.push(new cv.Point(p1.data32F[i * 2], p1.data32F[i * 2 + 1]));
-      goodOld.push(new cv.Point(p0.data32F[i * 2], p0.data32F[i * 2 + 1]));
-    }
-  }
-  let result = 0;
-  for (let i = 0; i < goodNew.length; i++) {
-    result += goodNew[i].y;
-  }
-  p1_y = result / goodNew.length;
-
-  p0.delete();
-  p0 = null;
-  p0 = new cv.Mat(goodNew.length, 1, cv.CV_32FC2);
-  for (let i = 0; i < goodNew.length; i++) {
-    p0.data32F[i * 2] = goodNew[i].x;
-    p0.data32F[i * 2 + 1] = goodNew[i].y;
-  }
-
-  return p1_y;
-}
-
-function peakdet(data, delta) {
-  var peaks = [];
-  var valleys = [];
-
-  var min = Infinity;
-  var max = -Infinity;
-  var minPosition = Number.NaN;
-  var maxPosition = Number.NaN;
-
-  var lookForMax = true;
-
-  var current;
-  for (var i = 0; i < data.length; i++) {
-    current = parseFloat(data[i]);
-    if (isNaN(current) || !isFinite(current)) {
-      // alert("Item that's not a number!");
-      break;
-    }
-    if (current > max) {
-      max = current;
-      maxPosition = i;
-    }
-    if (current < min) {
-      min = current;
-      minPosition = i;
-    }
-    if (lookForMax) {
-      if (current < max - delta) {
-        peaks.push({ position: maxPosition, value: max });
-        min = current;
-        minPosition = i;
-        lookForMax = false;
-      }
-    } else {
-      if (current > min + delta) {
-        valleys.push({ position: minPosition, value: min });
-        max = current;
-        maxPosition = i;
-        lookForMax = true;
-      }
-    }
-  }
-  return { peaks: peaks, valleys: valleys };
-}
-
-function movingAverage(signal, n, kernelSize) {
-  for (var i = 0; i < n; i++) {
-    cv.blur(signal, signal, { height: kernelSize, width: 1 });
-  }
 }

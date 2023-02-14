@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "build": "webpack",
+    "dev": "webpack-dev-server",
+    "build": "webpack --mode=production",
     "start": "webpack serve --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -39,11 +40,13 @@
     "@tensorflow/tfjs-converter": "^4.2.0",
     "@tensorflow/tfjs-core": "^4.2.0",
     "crypto-js": "^4.1.1",
+    "css-minimizer-webpack-plugin": "^4.2.2",
     "device-detector-js": "^3.0.3",
     "i": "^0.3.7",
     "js-circle-progress": "^0.2.4",
     "lottie-web": "^5.10.1",
     "npm": "^9.3.0",
-    "opencv.js": "^1.2.1"
+    "opencv.js": "^1.2.1",
+    "terser-webpack-plugin": "^5.3.6"
   }
 }

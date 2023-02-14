@@ -1,74 +1,57 @@
-import "./result.css";
+"use strict";
 
-const okBtn = document.getElementsByClassName("ok-btn")[0];
-const grade = document.getElementsByClassName("grade")[0];
-const gradeDes1 = document.getElementsByClassName("grade-des1")[0];
-const gradeDes2 = document.getElementsByClassName("grade-des2")[0];
-const gradeDes3 = document.getElementsByClassName("grade-des3")[0];
+require("./result.css");
 
-const hrRate = document.getElementsByClassName("hr-rate")[0];
-const respRate = document.getElementsByClassName("resp-rate")[0];
-const msiRate = document.getElementsByClassName("msi-rate")[0];
-const psiRate = document.getElementsByClassName("psi-rate")[0];
-
-const positions = document.getElementsByClassName("my-position");
-
-const err = document.getElementsByClassName("face-err")[0];
-
-let hrScore = sessionStorage.getItem("hr");
-let respScore = sessionStorage.getItem("resp");
-let msiScore = sessionStorage.getItem("msi");
-let psiScore = sessionStorage.getItem("psi");
-let age = sessionStorage.getItem("age");
-let face = sessionStorage.getItem("face");
-
-let hrPoint;
-let respPoint;
-let msiPoint;
-let psiPoint;
-
+var okBtn = document.getElementsByClassName("ok-btn")[0];
+var grade = document.getElementsByClassName("grade")[0];
+var gradeDes1 = document.getElementsByClassName("grade-des1")[0];
+var gradeDes2 = document.getElementsByClassName("grade-des2")[0];
+var gradeDes3 = document.getElementsByClassName("grade-des3")[0];
+var hrRate = document.getElementsByClassName("hr-rate")[0];
+var respRate = document.getElementsByClassName("resp-rate")[0];
+var msiRate = document.getElementsByClassName("msi-rate")[0];
+var psiRate = document.getElementsByClassName("psi-rate")[0];
+var positions = document.getElementsByClassName("my-position");
+var err = document.getElementsByClassName("face-err")[0];
+var hrScore = sessionStorage.getItem("hr");
+var respScore = sessionStorage.getItem("resp");
+var msiScore = sessionStorage.getItem("msi");
+var psiScore = sessionStorage.getItem("psi");
+var age = sessionStorage.getItem("age");
+var face = sessionStorage.getItem("face");
+var hrPoint;
+var respPoint;
+var msiPoint;
+var psiPoint;
 hrRate.textContent = hrScore;
 respRate.textContent = respScore;
 msiRate.textContent = msiScore.slice(0, 4);
 psiRate.textContent = psiScore.slice(0, 4);
-
 sessionStorage.setItem("age", "");
 sessionStorage.setItem("gender", "");
 err.classList.remove("on");
-
 console.log(face);
+
 if (face > 10) {
   console.log(1);
   err.classList.add("on");
-}
+} // HR Score
 
-// HR Score
+
 if (Number(age) <= 25) {
   if (Number(hrScore) >= 63 && Number(hrScore) <= 81) {
     positions[0].classList.add("healthy");
     hrPoint = 50;
-  } else if (
-    (Number(hrScore) >= 59 && Number(hrScore) < 63) ||
-    (Number(hrScore) > 81 && Number(hrScore) <= 85)
-  ) {
+  } else if (Number(hrScore) >= 59 && Number(hrScore) < 63 || Number(hrScore) > 81 && Number(hrScore) <= 85) {
     positions[0].classList.add("normal");
     hrPoint = 40;
-  } else if (
-    (Number(hrScore) >= 56 && Number(hrScore) < 59) ||
-    (Number(hrScore) > 85 && Number(hrScore) <= 88)
-  ) {
+  } else if (Number(hrScore) >= 56 && Number(hrScore) < 59 || Number(hrScore) > 85 && Number(hrScore) <= 88) {
     positions[0].classList.add("caution");
     hrPoint = 30;
-  } else if (
-    (Number(hrScore) >= 52 && Number(hrScore) < 56) ||
-    (Number(hrScore) > 88 && Number(hrScore) <= 92)
-  ) {
+  } else if (Number(hrScore) >= 52 && Number(hrScore) < 56 || Number(hrScore) > 88 && Number(hrScore) <= 92) {
     positions[0].classList.add("warning");
     hrPoint = 20;
-  } else if (
-    (Number(hrScore) >= 0 && Number(hrScore) < 52) ||
-    Number(hrScore) > 92
-  ) {
+  } else if (Number(hrScore) >= 0 && Number(hrScore) < 52 || Number(hrScore) > 92) {
     positions[0].classList.add("danger");
     hrPoint = 10;
   }
@@ -76,28 +59,16 @@ if (Number(age) <= 25) {
   if (Number(hrScore) >= 62 && Number(hrScore) <= 81) {
     positions[0].classList.add("healthy");
     hrPoint = 50;
-  } else if (
-    (Number(hrScore) >= 58 && Number(hrScore) < 62) ||
-    (Number(hrScore) > 81 && Number(hrScore) <= 85)
-  ) {
+  } else if (Number(hrScore) >= 58 && Number(hrScore) < 62 || Number(hrScore) > 81 && Number(hrScore) <= 85) {
     positions[0].classList.add("normal");
     hrPoint = 40;
-  } else if (
-    (Number(hrScore) >= 55 && Number(hrScore) < 58) ||
-    (Number(hrScore) > 85 && Number(hrScore) <= 88)
-  ) {
+  } else if (Number(hrScore) >= 55 && Number(hrScore) < 58 || Number(hrScore) > 85 && Number(hrScore) <= 88) {
     positions[0].classList.add("caution");
     hrPoint = 30;
-  } else if (
-    (Number(hrScore) >= 51 && Number(hrScore) < 55) ||
-    (Number(hrScore) > 88 && Number(hrScore) <= 92)
-  ) {
+  } else if (Number(hrScore) >= 51 && Number(hrScore) < 55 || Number(hrScore) > 88 && Number(hrScore) <= 92) {
     positions[0].classList.add("warning");
     hrPoint = 20;
-  } else if (
-    (Number(hrScore) >= 0 && Number(hrScore) < 51) ||
-    Number(hrScore) > 92
-  ) {
+  } else if (Number(hrScore) >= 0 && Number(hrScore) < 51 || Number(hrScore) > 92) {
     positions[0].classList.add("danger");
     hrPoint = 10;
   }
@@ -105,28 +76,16 @@ if (Number(age) <= 25) {
   if (Number(hrScore) >= 62 && Number(hrScore) <= 82) {
     positions[0].classList.add("healthy");
     hrPoint = 50;
-  } else if (
-    (Number(hrScore) >= 58 && Number(hrScore) < 62) ||
-    (Number(hrScore) > 82 && Number(hrScore) <= 86)
-  ) {
+  } else if (Number(hrScore) >= 58 && Number(hrScore) < 62 || Number(hrScore) > 82 && Number(hrScore) <= 86) {
     positions[0].classList.add("normal");
     hrPoint = 40;
-  } else if (
-    (Number(hrScore) >= 55 && Number(hrScore) < 58) ||
-    (Number(hrScore) > 86 && Number(hrScore) <= 89)
-  ) {
+  } else if (Number(hrScore) >= 55 && Number(hrScore) < 58 || Number(hrScore) > 86 && Number(hrScore) <= 89) {
     positions[0].classList.add("caution");
     hrPoint = 30;
-  } else if (
-    (Number(hrScore) >= 51 && Number(hrScore) < 55) ||
-    (Number(hrScore) > 89 && Number(hrScore) <= 93)
-  ) {
+  } else if (Number(hrScore) >= 51 && Number(hrScore) < 55 || Number(hrScore) > 89 && Number(hrScore) <= 93) {
     positions[0].classList.add("warning");
     hrPoint = 20;
-  } else if (
-    (Number(hrScore) >= 0 && Number(hrScore) < 51) ||
-    Number(hrScore) > 93
-  ) {
+  } else if (Number(hrScore) >= 0 && Number(hrScore) < 51 || Number(hrScore) > 93) {
     positions[0].classList.add("danger");
     hrPoint = 10;
   }
@@ -134,28 +93,16 @@ if (Number(age) <= 25) {
   if (Number(hrScore) >= 61 && Number(hrScore) <= 83) {
     positions[0].classList.add("healthy");
     hrPoint = 50;
-  } else if (
-    (Number(hrScore) >= 57 && Number(hrScore) < 61) ||
-    (Number(hrScore) > 83 && Number(hrScore) <= 87)
-  ) {
+  } else if (Number(hrScore) >= 57 && Number(hrScore) < 61 || Number(hrScore) > 83 && Number(hrScore) <= 87) {
     positions[0].classList.add("normal");
     hrPoint = 40;
-  } else if (
-    (Number(hrScore) >= 54 && Number(hrScore) < 57) ||
-    (Number(hrScore) > 87 && Number(hrScore) <= 90)
-  ) {
+  } else if (Number(hrScore) >= 54 && Number(hrScore) < 57 || Number(hrScore) > 87 && Number(hrScore) <= 90) {
     positions[0].classList.add("caution");
     hrPoint = 30;
-  } else if (
-    (Number(hrScore) >= 50 && Number(hrScore) < 54) ||
-    (Number(hrScore) > 90 && Number(hrScore) <= 94)
-  ) {
+  } else if (Number(hrScore) >= 50 && Number(hrScore) < 54 || Number(hrScore) > 90 && Number(hrScore) <= 94) {
     positions[0].classList.add("warning");
     hrPoint = 20;
-  } else if (
-    (Number(hrScore) >= 0 && Number(hrScore) < 50) ||
-    Number(hrScore) > 94
-  ) {
+  } else if (Number(hrScore) >= 0 && Number(hrScore) < 50 || Number(hrScore) > 94) {
     positions[0].classList.add("danger");
     hrPoint = 10;
   }
@@ -163,28 +110,16 @@ if (Number(age) <= 25) {
   if (Number(hrScore) >= 61 && Number(hrScore) <= 83) {
     positions[0].classList.add("healthy");
     hrPoint = 50;
-  } else if (
-    (Number(hrScore) >= 57 && Number(hrScore) < 61) ||
-    (Number(hrScore) > 83 && Number(hrScore) <= 87)
-  ) {
+  } else if (Number(hrScore) >= 57 && Number(hrScore) < 61 || Number(hrScore) > 83 && Number(hrScore) <= 87) {
     positions[0].classList.add("normal");
     hrPoint = 40;
-  } else if (
-    (Number(hrScore) >= 54 && Number(hrScore) < 57) ||
-    (Number(hrScore) > 87 && Number(hrScore) <= 90)
-  ) {
+  } else if (Number(hrScore) >= 54 && Number(hrScore) < 57 || Number(hrScore) > 87 && Number(hrScore) <= 90) {
     positions[0].classList.add("caution");
     hrPoint = 30;
-  } else if (
-    (Number(hrScore) >= 50 && Number(hrScore) < 54) ||
-    (Number(hrScore) > 90 && Number(hrScore) <= 94)
-  ) {
+  } else if (Number(hrScore) >= 50 && Number(hrScore) < 54 || Number(hrScore) > 90 && Number(hrScore) <= 94) {
     positions[0].classList.add("warning");
     hrPoint = 20;
-  } else if (
-    (Number(hrScore) >= 0 && Number(hrScore) < 50) ||
-    Number(hrScore) > 94
-  ) {
+  } else if (Number(hrScore) >= 0 && Number(hrScore) < 50 || Number(hrScore) > 94) {
     positions[0].classList.add("danger");
     hrPoint = 10;
   }
@@ -192,34 +127,22 @@ if (Number(age) <= 25) {
   if (Number(hrScore) >= 63 && Number(hrScore) <= 81) {
     positions[0].classList.add("healthy");
     hrPoint = 50;
-  } else if (
-    (Number(hrScore) >= 59 && Number(hrScore) < 63) ||
-    (Number(hrScore) > 81 && Number(hrScore) <= 85)
-  ) {
+  } else if (Number(hrScore) >= 59 && Number(hrScore) < 63 || Number(hrScore) > 81 && Number(hrScore) <= 85) {
     positions[0].classList.add("normal");
     hrPoint = 40;
-  } else if (
-    (Number(hrScore) >= 56 && Number(hrScore) < 59) ||
-    (Number(hrScore) > 85 && Number(hrScore) <= 88)
-  ) {
+  } else if (Number(hrScore) >= 56 && Number(hrScore) < 59 || Number(hrScore) > 85 && Number(hrScore) <= 88) {
     positions[0].classList.add("caution");
     hrPoint = 30;
-  } else if (
-    (Number(hrScore) >= 52 && Number(hrScore) < 56) ||
-    (Number(hrScore) > 88 && Number(hrScore) <= 92)
-  ) {
+  } else if (Number(hrScore) >= 52 && Number(hrScore) < 56 || Number(hrScore) > 88 && Number(hrScore) <= 92) {
     positions[0].classList.add("warning");
     hrPoint = 20;
-  } else if (
-    (Number(hrScore) >= 0 && Number(hrScore) < 52) ||
-    Number(hrScore) > 92
-  ) {
+  } else if (Number(hrScore) >= 0 && Number(hrScore) < 52 || Number(hrScore) > 92) {
     positions[0].classList.add("danger");
     hrPoint = 10;
   }
-}
+} // PSI Score
 
-// PSI Score
+
 if (Number(psiScore) <= 0.1) {
   positions[3].classList.add("healthy");
   psiPoint = 15;
@@ -235,9 +158,9 @@ if (Number(psiScore) <= 0.1) {
 } else if (Number(psiScore) >= 3) {
   positions[3].classList.add("danger");
   psiPoint = 3;
-}
+} // MSI Score
 
-// MSI Score
+
 if (Number(msiScore) <= 0.1) {
   positions[2].classList.add("healthy");
   msiPoint = 15;
@@ -253,9 +176,9 @@ if (Number(msiScore) <= 0.1) {
 } else if (Number(msiScore) >= 3) {
   positions[2].classList.add("danger");
   msiPoint = 3;
-}
+} // Resp Score
 
-// Resp Score
+
 if (Number(respScore) > 6 && Number(respScore) <= 12) {
   positions[1].classList.add("healthy");
   respPoint = 20;
@@ -273,9 +196,8 @@ if (Number(respScore) > 6 && Number(respScore) <= 12) {
   respPoint = 0.5;
 }
 
-let totalScore = hrPoint + psiPoint + msiPoint + respPoint;
+var totalScore = hrPoint + psiPoint + msiPoint + respPoint; // Total Score
 
-// Total Score
 if (totalScore > 90) {
   grade.classList.add("one");
   grade.textContent = "Grade 1";
@@ -308,7 +230,7 @@ if (totalScore > 90) {
   gradeDes3.textContent = "We recommend you consult a doctor.";
 }
 
-const handleClickOk = () => {
+var handleClickOk = function handleClickOk() {
   sessionStorage.setItem("resp", "");
   sessionStorage.setItem("hr", "");
   sessionStorage.setItem("psi", "");
@@ -316,8 +238,7 @@ const handleClickOk = () => {
   sessionStorage.setItem("gender", "");
   sessionStorage.setItem("age", "");
   sessionStorage.setItem("face", false);
-  location.href = "./index.html";
-  // window.close();
+  location.href = "./index.html"; // window.close();
 };
 
 okBtn.addEventListener("click", handleClickOk);

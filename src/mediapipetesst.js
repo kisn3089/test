@@ -128,17 +128,12 @@ networkBtn.addEventListener("click", () => {
 
 Loading.classList.remove("Loaded");
 LoadingWrapper.classList.remove("remove");
-preparation.classList.remove("off");
+preparation.classList.add("off");
 measuring.classList.remove("on");
 Modal.classList.remove("alert");
 detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
 preparation.classList.add("off");
-
-// setTimeout(() => {
-//   Loading.classList.add("Loaded");
-//   LoadingWrapper.classList.add("remove");
-// }, 2000);
 
 const ctx = canvasElement.getContext("2d");
 // const ctx2 = canvasElement2.getContext("2d");
@@ -158,12 +153,12 @@ let rgbArray = [];
 let sum_red = 0;
 let sum_green = 0;
 let sum_blue = 0;
-var mean_red = [];
-var mean_green = [];
-var mean_blue = [];
+let mean_red = [];
+let mean_green = [];
+let mean_blue = [];
 // second * 30
 const maxHistLen = 900;
-var timingHist = [];
+let timingHist = [];
 let frame = 0;
 let H = [];
 let curPollFreq = 30;
@@ -171,8 +166,8 @@ let graphData = [];
 
 let width;
 let height;
-var VIEW_WIDTH;
-var VIEW_HEIGHT;
+let VIEW_WIDTH;
+let VIEW_HEIGHT;
 
 let init_frame;
 let lastFrameGray;
@@ -320,18 +315,18 @@ async function renderPrediction() {
 
 // At around 10 Hz for the camera, we want like 5 seconds of history
 var bloodHist = Array(maxHistLen).fill(0);
-var timingHist = [];
 var last = performance.now();
 var average = (array) => array.reduce((a, b) => a + b) / array.length;
 var argMax = (array) =>
   array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
-var mean_red = [];
-var mean_green = [];
-var mean_blue = [];
 let fpos = [];
 
 // Draws the current eyes onto the canvas, directly from video streams
 async function drawFaces() {
+  preparation.classList.remove("off");
+  Loading.classList.add("Loaded");
+  LoadingWrapper.classList.add("remove");
+
   lottie.src = "";
 
   ctx.strokeStyle = "cyan";
@@ -585,10 +580,12 @@ async function drawFaces() {
         frame = frame + 1;
       }
     } else {
-      if (video.srcObject.active !== false && mean_red.length > 1) {
-        stop();
-        Modal.classList.add("alert");
-        detectedModal.classList.add("on");
+      if (video.srcObject.active !== false) {
+        if (mean_red.length > 30) {
+          stop();
+          Modal.classList.add("alert");
+          detectedModal.classList.add("on");
+        }
       }
     }
   }

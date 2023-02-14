@@ -7,7 +7,6 @@ const gradeDes2 = document.getElementsByClassName("grade-des2")[0];
 const gradeDes3 = document.getElementsByClassName("grade-des3")[0];
 
 const hrRate = document.getElementsByClassName("hr-rate")[0];
-const respRate = document.getElementsByClassName("resp-rate")[0];
 const msiRate = document.getElementsByClassName("msi-rate")[0];
 const psiRate = document.getElementsByClassName("psi-rate")[0];
 
@@ -16,29 +15,25 @@ const positions = document.getElementsByClassName("my-position");
 const err = document.getElementsByClassName("face-err")[0];
 
 let hrScore = sessionStorage.getItem("hr");
-let respScore = sessionStorage.getItem("resp");
 let msiScore = sessionStorage.getItem("msi");
 let psiScore = sessionStorage.getItem("psi");
 let age = sessionStorage.getItem("age");
 let face = sessionStorage.getItem("face");
 
 let hrPoint;
-let respPoint;
 let msiPoint;
 let psiPoint;
 
 hrRate.textContent = hrScore;
-respRate.textContent = respScore;
 msiRate.textContent = msiScore.slice(0, 4);
 psiRate.textContent = psiScore.slice(0, 4);
 
 sessionStorage.setItem("age", "");
 sessionStorage.setItem("gender", "");
+
 err.classList.remove("on");
 
-console.log(face);
 if (face > 10) {
-  console.log(1);
   err.classList.add("on");
 }
 
@@ -221,59 +216,41 @@ if (Number(age) <= 25) {
 
 // PSI Score
 if (Number(psiScore) <= 0.1) {
-  positions[3].classList.add("healthy");
-  psiPoint = 15;
+  positions[2].classList.add("healthy");
+  psiPoint = 25;
 } else if (Number(psiScore) > 0.1 && Number(psiScore) <= 0.5) {
-  positions[3].classList.add("normal");
-  psiPoint = 12;
+  positions[2].classList.add("normal");
+  psiPoint = 19.5;
 } else if (Number(psiScore) > 0.5 && Number(psiScore) <= 1) {
-  positions[3].classList.add("caution");
-  psiPoint = 9;
+  positions[2].classList.add("caution");
+  psiPoint = 14;
 } else if (Number(psiScore) > 1 && Number(psiScore) < 3) {
-  positions[3].classList.add("warning");
-  psiPoint = 6;
+  positions[2].classList.add("warning");
+  psiPoint = 8.5;
 } else if (Number(psiScore) >= 3) {
-  positions[3].classList.add("danger");
-  psiPoint = 3;
+  positions[2].classList.add("danger");
+  psiPoint = 4;
 }
 
 // MSI Score
 if (Number(msiScore) <= 0.1) {
-  positions[2].classList.add("healthy");
-  msiPoint = 15;
-} else if (Number(msiScore) > 0.1 && Number(msiScore) <= 0.5) {
-  positions[2].classList.add("normal");
-  msiPoint = 12;
-} else if (Number(msiScore) > 0.5 && Number(msiScore) <= 1) {
-  positions[2].classList.add("caution");
-  msiPoint = 9;
-} else if (Number(msiScore) > 1 && Number(msiScore) < 3) {
-  positions[2].classList.add("warning");
-  msiPoint = 6;
-} else if (Number(msiScore) >= 3) {
-  positions[2].classList.add("danger");
-  msiPoint = 3;
-}
-
-// Resp Score
-if (Number(respScore) > 6 && Number(respScore) <= 12) {
   positions[1].classList.add("healthy");
-  respPoint = 20;
-} else if (Number(respScore) > 12 && Number(respScore) <= 18) {
+  msiPoint = 25;
+} else if (Number(msiScore) > 0.1 && Number(msiScore) <= 0.5) {
   positions[1].classList.add("normal");
-  respPoint = 15;
-} else if (Number(respScore) > 18 && Number(respScore) <= 21) {
+  msiPoint = 19.5;
+} else if (Number(msiScore) > 0.5 && Number(msiScore) <= 1) {
   positions[1].classList.add("caution");
-  respPoint = 10;
-} else if (Number(respScore) > 21 && Number(respScore) <= 24) {
+  msiPoint = 14;
+} else if (Number(msiScore) > 1 && Number(msiScore) < 3) {
   positions[1].classList.add("warning");
-  respPoint = 5;
-} else if (Number(respScore) > 24 || Number(respScore) < 6) {
+  msiPoint = 8.5;
+} else if (Number(msiScore) >= 3) {
   positions[1].classList.add("danger");
-  respPoint = 0.5;
+  msiPoint = 4;
 }
 
-let totalScore = hrPoint + psiPoint + msiPoint + respPoint;
+let totalScore = hrPoint + psiPoint + msiPoint;
 
 // Total Score
 if (totalScore > 90) {
@@ -308,16 +285,11 @@ if (totalScore > 90) {
   gradeDes3.textContent = "We recommend you consult a doctor.";
 }
 
-const handleClickOk = () => {
-  sessionStorage.setItem("resp", "");
+okBtn.addEventListener("click", function () {
   sessionStorage.setItem("hr", "");
   sessionStorage.setItem("psi", "");
   sessionStorage.setItem("msi", "");
   sessionStorage.setItem("gender", "");
   sessionStorage.setItem("age", "");
-  sessionStorage.setItem("face", false);
   location.href = "./index.html";
-  // window.close();
-};
-
-okBtn.addEventListener("click", handleClickOk);
+});
