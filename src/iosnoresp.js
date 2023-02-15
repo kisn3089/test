@@ -203,7 +203,7 @@ async function main() {
   const videoHeight = video.videoHeight;
 
   video.play();
-  if (timingHist < maxHistLen) {
+  if (timingHist.length < maxHistLen) {
     Loading.classList.add("Loaded");
     LoadingWrapper.classList.add("remove");
   }
@@ -260,11 +260,11 @@ async function drawFaces() {
       boxWidth = mesh[454][0] - boxLeft;
       boxHeight = mesh[152][1] - boxTop;
 
-      if (Math.abs(boxLeft - lastPosition) > 20) {
+      if (Math.abs(boxLeft - lastPosition) > 15) {
         positionErr++;
       }
 
-      if (Math.abs(boxTop - lastYPosition) > 20) {
+      if (Math.abs(boxTop - lastYPosition) > 15) {
         yPositionErr++;
       }
 
