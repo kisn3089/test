@@ -260,11 +260,11 @@ async function drawFaces() {
       boxWidth = mesh[454][0] - boxLeft;
       boxHeight = mesh[152][1] - boxTop;
 
-      if (Math.abs(boxLeft - lastPosition) > 10) {
+      if (Math.abs(boxLeft - lastPosition) > 20) {
         positionErr++;
       }
 
-      if (Math.abs(boxTop - lastYPosition) > 10) {
+      if (Math.abs(boxTop - lastYPosition) > 20) {
         yPositionErr++;
       }
 
@@ -348,6 +348,7 @@ async function drawFaces() {
         mean_blue.shift();
         timingHist.shift();
         let textArr = [];
+        stop();
 
         for (let i = 0; i < maxHistLen; i++) {
           textArr.push(
@@ -356,7 +357,6 @@ async function drawFaces() {
         }
 
         textArr = textArr.join("\n");
-        stop();
 
         var blob = new Blob([textArr], { type: "text/plain" });
 
@@ -364,6 +364,7 @@ async function drawFaces() {
         form.append("rgb", blob);
         form.append("age", sessionStorage.getItem("age"));
         form.append("gender", sessionStorage.getItem("gender"));
+        sessionStorage.setItem("face", positionErr + yPositionErr);
 
         let signature = makeSignature();
 
@@ -384,7 +385,6 @@ async function drawFaces() {
         Ani.classList.add("off");
         measuring.classList.remove("on");
         preparation.classList.add("off");
-        sessionStorage.setItem("face", positionErr + yPositionErr);
 
         fetch(url, options)
           .then((response) => response.json())

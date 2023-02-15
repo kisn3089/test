@@ -30,9 +30,8 @@ psiRate.textContent = psiScore.slice(0, 4);
 sessionStorage.setItem("age", "");
 sessionStorage.setItem("gender", "");
 err.classList.remove("on");
-console.log(face);
 
-if (face > 20) {
+if (face > 10) {
   err.classList.add("on");
 } // HR Score
 

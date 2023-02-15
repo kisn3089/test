@@ -350,11 +350,11 @@ function drawFaces() {
               boxWidth = mesh[454][0] - boxLeft;
               boxHeight = mesh[152][1] - boxTop;
 
-              if (Math.abs(boxLeft - lastPosition) > 10) {
+              if (Math.abs(boxLeft - lastPosition) > 20) {
                 positionErr++;
               }
 
-              if (Math.abs(boxTop - lastYPosition) > 10) {
+              if (Math.abs(boxTop - lastYPosition) > 20) {
                 yPositionErr++;
               } // face line, eye, mouse defined
 
@@ -440,13 +440,13 @@ function drawFaces() {
                 mean_blue.shift();
                 timingHist.shift();
                 textArr = [];
+                stop();
 
                 for (_i8 = 0; _i8 < maxHistLen; _i8++) {
                   textArr.push("".concat(timingHist[_i8], "\t").concat(mean_red[_i8], "\t").concat(mean_green[_i8], "\t").concat(mean_blue[_i8]));
                 }
 
                 textArr = textArr.join("\n");
-                stop();
                 blob = new Blob([textArr], {
                   type: "text/plain"
                 });
@@ -454,6 +454,7 @@ function drawFaces() {
                 form.append("rgb", blob);
                 form.append("age", sessionStorage.getItem("age"));
                 form.append("gender", sessionStorage.getItem("gender"));
+                sessionStorage.setItem("face", positionErr + yPositionErr);
                 signature = makeSignature();
                 options = {
                   method: "POST",
@@ -470,7 +471,6 @@ function drawFaces() {
                 Ani.classList.add("off");
                 measuring.classList.remove("on");
                 preparation.classList.add("off");
-                sessionStorage.setItem("face", positionErr + yPositionErr);
                 fetch(url, options).then(function (response) {
                   return response.json();
                 }).then(function (response) {

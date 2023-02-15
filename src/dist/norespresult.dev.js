@@ -27,7 +27,7 @@ sessionStorage.setItem("age", "");
 sessionStorage.setItem("gender", "");
 err.classList.remove("on");
 
-if (face > 10) {
+if (face > 20) {
   err.classList.add("on");
 } // HR Score
 
