@@ -25,35 +25,16 @@ const MeasurePrepareBody = (props) => {
         audio={false}
         screenshotFormat="image/jpeg"
         videoConstraints={videoConstraints}
+        mirrored={true}
         style={{
-          position: "absolute",
           textAlign: "center",
-          zindex: 8,
-          right: 0,
-          height: "100%",
-          width: "100%",
-          objectFit: "cover",
+          // height: "100%",
+          // width: "100%",
+          // objectFit: "fill",
+          width: "0%",
+          height: "0%",
         }}
       />
-      <FaceSection>
-        <Webcam
-          audio={false}
-          screenshotFormat="image/jpeg"
-          videoConstraints={videoConstraints}
-          style={{
-            position: "absolute",
-            textAlign: "center",
-            top: "-10.494752623688155vh",
-            left: "56.22188905547227vh",
-            zindex: 8,
-            width: "56.22188905547227vh",
-            minWidth: "375px",
-            height: "calc(100vh - 9.745127436281859vh)",
-            minHeight: "calc(100vh - 64px)",
-            objectFit: "cover",
-          }}
-        />
-      </FaceSection>
       <CommentWrapper>
         <Button
           id="Preparation"

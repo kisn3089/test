@@ -15,10 +15,6 @@ export const StyledMeasureBody = styled.div`
     box-sizing: border-box;
   } */
 
-  .input_video {
-    display: none;
-  }
-
   .output_canvas {
     /* display: none; */
     /* position: absolute; */

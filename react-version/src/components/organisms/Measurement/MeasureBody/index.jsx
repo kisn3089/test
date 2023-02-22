@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import Button from "../../../atoms/Button";
 import Text from "../../../atoms/Text";
 import {
@@ -7,7 +7,6 @@ import {
   MeasuringCommentWrapper,
   Modal,
   PrepareCommentWrapper,
-  ProgressWraaper,
   StyledMeasureBody,
 } from "./styles";
 import Webcam from "react-webcam";
@@ -18,8 +17,6 @@ import {
   FACEMESH_FACE_OVAL,
   FACEMESH_LIPS,
 } from "@mediapipe/face_mesh";
-import { CircularProgressbar } from "react-circular-progressbar";
-import { Spring, config } from "react-spring";
 import "react-circular-progressbar/dist/styles.css";
 import CryptoJS from "crypto-js";
 import Animation from "../../../molecules/Animation";
@@ -29,6 +26,30 @@ const videoConstraints = {
   height: 566,
   facingMode: "user",
 };
+
+const url =
+  "https://siigjmw19n.apigw.ntruss.com/face_health_estimate/v1/calculate_face_ppg_stress_cors";
+const uri = "/face_health_estimate/v1/calculate_face_ppg_stress_cors";
+
+let mean_red = [];
+let mean_green = [];
+let mean_blue = [];
+// second * 30
+const maxHistLen = 900;
+let timingHist = [];
+let frame = 0;
+
+let boxLeft;
+let boxTop;
+let boxWidth;
+let boxHeight;
+
+let timestamp = 0;
+
+let lastPosition;
+let lastYPosition;
+let positionErr = 0;
+let yPositionErr = 0;
 
 const MeasureBody = (props) => {
   const {
@@ -47,39 +68,11 @@ const MeasureBody = (props) => {
 
   const webcamRef = useRef(null);
   const canvasReference = useRef(null);
-  const canvasReference2 = useRef(null);
   const [setCameraReady] = useState(false);
   let canvasCtx;
-  let canvasCtx2;
-  let camera;
 
   const videoElement = document.getElementsByClassName("input_video")[0];
   const canvasElement = document.createElement("canvas");
-  const canvasElement2 = document.createElement("canvas");
-
-  let url =
-    "https://siigjmw19n.apigw.ntruss.com/face_health_estimate/v1/calculate_face_ppg_stress_cors";
-  let uri = "/face_health_estimate/v1/calculate_face_ppg_stress_cors";
-
-  let mean_red = [];
-  let mean_green = [];
-  let mean_blue = [];
-  // second * 30
-  const maxHistLen = 900;
-  let timingHist = [];
-  let frame = 0;
-
-  let boxLeft;
-  let boxTop;
-  let boxWidth;
-  let boxHeight;
-
-  let timestamp = 0;
-
-  let lastPosition;
-  let lastYPosition;
-  let positionErr = 0;
-  let yPositionErr = 0;
 
   return (
     <StyledMeasureBody>
@@ -91,11 +84,11 @@ const MeasureBody = (props) => {
         mirrored={true}
         style={{
           textAlign: "center",
-          // height: "100%",
-          // width: "100%",
-          // objectFit: "fill",
-          width: "0%",
-          height: "0%",
+          height: "100%",
+          width: "100%",
+          objectFit: "fill",
+          // width: "0%",
+          // height: "0%",
         }}
         onUserMedia={() => {
           console.log("webcamRef.current", webcamRef.current);
@@ -115,71 +108,6 @@ const MeasureBody = (props) => {
           display: "none",
         }}
       />
-      <canvas
-        ref={canvasReference2}
-        style={{
-          position: "absolute",
-          textAlign: "center",
-          zIndex: 30,
-          right: 0,
-          height: "100%",
-          width: "100%",
-          objectFit: "fill",
-        }}
-      />
-      <canvas
-        id="canvasId"
-        style={{
-          position: "absolute",
-          zIndex: 50,
-          top: 0,
-          right: 0,
-          border: "1px solid red",
-        }}
-      />
-      <canvas
-        id="canvasId2"
-        style={{
-          position: "absolute",
-          zIndex: 50,
-          top: 0,
-          left: 0,
-          border: "1px solid red",
-        }}
-      />
-      <ProgressWraaper>
-        <Spring
-          from={{ percentage: 0 }}
-          to={{ percentage: 100 }}
-          config={config.molasses}
-        >
-          {({ percentage }) => {
-            const roundedPercentage = Math.round(percentage);
-            return (
-              <CircularProgressbar
-                percentage={roundedPercentage}
-                text={`${roundedPercentage}%`}
-                styles={{
-                  path: {
-                    transformOrigin: "center center",
-                    strokeLinecap: "butt",
-                    stroke: "#006FAD",
-                  },
-                  trail: {
-                    strokeWidth: 4,
-                    stroke: "white",
-                  },
-                  text: {
-                    fontSize: 0,
-                  },
-                }}
-                strokeWidth={4}
-                value={tpercentage}
-              />
-            );
-          }}
-        </Spring>
-      </ProgressWraaper>
       {!measuring && (
         <PrepareCommentWrapper>
           <Button id="Preparation" className="measure" content="Preparation" />
