@@ -147,9 +147,11 @@ table {
 }
 
 body {
+  max-width: 750px;
   height: 100vh;
   text-align: center;
   margin: 0 auto;
+  padding: 2.9985007496251876vh 0;
   box-sizing: border-box;
   font-family: "notoSans";
 }

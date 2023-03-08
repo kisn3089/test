@@ -1,3 +1,6 @@
 import styled from "styled-components";
 
-export const StyledAgeTemplate = styled.div``;
+export const GederTemplateWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
