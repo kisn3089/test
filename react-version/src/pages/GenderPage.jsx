@@ -1,7 +1,8 @@
 import React from "react";
+import GenderTemplate from "../templates/Gender";
 
 const GenderPage = () => {
-  return <div></div>;
+  return <GenderTemplate />;
 };
 
 export default GenderPage;

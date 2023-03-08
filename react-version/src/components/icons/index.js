@@ -1,0 +1,9 @@
+export { ReactComponent as Arrow } from "./../../assets/icons/ic_arrowback_20x20.svg";
+export { ReactComponent as FemaleSeleted } from "./../../assets/icons/ic_female_selected.svg";
+export { ReactComponent as Female } from "./../../assets/icons/ic_female.svg";
+export { ReactComponent as MaleSelected } from "./../../assets/icons/ic_male_selected.svg";
+export { ReactComponent as Male } from "./../../assets/icons/ic_male.svg";
+export { ReactComponent as Measuring } from "./../../assets/icons/ic_measuring.svg";
+export { ReactComponent as Prepareing } from "./../../assets/icons/ic_prepatation.svg";
+export { ReactComponent as Stage } from "./../../assets/icons/ic_stage.svg";
+export { ReactComponent as MyStatus } from "./../../assets/icons/ic_you.svg";

@@ -1,7 +1,8 @@
 import React from "react";
+import ResultTemplate from "../templates/Result";
 
 const ResultPage = () => {
-  return <div></div>;
+  return <ResultTemplate />;
 };
 
 export default ResultPage;

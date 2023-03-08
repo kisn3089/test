@@ -1,7 +1,8 @@
 import React from "react";
+import AgeTemplate from "../templates/Age";
 
 const AgePage = () => {
-  return <div></div>;
+  return <AgeTemplate />;
 };
 
 export default AgePage;
