@@ -7,9 +7,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Pages.GenderPage />} />
-        <Route path="age" element={<Pages.AgePage />} />
-        <Route path="measure" element={<Pages.MeasurePage />} />
-        <Route path="result" element={<Pages.ResultPage />} />
+        <Route path="/age" element={<Pages.AgePage />} />
+        <Route path="/measure" element={<Pages.MeasurePage />} />
+        <Route path="/result" element={<Pages.ResultPage />} />
       </Routes>
     </BrowserRouter>
   );
