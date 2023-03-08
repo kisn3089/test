@@ -6,7 +6,7 @@ export const StyledButton = styled.button`
   text-align: center;
   justify-content: center;
   align-items: center;
-  border-radius: 40px;
+  border-radius: 5.997001499250375vh;
   align-items: center;
   outline: none;
   border: none;

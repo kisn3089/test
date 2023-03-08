@@ -44,4 +44,4 @@ const Input = (props) => {
   );
 };
 
-export default memo(Input);
+export default Input;

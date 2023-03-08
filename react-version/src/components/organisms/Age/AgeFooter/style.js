@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const GenderFooterWrapper = styled.div`
+export const AgeFooterWrapper = styled.div`
   width: 100%;
 
   button {

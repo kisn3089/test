@@ -3,12 +3,22 @@ import Text from "../../../atoms/Text";
 import { GenderContentWrapper } from "./style";
 
 const GenderContent = (props) => {
-  const { genderRecoil } = props;
+  const { genderRecoil, handleClickGender } = props;
   return (
     <GenderContentWrapper>
-      <Text />
-      <Button className={genderRecoil === 0 ? "male-selected" : "male"} />
-      <Button className={genderRecoil === 1 ? "female-selected" : "female"} />
+      <Text content="What is your gender?" />
+      <Button
+        id="0"
+        className={genderRecoil === "0" ? "male-selected" : "male"}
+        content="Male"
+        handleClick={handleClickGender}
+      />
+      <Button
+        id="1"
+        className={genderRecoil === "1" ? "female-selected" : "female"}
+        content="Female"
+        handleClick={handleClickGender}
+      />
     </GenderContentWrapper>
   );
 };
