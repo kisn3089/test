@@ -3,12 +3,17 @@ import Text from "../../../atoms/Text";
 import { AgeContentWrapper } from "./style";
 
 const AgeContent = (props) => {
-  const { AgeRecoil, handleClickNext } = props;
+  const { AgeRecoil, invalid, start, handleChangeAge } = props;
 
   return (
     <AgeContentWrapper>
       <Text content="How old are you?" />
-      <Input />
+      <Input id="age" handleChange={handleChangeAge} value={AgeRecoil} />
+      {!invalid && !start ? (
+        <Text className="invalid" content="Please enter a valid number." />
+      ) : (
+        <></>
+      )}
     </AgeContentWrapper>
   );
 };

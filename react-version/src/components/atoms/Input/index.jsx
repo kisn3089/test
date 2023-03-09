@@ -40,6 +40,7 @@ const Input = (props) => {
       onKeyUp={onKeyUp}
       onKeyDown={onKeyDown}
       autoComplete={autoComplete}
+      inputmode="numeric"
     />
   );
 };

@@ -13,6 +13,13 @@ export const AgeContentWrapper = styled.div`
     margin-bottom: 5.997001499250375vh;
   }
 
+  span.invalid {
+    font-family: "notoSans";
+    font-size: 2.39880059970015vh;
+    color: #ff2525;
+    margin-top: 1.4992503748125938vh;
+  }
+
   input {
     width: 53.333vw;
     max-width: 400px;

@@ -11,9 +11,11 @@ export const GenderFooterWrapper = styled.div`
     font-family: "notoSansbold";
     color: #ffffff;
     margin: 0 auto;
+    cursor: inherit;
 
     &.on {
       background: #006fad;
+      cursor: pointer;
     }
   }
 `;

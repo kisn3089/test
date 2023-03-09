@@ -2,12 +2,12 @@ import Button from "../../../atoms/Button";
 import { AgeFooterWrapper } from "./style";
 
 const AgeFooter = (props) => {
-  const { AgeRecoil, handleClickNext } = props;
+  const { invalid, handleClickNext } = props;
 
   return (
     <AgeFooterWrapper>
       <Button
-        className={AgeRecoil !== "" ? "on" : ""}
+        className={invalid ? "on" : ""}
         content="Start Measurement"
         handleClick={handleClickNext}
       />
