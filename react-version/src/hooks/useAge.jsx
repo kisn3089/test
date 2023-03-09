@@ -33,7 +33,7 @@ const useAge = () => {
 
   const handleClickNext = () => {
     if (invalid) {
-      navigator("./measure");
+      navigator("/measure");
     }
   };
 
