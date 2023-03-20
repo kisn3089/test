@@ -1,7 +1,12 @@
 import styled from "styled-components";
 
-export const ResultContentWrapper = styled.div`
-  width: 100%;
-  padding: 0 5.333vw;
-  box-sizing: border-box;
+export const TotalGradeWrapper = styled.div`
+  width: 89.333vw;
+  max-width: 670px;
+  text-align: left;
+
+  span {
+    font-size: 2.9985007496251876vh;
+    font-family: "notoSansBold";
+  }
 `;

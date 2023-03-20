@@ -8,7 +8,11 @@ const Header = (props) => {
 
   return (
     <HeaderWrapper>
-      {option === "main" ? <></> : <Svg.Arrow onClick={handleClickPrev} />}
+      {option === "main" || option === "result" ? (
+        <></>
+      ) : (
+        <Svg.Arrow onClick={handleClickPrev} />
+      )}
       <Text content={content} />
       {option === "result" ? (
         <Text className="ok-btn" content="OK" handleClick={handleClickOK} />

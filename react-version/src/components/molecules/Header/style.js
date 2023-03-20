@@ -22,4 +22,10 @@ export const HeaderWrapper = styled.div`
     bottom: 1.6491754122938531vh;
     cursor: pointer;
   }
+
+  .ok-btn {
+    position: absolute;
+    right: 5.333vw;
+    cursor: pointer;
+  }
 `;
