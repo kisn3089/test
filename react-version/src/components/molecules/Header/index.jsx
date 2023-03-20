@@ -4,12 +4,17 @@ import * as Svg from "./../../icons";
 import Text from "../../atoms/Text";
 
 const Header = (props) => {
-  const { option, content, handleClickPrev } = props;
+  const { option, content, handleClickPrev, handleClickOK } = props;
 
   return (
     <HeaderWrapper>
       {option === "main" ? <></> : <Svg.Arrow onClick={handleClickPrev} />}
       <Text content={content} />
+      {option === "result" ? (
+        <Text className="ok-btn" content="OK" handleClick={handleClickOK} />
+      ) : (
+        <></>
+      )}
     </HeaderWrapper>
   );
 };

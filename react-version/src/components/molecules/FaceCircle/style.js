@@ -6,7 +6,7 @@ export const FaceCircleWrapper = styled.div`
   height: 64vw;
   max-height: 480px;
   border-radius: 50%;
-  border: 10px solid #fff;
+  /* border: 10px solid #fff; */
   position: absolute;
   top: 8.245877061469265vh;
   left: 50%;
