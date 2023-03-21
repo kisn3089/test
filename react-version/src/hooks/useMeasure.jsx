@@ -15,7 +15,7 @@ require("@tensorflow/tfjs-backend-wasm");
 const useMeasure = () => {
   // tf.setBackend("wasm").then(() => main());
 
-  const navigate = useNavigate();
+  const navigator = useNavigate();
 
   // let video = useRef();
   // let canvasElement = useRef();
@@ -289,11 +289,11 @@ const useMeasure = () => {
   // }
 
   const handleClickPrev = () => {
-    navigate(-1);
+    navigator(-1);
   };
 
   const handleClickOK = () => {
-    navigate("/measure");
+    window.location.replace("/measure");
   };
 
   const makeSignature = () => {

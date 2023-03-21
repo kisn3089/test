@@ -143,11 +143,11 @@ const MeasureContent = () => {
       boxWidth = multiface[454].x * canvasElement.width - boxLeft;
       boxHeight = multiface[152].y * canvasElement.height - boxTop;
 
-      if (Math.abs(boxLeft - lastPosition) > 15) {
+      if (Math.abs(boxLeft - lastPosition) > 4) {
         positionErr++;
       }
 
-      if (Math.abs(boxTop - lastYPosition) > 15) {
+      if (Math.abs(boxTop - lastYPosition) > 3) {
         yPositionErr++;
       }
 
@@ -315,7 +315,10 @@ const MeasureContent = () => {
         frame = frame + 1;
       }
     } else {
-      setNoFace(true);
+      if (mean_red.length < maxHistLen) {
+        setNoFace(true);
+        camera.stop();
+      }
       canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     }
     canvasCtx.restore();

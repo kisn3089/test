@@ -13,6 +13,9 @@ const ResultTemplate = (props) => {
     position,
     position1,
     position2,
+    dataRecoil,
+    msiScore,
+    psiScore,
     handleClickOK,
   } = props;
 
@@ -32,6 +35,9 @@ const ResultTemplate = (props) => {
         position={position}
         position1={position1}
         position2={position2}
+        msiScore={msiScore}
+        psiScore={psiScore}
+        dataRecoil={dataRecoil}
       />
     </ResultTemplateWrapper>
   );

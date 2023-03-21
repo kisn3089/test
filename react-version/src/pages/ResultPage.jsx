@@ -12,6 +12,9 @@ const ResultPage = () => {
     position,
     position1,
     position2,
+    dataRecoil,
+    msiScore,
+    psiScore,
     handleClickOK,
   } = useResult();
 
@@ -25,6 +28,9 @@ const ResultPage = () => {
       position={position}
       position1={position1}
       position2={position2}
+      dataRecoil={dataRecoil}
+      msiScore={msiScore}
+      psiScore={psiScore}
       handleClickOK={handleClickOK}
     />
   );
