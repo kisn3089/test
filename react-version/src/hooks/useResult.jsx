@@ -249,16 +249,6 @@ const useResult = () => {
     }
 
     let totalScore = hrPoint + psiPoint + msiPoint;
-    console.log(
-      dataRecoil,
-      hrScore,
-      msiScore,
-      psiScore,
-      totalScore,
-      hrPoint,
-      psiPoint,
-      msiPoint
-    );
 
     // Total Score
     if (totalScore > 90) {

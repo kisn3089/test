@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { MeasureContentWrapper, VideoWrapper } from "./style";
 import Webcam from "react-webcam";
-import FaceCircle from "../../../molecules/FaceCircle";
 import CryptoJS from "crypto-js";
 import { Camera } from "@mediapipe/camera_utils";
 import {
