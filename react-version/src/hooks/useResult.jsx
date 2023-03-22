@@ -22,9 +22,13 @@ const useResult = () => {
   const [msiScore, setMsiScore] = useState(dataRecoil.msi);
   const [psiScore, setPsiScore] = useState(dataRecoil.psi);
 
-  const [hrPoint, setHrPoint] = useState(0);
-  const [msiPoint, setMsiPoint] = useState(0);
-  const [psiPoint, setPsiPoint] = useState(0);
+  // const [hrPoint, setHrPoint] = useState(0);
+  // const [msiPoint, setMsiPoint] = useState(0);
+  // const [psiPoint, setPsiPoint] = useState(0);
+
+  let hrPoint = 0;
+  let msiPoint = 0;
+  let psiPoint = 0;
 
   useEffect(() => {
     if (face > 20) {
@@ -35,216 +39,226 @@ const useResult = () => {
     if (Number(age) <= 25) {
       if (Number(hrScore) >= 63 && Number(hrScore) <= 81) {
         setPosition("healthy");
-        setHrPoint(50);
+        hrPoint = 50;
       } else if (
         (Number(hrScore) >= 59 && Number(hrScore) < 63) ||
         (Number(hrScore) > 81 && Number(hrScore) <= 85)
       ) {
         setPosition("normal");
-        setHrPoint(40);
+        hrPoint = 40;
       } else if (
         (Number(hrScore) >= 56 && Number(hrScore) < 59) ||
         (Number(hrScore) > 85 && Number(hrScore) <= 88)
       ) {
         setPosition("caution");
-        setHrPoint(30);
+        hrPoint = 30;
       } else if (
         (Number(hrScore) >= 52 && Number(hrScore) < 56) ||
         (Number(hrScore) > 88 && Number(hrScore) <= 92)
       ) {
         setPosition("warning");
-        setHrPoint(20);
+        hrPoint = 20;
       } else if (
         (Number(hrScore) >= 0 && Number(hrScore) < 52) ||
         Number(hrScore) > 92
       ) {
         setPosition("danger");
-        setHrPoint(10);
+        hrPoint = 10;
       }
     } else if (Number(age) > 25 || Number(age) <= 35) {
       if (Number(hrScore) >= 62 && Number(hrScore) <= 81) {
         setPosition("healthy");
-        setHrPoint(50);
+        hrPoint = 50;
       } else if (
         (Number(hrScore) >= 58 && Number(hrScore) < 62) ||
         (Number(hrScore) > 81 && Number(hrScore) <= 85)
       ) {
         setPosition("normal");
-        setHrPoint(40);
+        hrPoint = 40;
       } else if (
         (Number(hrScore) >= 55 && Number(hrScore) < 58) ||
         (Number(hrScore) > 85 && Number(hrScore) <= 88)
       ) {
         setPosition("caution");
-        setHrPoint(30);
+        hrPoint = 30;
       } else if (
         (Number(hrScore) >= 51 && Number(hrScore) < 55) ||
         (Number(hrScore) > 88 && Number(hrScore) <= 92)
       ) {
         setPosition("warning");
-        setHrPoint(20);
+        hrPoint = 20;
       } else if (
         (Number(hrScore) >= 0 && Number(hrScore) < 51) ||
         Number(hrScore) > 92
       ) {
         setPosition("danger");
-        setHrPoint(10);
+        hrPoint = 10;
       }
     } else if (Number(age) > 36 || Number(age) <= 45) {
       if (Number(hrScore) >= 62 && Number(hrScore) <= 82) {
         setPosition("healthy");
-        setHrPoint(50);
+        hrPoint = 50;
       } else if (
         (Number(hrScore) >= 58 && Number(hrScore) < 62) ||
         (Number(hrScore) > 82 && Number(hrScore) <= 86)
       ) {
         setPosition("normal");
-        setHrPoint(40);
+        hrPoint = 40;
       } else if (
         (Number(hrScore) >= 55 && Number(hrScore) < 58) ||
         (Number(hrScore) > 86 && Number(hrScore) <= 89)
       ) {
         setPosition("caution");
-        setHrPoint(30);
+        hrPoint = 30;
       } else if (
         (Number(hrScore) >= 51 && Number(hrScore) < 55) ||
         (Number(hrScore) > 89 && Number(hrScore) <= 93)
       ) {
         setPosition("warning");
-        setHrPoint(20);
+        hrPoint = 20;
       } else if (
         (Number(hrScore) >= 0 && Number(hrScore) < 51) ||
         Number(hrScore) > 93
       ) {
         setPosition("danger");
-        setHrPoint(10);
+        hrPoint = 10;
       }
     } else if (Number(age) > 46 || Number(age) <= 55) {
       if (Number(hrScore) >= 61 && Number(hrScore) <= 83) {
         setPosition("healthy");
-        setHrPoint(50);
+        hrPoint = 50;
       } else if (
         (Number(hrScore) >= 57 && Number(hrScore) < 61) ||
         (Number(hrScore) > 83 && Number(hrScore) <= 87)
       ) {
         setPosition("normal");
-        setHrPoint(40);
+        hrPoint = 40;
       } else if (
         (Number(hrScore) >= 54 && Number(hrScore) < 57) ||
         (Number(hrScore) > 87 && Number(hrScore) <= 90)
       ) {
         setPosition("caution");
-        setHrPoint(30);
+        hrPoint = 30;
       } else if (
         (Number(hrScore) >= 50 && Number(hrScore) < 54) ||
         (Number(hrScore) > 90 && Number(hrScore) <= 94)
       ) {
         setPosition("warning");
-        setHrPoint(20);
+        hrPoint = 20;
       } else if (
         (Number(hrScore) >= 0 && Number(hrScore) < 50) ||
         Number(hrScore) > 94
       ) {
         setPosition("danger");
-        setHrPoint(10);
+        hrPoint = 10;
       }
     } else if (Number(age) > 56 || Number(age) <= 65) {
       if (Number(hrScore) >= 61 && Number(hrScore) <= 83) {
         setPosition("healthy");
-        setHrPoint(50);
+        hrPoint = 50;
       } else if (
         (Number(hrScore) >= 57 && Number(hrScore) < 61) ||
         (Number(hrScore) > 83 && Number(hrScore) <= 87)
       ) {
         setPosition("normal");
-        setHrPoint(40);
+        hrPoint = 40;
       } else if (
         (Number(hrScore) >= 54 && Number(hrScore) < 57) ||
         (Number(hrScore) > 87 && Number(hrScore) <= 90)
       ) {
         setPosition("caution");
-        setHrPoint(30);
+        hrPoint = 30;
       } else if (
         (Number(hrScore) >= 50 && Number(hrScore) < 54) ||
         (Number(hrScore) > 90 && Number(hrScore) <= 94)
       ) {
         setPosition("warning");
-        setHrPoint(20);
+        hrPoint = 20;
       } else if (
         (Number(hrScore) >= 0 && Number(hrScore) < 50) ||
         Number(hrScore) > 94
       ) {
         setPosition("danger");
-        setHrPoint(10);
+        hrPoint = 10;
       }
     } else if (Number(age) > 65) {
       if (Number(hrScore) >= 63 && Number(hrScore) <= 81) {
         setPosition("healthy");
-        setHrPoint(50);
+        hrPoint = 50;
       } else if (
         (Number(hrScore) >= 59 && Number(hrScore) < 63) ||
         (Number(hrScore) > 81 && Number(hrScore) <= 85)
       ) {
         setPosition("normal");
-        setHrPoint(40);
+        hrPoint = 40;
       } else if (
         (Number(hrScore) >= 56 && Number(hrScore) < 59) ||
         (Number(hrScore) > 85 && Number(hrScore) <= 88)
       ) {
         setPosition("caution");
-        setHrPoint(30);
+        hrPoint = 30;
       } else if (
         (Number(hrScore) >= 52 && Number(hrScore) < 56) ||
         (Number(hrScore) > 88 && Number(hrScore) <= 92)
       ) {
         setPosition("warning");
-        setHrPoint(20);
+        hrPoint = 20;
       } else if (
         (Number(hrScore) >= 0 && Number(hrScore) < 52) ||
         Number(hrScore) > 92
       ) {
         setPosition("danger");
-        setHrPoint(10);
+        hrPoint = 10;
       }
     }
 
     // PSI Score
     if (Number(psiScore) <= 0.1) {
       setPosition2("healthy");
-      setPsiPoint(25);
+      psiPoint = 25;
     } else if (Number(psiScore) > 0.1 && Number(psiScore) <= 0.5) {
       setPosition2("normal");
-      setPsiPoint(19.5);
+      psiPoint = 19.5;
     } else if (Number(psiScore) > 0.5 && Number(psiScore) <= 1) {
       setPosition2("caution");
-      setPsiPoint(14);
+      psiPoint = 14;
     } else if (Number(psiScore) > 1 && Number(psiScore) < 3) {
       setPosition2("warning");
-      setPsiPoint(8.5);
+      psiPoint = 8.5;
     } else if (Number(psiScore) >= 3) {
       setPosition2("danger");
-      setPsiPoint(4);
+      psiPoint = 4;
     }
 
     // MSI Score
     if (Number(msiScore) <= 0.1) {
       setPosition1("healthy");
-      setMsiPoint(25);
+      msiPoint = 25;
     } else if (Number(msiScore) > 0.1 && Number(msiScore) <= 0.5) {
       setPosition1("normal");
-      setMsiPoint(19.5);
+      msiPoint = 19.5;
     } else if (Number(msiScore) > 0.5 && Number(msiScore) <= 1) {
       setPosition1("caution");
-      setMsiPoint(14);
+      msiPoint = 14;
     } else if (Number(msiScore) > 1 && Number(msiScore) < 3) {
       setPosition1("warning");
-      setMsiPoint(8.5);
+      msiPoint = 8.5;
     } else if (Number(msiScore) >= 3) {
       setPosition1("danger");
-      setMsiPoint(4);
+      msiPoint = 4;
     }
 
     let totalScore = hrPoint + psiPoint + msiPoint;
+    console.log(
+      dataRecoil,
+      hrScore,
+      msiScore,
+      psiScore,
+      totalScore,
+      hrPoint,
+      psiPoint,
+      msiPoint
+    );
 
     // Total Score
     if (totalScore > 90) {

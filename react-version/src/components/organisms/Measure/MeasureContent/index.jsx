@@ -24,7 +24,6 @@ import { faceState } from "../../../../store/face";
 import { networkState } from "../../../../store/network";
 import { FaceCircleWrapper } from "../../../molecules/FaceCircle/style";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import CircleProgress from "js-circle-progress";
 import "react-circular-progressbar/dist/styles.css";
 require("@tensorflow/tfjs-backend-wasm");
 
@@ -45,11 +44,13 @@ const MeasureContent = () => {
   const genderRecoil = useRecoilValue(genderState);
   const setDataRecoil = useSetRecoilState(dataState);
 
+  const [count, setCount] = useState(0);
+
   const navigator = useNavigate();
 
   const webcamRef = useRef(null);
   const canvasReference = useRef(null);
-  const container = useRef(null);
+  // const container = useRef(null);
   let canvasCtx;
   let camera;
 
@@ -67,7 +68,6 @@ const MeasureContent = () => {
   // var maxHistLen = set_time ? Number(set_time) * 30 : 900;
   var maxHistLen = 900;
   var timingHist = [];
-  let count = 0;
   let frame = 0;
 
   let boxLeft;
@@ -255,8 +255,7 @@ const MeasureContent = () => {
       sum_green = 0;
       sum_blue = 0;
 
-      container.current.value = mean_red.length;
-      container.current.text = mean_red.length;
+      setCount(mean_red.length);
 
       if (mean_red.length > maxHistLen) {
         mean_red.shift();
@@ -384,7 +383,8 @@ const MeasureContent = () => {
             trailColor: "#ffffff",
             backgroundColor: "#3e98c7",
           })}
-          ref={container}
+          value={count}
+          maxValue={maxHistLen}
         />
       </FaceCircleWrapper>
     </MeasureContentWrapper>
