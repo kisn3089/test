@@ -5,7 +5,6 @@ import "./util/js/format.js";
 import "./util/js/grid.js";
 import "./util/js/intersect.js";
 import "./util/js/math.js";
-import "./util/js/opencv.js";
 import "./util/js/bci.min.js";
 import "./util/js/fili.min.js";
 import "./util/js/numjs.min.js";
@@ -56,6 +55,7 @@ tf.setBackend("wasm").then(() => main());
 
 // html tag
 const video = document.getElementsByClassName("input_video")[0];
+const videoOfPrev = document.getElementById("face_video");
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
 // const canvasElement2 = document.getElementsByClassName("output_canvas2")[0];
 // const canvasId = document.getElementById("canvas");
@@ -131,6 +131,7 @@ detectedModal.classList.remove("on");
 networkModal.classList.remove("on");
 
 const ctx = canvasElement.getContext("2d");
+const ctxFace = videoOfPrev.getContext("2d");
 // const ctx2 = canvasElement2.getContext("2d");
 
 let url =
@@ -141,7 +142,7 @@ let mean_red = [];
 let mean_green = [];
 let mean_blue = [];
 // second * 30
-const maxHistLen = 900;
+const maxHistLen = 90000;
 let timingHist = [];
 let frame = 0;
 
@@ -212,6 +213,7 @@ async function main() {
   // Create canvas and drawing context
   canvasElement.width = videoWidth / 2;
   canvasElement.height = videoHeight / 2;
+  console.log("canvasElement: ", canvasElement);
 
   // start prediction loop
   renderPrediction();
@@ -222,6 +224,9 @@ async function renderPrediction() {
   preparation.classList.remove("off");
   facepred = await fmesh.estimateFaces(canvasElement);
   ctx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+  videoOfPrev.width = boxWidth;
+  videoOfPrev.height = boxHeight;
+  ctxFace.clearRect(0, 0, videoOfPrev.width, videoOfPrev.height);
   if (facepred.length > 0) {
     // If we find a face, process it
     curFaces = facepred;
@@ -235,8 +240,8 @@ async function renderPrediction() {
 async function drawFaces() {
   lottie.src = "";
 
-  ctx.strokeStyle = "cyan";
-  ctx.lineWidth = 2;
+  // ctx.strokeStyle = "cyan";
+  // ctx.lineWidth = 2;
 
   // curFaces = facepred;
   let face_oval = [];
@@ -245,163 +250,143 @@ async function drawFaces() {
   let lips = [];
 
   for (let face of curFaces) {
-    if (face.faceInViewConfidence > 0.5) {
-      preparation.classList.add("off");
-      measuring.classList.add("on");
+    // if (face.faceInViewConfidence > 0.5) {
+    preparation.classList.add("off");
+    measuring.classList.add("on");
 
-      let mesh = face.scaledMesh;
-      lastPosition = boxLeft;
-      lastYPosition = boxTop;
+    let mesh = face.scaledMesh;
+    lastPosition = boxLeft;
+    lastYPosition = boxTop;
 
-      // Get the facial region of interest's bounds
-      boxLeft = mesh[234][0];
-      boxTop = mesh[10][1];
-      boxWidth = mesh[454][0] - boxLeft;
-      boxHeight = mesh[152][1] - boxTop;
+    // Get the facial region of interest's bounds
+    boxLeft = mesh[234][0];
+    boxTop = mesh[10][1];
+    boxWidth = mesh[454][0] - boxLeft;
+    boxHeight = mesh[152][1] - boxTop;
 
-      if (Math.abs(boxLeft - lastPosition) > 15) {
-        positionErr++;
-      }
-
-      if (Math.abs(boxTop - lastYPosition) > 15) {
-        yPositionErr++;
-      }
-
-      // face line, eye, mouse defined
-      for (let i = 0; i < FACEMESH_FACE_OVAL.length; i++) {
-        face_oval.push(FACEMESH_FACE_OVAL[i][0], FACEMESH_FACE_OVAL[i][1]);
-      }
-      for (let i = 0; i < FACEMESH_RIGHT_EYE.length; i++) {
-        right_eye.push(FACEMESH_RIGHT_EYE[i][0], FACEMESH_RIGHT_EYE[i][1]);
-      }
-      for (let i = 0; i < FACEMESH_LEFT_EYE.length; i++) {
-        left_eye.push(FACEMESH_LEFT_EYE[i][0], FACEMESH_LEFT_EYE[i][1]);
-      }
-      for (let i = 0; i < FACEMESH_LIPS.length; i++) {
-        lips.push(FACEMESH_LIPS[i][0], FACEMESH_LIPS[i][1]);
-      }
-
-      ctx.fillStyle = "white";
-      ctx.globalCompositeOperation = "source-over";
-      ctx.beginPath();
-      ctx.moveTo(mesh[left_eye[0]][0], mesh[left_eye[0]][1]);
-      for (let i = 0; i < left_eye.length; i++) {
-        ctx.lineTo(mesh[left_eye[i]][0], mesh[left_eye[i]][1]);
-      }
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(mesh[right_eye[0]][0], mesh[right_eye[0]][1]);
-      for (let i = 0; i < right_eye.length; i++) {
-        ctx.lineTo(mesh[right_eye[i]][0], mesh[right_eye[i]][1]);
-      }
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(mesh[lips[0]][0], mesh[lips[0]][1]);
-      for (let i = 0; i < lips.length; i++) {
-        ctx.lineTo(mesh[lips[i]][0], mesh[lips[i]][1]);
-      }
-      ctx.fill();
-
-      // Draw the box a bit larger for debugging purposes
-      ctx.beginPath();
-      ctx.rect(boxLeft, boxTop, boxWidth, boxHeight);
-      // ctx.fill();
-      ctx.stroke();
-
-      // Get the image data from that region
-      let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
-      let faceSrc = cv.matFromImageData(faceRegion);
-      let faceScaled = new cv.Mat();
-      cv.resize(
-        faceSrc,
-        faceScaled,
-        new cv.Size(32, 32),
-        0,
-        0,
-        cv.INTER_NEAREST
-      );
-      let rgbData = cv.mean(faceScaled);
-
-      // Get FPS of this loop as well
-      timingHist.push(String(Date.now() * 1000));
-
-      mean_red.push(rgbData[0]);
-      mean_green.push(rgbData[1]);
-      mean_blue.push(rgbData[2]);
-
-      cp.value = mean_red.length;
-
-      if (mean_red.length > maxHistLen) {
-        mean_red.shift();
-        mean_green.shift();
-        mean_blue.shift();
-        timingHist.shift();
-        let textArr = [];
-        stop();
-
-        Loading.classList.remove("Loaded");
-        LoadingWrapper.classList.remove("remove");
-        measuring.classList.remove("on");
-        preparation.classList.add("off");
-        Ani.classList.add("off");
-
-        for (let i = 0; i < maxHistLen; i++) {
-          textArr.push(
-            `${timingHist[i]}	${mean_red[i]}	${mean_green[i]}	${mean_blue[i]}`
-          );
-        }
-
-        textArr = textArr.join("\n");
-
-        var blob = new Blob([textArr], { type: "text/plain" });
-
-        var form = new FormData();
-        form.append("rgb", blob);
-        form.append("age", sessionStorage.getItem("age"));
-        form.append("gender", sessionStorage.getItem("gender"));
-        sessionStorage.setItem("face", positionErr + yPositionErr);
-
-        let signature = makeSignature();
-
-        const options = {
-          method: "POST",
-          headers: {
-            "x-ncp-apigw-timestamp": timestamp,
-            "x-ncp-iam-access-key": "PbDvaXxkTaHf19QGViU1",
-            "x-ncp-apigw-signature-v2": signature,
-            "x-ncp-apigw-api-key": "vkqvcuTCcBtjnErVIgyDtWzdBZPhYJo1VRtUqnx4",
-          },
-        };
-
-        options.body = form;
-
-        fetch(url, options)
-          .then((response) => response.json())
-          .then((response) => {
-            if (response.result === 200) {
-              sessionStorage.setItem("msi", response.message.mentalStress);
-              sessionStorage.setItem("psi", response.message.physicalStress);
-              sessionStorage.setItem("hr", response.message.hr);
-              location.href = "./result.html";
-            } else {
-              Modal.classList.add("alert");
-              networkModal.classList.add("on");
-            }
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-        frame = frame + 1;
-      }
-    } else {
-      if (video.srcObject.active !== false) {
-        if (mean_red.length > 30) {
-          stop();
-          Modal.classList.add("alert");
-          detectedModal.classList.add("on");
-        }
-      }
+    if (Math.abs(boxLeft - lastPosition) > 15) {
+      positionErr++;
     }
+
+    if (Math.abs(boxTop - lastYPosition) > 15) {
+      yPositionErr++;
+    }
+
+    // face line, eye, mouse defined
+    for (let i = 0; i < FACEMESH_FACE_OVAL.length; i++) {
+      face_oval.push(FACEMESH_FACE_OVAL[i][0], FACEMESH_FACE_OVAL[i][1]);
+    }
+    for (let i = 0; i < FACEMESH_RIGHT_EYE.length; i++) {
+      right_eye.push(FACEMESH_RIGHT_EYE[i][0], FACEMESH_RIGHT_EYE[i][1]);
+    }
+    for (let i = 0; i < FACEMESH_LEFT_EYE.length; i++) {
+      left_eye.push(FACEMESH_LEFT_EYE[i][0], FACEMESH_LEFT_EYE[i][1]);
+    }
+    for (let i = 0; i < FACEMESH_LIPS.length; i++) {
+      lips.push(FACEMESH_LIPS[i][0], FACEMESH_LIPS[i][1]);
+    }
+
+    // 얼굴 테두리 따는 함수
+    drawFaceOutline(ctxFace, mesh, boxLeft, boxTop);
+
+    ctxFace.drawImage(
+      video,
+      -boxLeft,
+      -boxTop,
+      canvasElement.width,
+      canvasElement.height
+    );
+
+    // 눈, 입 따는 함수
+    drawTransparentEyesAndMouth(ctxFace, mesh, boxLeft, boxTop);
+
+    // Get the image data from that region
+    let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
+    let faceSrc = cv.matFromImageData(faceRegion);
+    let faceScaled = new cv.Mat();
+    cv.resize(faceSrc, faceScaled, new cv.Size(32, 32), 0, 0, cv.INTER_NEAREST);
+    let rgbData = cv.mean(faceSrc);
+
+    // Get FPS of this loop as well
+    timingHist.push(String(Date.now() * 1000));
+
+    mean_red.push(rgbData[0]);
+    mean_green.push(rgbData[1]);
+    mean_blue.push(rgbData[2]);
+
+    cp.value = mean_red.length;
+
+    if (mean_red.length > maxHistLen) {
+      mean_red.shift();
+      mean_green.shift();
+      mean_blue.shift();
+      timingHist.shift();
+      let textArr = [];
+      stop();
+
+      Loading.classList.remove("Loaded");
+      LoadingWrapper.classList.remove("remove");
+      measuring.classList.remove("on");
+      preparation.classList.add("off");
+      Ani.classList.add("off");
+
+      for (let i = 0; i < maxHistLen; i++) {
+        textArr.push(
+          `${timingHist[i]}	${mean_red[i]}	${mean_green[i]}	${mean_blue[i]}`
+        );
+      }
+
+      textArr = textArr.join("\n");
+
+      var blob = new Blob([textArr], { type: "text/plain" });
+
+      var form = new FormData();
+      form.append("rgb", blob);
+      form.append("age", sessionStorage.getItem("age"));
+      form.append("gender", sessionStorage.getItem("gender"));
+      sessionStorage.setItem("face", positionErr + yPositionErr);
+
+      let signature = makeSignature();
+
+      const options = {
+        method: "POST",
+        headers: {
+          "x-ncp-apigw-timestamp": timestamp,
+          "x-ncp-iam-access-key": "PbDvaXxkTaHf19QGViU1",
+          "x-ncp-apigw-signature-v2": signature,
+          "x-ncp-apigw-api-key": "vkqvcuTCcBtjnErVIgyDtWzdBZPhYJo1VRtUqnx4",
+        },
+      };
+
+      options.body = form;
+
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.result === 200) {
+            sessionStorage.setItem("msi", response.message.mentalStress);
+            sessionStorage.setItem("psi", response.message.physicalStress);
+            sessionStorage.setItem("hr", response.message.hr);
+            location.href = "./result.html";
+          } else {
+            Modal.classList.add("alert");
+            networkModal.classList.add("on");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+      frame = frame + 1;
+    }
+    // } else {
+    //   if (video.srcObject.active !== false) {
+    //     if (mean_red.length > 30) {
+    //       stop();
+    //       Modal.classList.add("alert");
+    //       detectedModal.classList.add("on");
+    //     }
+    //   }
+    // }
   }
 }
 
@@ -434,4 +419,79 @@ function makeSignature() {
   var hash = hmac.finalize();
 
   return hash.toString(CryptoJS.enc.Base64);
+}
+
+function drawTransparentEyesAndMouth(context, mesh, x, y) {
+  context.globalCompositeOperation = "destination-out"; // 투명 영역을 그립니다.
+
+  // 왼쪽 눈 테두리를 그립니다.
+  const leftEyeOutline = FACEMESH_LEFT_EYE;
+  context.beginPath();
+  context.moveTo(
+    mesh[leftEyeOutline[0][0]][0] - x,
+    mesh[leftEyeOutline[0][0]][1] - y
+  );
+  for (let i = 0; i < leftEyeOutline.length; i++) {
+    context.lineTo(
+      mesh[leftEyeOutline[i][0]][0] - x,
+      mesh[leftEyeOutline[i][0]][1] - y
+    );
+  }
+  context.closePath();
+  context.fill();
+
+  // 오른쪽 눈 테두리를 그립니다.
+  const rightEyeOutline = FACEMESH_RIGHT_EYE;
+  context.beginPath();
+  context.moveTo(
+    mesh[rightEyeOutline[0][0]][0] - x,
+    mesh[rightEyeOutline[0][0]][1] - y
+  );
+  for (let i = 0; i < rightEyeOutline.length; i++) {
+    context.lineTo(
+      mesh[rightEyeOutline[i][0]][0] - x,
+      mesh[rightEyeOutline[i][0]][1] - y
+    );
+  }
+  context.closePath();
+  context.fill();
+
+  // 입 테두리를 그립니다.
+  const lipsOutline = FACEMESH_LIPS;
+  context.beginPath();
+  context.moveTo(
+    mesh[lipsOutline[0][0]][0] - x,
+    mesh[lipsOutline[0][0]][1] - y
+  );
+  for (let i = 0; i < lipsOutline.length; i++) {
+    context.lineTo(
+      mesh[lipsOutline[i][0]][0] - x,
+      mesh[lipsOutline[i][0]][1] - y
+    );
+  }
+  context.closePath();
+  context.fill();
+
+  context.globalCompositeOperation = "source-over"; // 투명 영역을 원래 상태로 복구합니다.
+}
+
+// 얼굴 테두리만 그리는 함수를 작성합니다.
+function drawFaceOutline(context, mesh, x, y) {
+  context.strokeStyle = "cyan";
+  context.lineWidth = 2;
+
+  const faceOutline = FACEMESH_FACE_OVAL;
+  context.beginPath();
+  context.moveTo(
+    mesh[faceOutline[0][0]][0] - x,
+    mesh[faceOutline[0][0]][1] - y
+  );
+  for (let i = 0; i < faceOutline.length; i++) {
+    context.lineTo(
+      mesh[faceOutline[i][0]][0] - x,
+      mesh[faceOutline[i][0]][1] - y
+    );
+  }
+  context.closePath();
+  context.clip();
 }

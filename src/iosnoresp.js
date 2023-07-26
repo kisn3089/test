@@ -56,6 +56,7 @@ tf.setBackend("wasm").then(() => main());
 
 // html tag
 const video = document.getElementsByClassName("input_video")[0];
+
 const canvasElement = document.getElementsByClassName("output_canvas")[0];
 
 const container = document.getElementsByClassName("progress-bar")[0];

@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "dev": "webpack-dev-server",
+    "dev": "cross-env NODE_OPTIONS=--max-old-space-size=8192 development webpack-dev-server",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 webpack --mode=production",
     "start": "cross-env NODE_OPTIONS=--max-old-space-size=8192 webpack-dev-server --mode development",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -48,6 +48,7 @@
     "lottie-web": "^5.10.1",
     "npm": "^9.3.0",
     "opencv.js": "^1.2.1",
+    "react-scripts": "^2.1.8",
     "terser-webpack-plugin": "^5.3.6"
   }
 }

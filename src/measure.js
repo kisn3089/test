@@ -1,8 +1,6 @@
 // import libraries
 import "./measure.css";
 import "./util/css/reset.css";
-// import "./util/js/math.js";
-// import "./util/js/opencv.js";
 import "./util/js/lottie-player.js";
 import "./util/js/rollups/hmac-md5.js";
 import "./util/js/rollups/aes.js";
@@ -287,7 +285,6 @@ async function main() {
   // Create canvas and drawing context
   canvasElement.width = videoWidth / 2;
   canvasElement.height = videoHeight / 2;
-
   // start prediction loop
   renderPrediction();
 }
@@ -404,6 +401,7 @@ async function drawFaces() {
 
       // Get the image data from that region
       let faceRegion = ctx.getImageData(boxLeft, boxTop, boxWidth, boxHeight);
+
       const data = faceRegion.data;
       for (var i = 0; i < data.length; i += 4) {
         if (
@@ -433,6 +431,11 @@ async function drawFaces() {
       sum_red = 0;
       sum_green = 0;
       sum_blue = 0;
+
+      rgbArrayOfPrevFace = [];
+      sum_red_prev = 0;
+      sum_green_prev = 0;
+      sum_blue_prev = 0;
 
       cp.value = mean_red.length;
 
